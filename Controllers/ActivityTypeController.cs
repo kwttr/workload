@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using workload.Data;
 using workload.Models;
@@ -60,17 +61,47 @@ namespace workload.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(activityTypeVM.ActivityType == null) {
-                _db.Activities.Add(activityTypeVM.ActivityType);
+                if(activityTypeVM.ActivityType == null || activityTypeVM.ActivityType.Id == 0) {
+                    _db.Activities.Add(activityTypeVM.ActivityType);
                 }
                 else
                 {
-                    //updating
+                    _db.Activities.Update(activityTypeVM.ActivityType);
                 }
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View();
+        }
+        //GET - DELETE
+        public ActionResult Delete(int? id)
+        {
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+            var obj = _db.Activities.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        //POST - DELETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirm(int? id)
+        {
+            var obj = _db.Activities.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            _db.Activities.Remove(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
