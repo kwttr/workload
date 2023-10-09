@@ -15,8 +15,27 @@ namespace workload.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Teacher> objList = _db.Teachers;
+            IEnumerable<Report> objList = _db.Reports;
+            foreach (var obj in objList)
+            {
+                obj.Teacher = _db.Teachers.FirstOrDefault(u => u.Id == obj.TeacherId);
+            }
             return View(objList);
+        }
+        
+        //GET - DETAILS
+        public IActionResult Details(int? id)
+        {
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+            var obj = _db.Reports.Find(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            return View(obj);
         }
     }
 }
