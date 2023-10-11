@@ -15,6 +15,7 @@ namespace workload.Models
 
         public int PositionId { get; set; }
         public Position? Position { get; set; }
+
         public List<Report>? Reports { get; set; }
 
         [Display(Name="Department Name")]

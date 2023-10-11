@@ -19,13 +19,6 @@ namespace workload.Controllers
             return View(objList);
         }
 
-        //Просмотр отчетов кафедры
-        public IActionResult ViewReports(int? id)
-        {
-            //Просмотр видов работ текущей категории
-            return View();
-        }
-
         //Просмотр работников кафедры
         public IActionResult ViewWorkers(int? id)
         {

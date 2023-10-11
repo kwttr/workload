@@ -8,6 +8,9 @@ namespace workload.Models
         [Key]
         public int Id { get; set; }
 
+        public string Name { get; set; }
+        public int NormHours { get; set; }
+
         public string? DatePlan { get; set; }
         public string? DateFact { get; set; }
 
@@ -16,10 +19,6 @@ namespace workload.Models
 
         public int UnitPlan { get; set; }
         public int UnitFact { get; set; }
-
-        public int ActivityTypeId { get; set; }
-        [ForeignKey(nameof(ActivityTypeId))]
-        public ActivityType ActivityType { get; set; }
 
         [Display(Name = "Report Id")]
         public int ReportId { get; set; }
