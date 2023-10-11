@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workload.Data;
 
@@ -10,9 +11,11 @@ using workload.Data;
 namespace workload.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231011002104_UpdateDepartment")]
+    partial class UpdateDepartment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -77,21 +80,6 @@ namespace workload.Migrations
                         });
                 });
 
-            modelBuilder.Entity("workload.Models.Degree", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Degree");
-                });
-
             modelBuilder.Entity("workload.Models.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -125,21 +113,6 @@ namespace workload.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("HeadOfDepartments");
-                });
-
-            modelBuilder.Entity("workload.Models.Position", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Position");
                 });
 
             modelBuilder.Entity("workload.Models.ProcessActivityType", b =>
@@ -219,8 +192,9 @@ namespace workload.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DegreeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Degree")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("DepartmentId")
                         .HasColumnType("INTEGER");
@@ -229,16 +203,9 @@ namespace workload.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PositionId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("DegreeId");
-
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("PositionId");
 
                     b.ToTable("Teachers");
                 });
@@ -301,29 +268,13 @@ namespace workload.Migrations
 
             modelBuilder.Entity("workload.Models.Teacher", b =>
                 {
-                    b.HasOne("workload.Models.Degree", "Degree")
-                        .WithMany()
-                        .HasForeignKey("DegreeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("workload.Models.Department", "Department")
                         .WithMany("Teachers")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workload.Models.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Degree");
-
                     b.Navigation("Department");
-
-                    b.Navigation("Position");
                 });
 
             modelBuilder.Entity("workload.Models.Department", b =>
