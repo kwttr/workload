@@ -76,6 +76,80 @@ namespace workload.Migrations
                         });
                 });
 
+            modelBuilder.Entity("workload.Models.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Department");
+                });
+
+            modelBuilder.Entity("workload.Models.HeadOfDepartment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("HeadOfDepartments");
+                });
+
+            modelBuilder.Entity("workload.Models.ProcessActivityType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ActivityTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DateFact")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DatePlan")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("HoursFact")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("HoursPlan")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ReportId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UnitFact")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UnitPlan")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityTypeId");
+
+                    b.HasIndex("ReportId");
+
+                    b.ToTable("ProcessActivityType");
+                });
+
             modelBuilder.Entity("workload.Models.Report", b =>
                 {
                     b.Property<int>("Id")
@@ -113,11 +187,16 @@ namespace workload.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Teachers");
                 });
@@ -133,15 +212,66 @@ namespace workload.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("workload.Models.HeadOfDepartment", b =>
+                {
+                    b.HasOne("workload.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("workload.Models.ProcessActivityType", b =>
+                {
+                    b.HasOne("workload.Models.ActivityType", "ActivityType")
+                        .WithMany()
+                        .HasForeignKey("ActivityTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workload.Models.Report", "Report")
+                        .WithMany("ProcessActivities")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ActivityType");
+
+                    b.Navigation("Report");
+                });
+
             modelBuilder.Entity("workload.Models.Report", b =>
                 {
                     b.HasOne("workload.Models.Teacher", "Teacher")
-                        .WithMany()
+                        .WithMany("Reports")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("workload.Models.Teacher", b =>
+                {
+                    b.HasOne("workload.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("workload.Models.Report", b =>
+                {
+                    b.Navigation("ProcessActivities");
+                });
+
+            modelBuilder.Entity("workload.Models.Teacher", b =>
+                {
+                    b.Navigation("Reports");
                 });
 #pragma warning restore 612, 618
         }

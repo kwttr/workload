@@ -14,5 +14,21 @@ namespace workload.Models
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
+        public ActivityType(string name, int normHours, int categoryId)
+        {
+            Name = name;
+            NormHours = normHours;
+            CategoryId = categoryId;
+        }
+
+        public ActivityType(){ }
+        public ActivityType(int id, string name, int normHours, int categoryId, Category? category)
+        {
+            Id = id;
+            Name = name;
+            NormHours = normHours;
+            CategoryId = categoryId;
+            Category = category;
+        }
     }
 }

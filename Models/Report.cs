@@ -18,5 +18,6 @@ namespace workload.Models
         public double Rate { get; set; }
 
         //Display in form
+        public List<ProcessActivityType>? ProcessActivities { get; set; }
     }
 }
