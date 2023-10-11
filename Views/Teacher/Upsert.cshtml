@@ -1,0 +1,86 @@
+﻿@model workload.Models.ViewModels.TeacherVM
+
+@{
+    var title = "Create Teacher";
+}
+<form method="post">
+    @if (Model.Teacher.Id != 0)
+    {
+        title = "Edit Teacher";
+        <input asp-for="Teacher.Id" hidden />
+    }
+    <div class="border p3">
+        <div class="form-group row">
+            <h2 class="text-info p1-3">@title</h2>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Teacher.Name"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Teacher.Name" class="form-control" />
+                        <span asp-validation-for="Teacher.Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Teacher.DegreeId"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="Teacher.DegreeId" asp-items="@Model.DegreeSelectList" class="form-control">
+                            <option disabled selected>--Select Degree--</option>
+                        </select>
+                        <span asp-validation-for="Teacher.DegreeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Teacher.PositionId"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="Teacher.PositionId" asp-items="@Model.PositionSelectList" class="form-control">
+                            <option disabled selected>--Select Position--</option>
+                        </select>
+                        <span asp-validation-for="Teacher.PositionId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+
+                        <div class="col">
+                            @if (Model.Teacher.Id != 0)
+                            {
+                            //update
+                                <input type="submit" class="btn btn-info w-100" value="Update" />
+                            }
+                            else
+                            {
+                                //create
+                                <input type="submit" class="btn btn-info w-100" value="Create" />
+                            }
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success w-100">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                @*KEEP THIS EMPTY*@
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}

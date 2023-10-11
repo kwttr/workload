@@ -73,6 +73,7 @@ namespace workload.Controllers
             }
             return View();
         }
+
         //GET - DELETE
         public ActionResult Delete(int? id)
         {

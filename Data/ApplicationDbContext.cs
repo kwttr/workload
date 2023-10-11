@@ -19,6 +19,8 @@ namespace workload.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<HeadOfDepartment> HeadOfDepartments { get; set; }
+        public DbSet<Degree> Degree { get; set; }
+        public DbSet<Position> Position { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,6 +50,61 @@ namespace workload.Data
                 }
             };
             modelBuilder.Entity<Category>().HasData(categories);
+
+            var degrees = new Degree[]
+            {
+                new Degree
+                {
+                    Id=1,
+                    Name = "Доцент"
+                },
+                new Degree
+                {
+                    Id=2,
+                    Name = "Профессор"
+                },
+                new Degree
+                {
+                    Id=3,
+                    Name = "Кандидат"
+                },
+                new Degree
+                {
+                    Id=4,
+                    Name = "Доктор"
+                }
+            };
+            modelBuilder.Entity<Degree>().HasData(degrees);
+
+            var positions = new Position[]
+            {
+                new Position
+                {
+                    Id=1,
+                    Name = "Аспирант"
+                },
+                new Position
+                {
+                    Id=2,
+                    Name = "Ассистент"
+                },
+                new Position
+                {
+                    Id=3,
+                    Name = "Ведущий научный сотрудник"
+                },
+                new Position
+                {
+                    Id=4,
+                    Name = "Главный научный сотрудник"
+                },
+                new Position
+                {
+                    Id=5,
+                    Name = "Преподаватель"
+                }
+            };
+            modelBuilder.Entity<Position>().HasData(positions);
         }
     }
 }
