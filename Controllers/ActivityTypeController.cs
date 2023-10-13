@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using workload.Data;
 using workload.Models;
 using workload.Models.ViewModels;
 
 namespace workload.Controllers
 {
+    [Authorize(Roles = WC.AdminRole)]
     public class ActivityTypeController : Controller
     {
         private readonly ApplicationDbContext _db;

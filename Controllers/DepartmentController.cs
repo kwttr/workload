@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using workload.Data;
 using workload.Models;
 using workload.Models.ViewModels;
 
 namespace workload.Controllers
 {
+    [Authorize(Roles = WC.AdminRole)]
     public class DepartmentController : Controller
     {
         private readonly ApplicationDbContext _db;
