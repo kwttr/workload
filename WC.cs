@@ -4,6 +4,6 @@
     {
         public const string AdminRole = "Admin";
         public const string HeadOfDepartmentRole = "HeadOfDepartment";
-        public const string WorkerRole = "Worker";
+        public const string TeacherRole = "Teacher";
     }
 }

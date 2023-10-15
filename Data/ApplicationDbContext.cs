@@ -17,6 +17,7 @@ namespace workload.Data
 
         public DbSet<Department> Department { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<ActivityType> Activities { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Report> Reports { get; set; }

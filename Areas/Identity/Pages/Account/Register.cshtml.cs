@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using workload.Data;
+using workload.Models;
 
 namespace workload.Areas.Identity.Pages.Account
 {
@@ -109,7 +111,7 @@ namespace workload.Areas.Identity.Pages.Account
             {
                 await _roleManager.CreateAsync(new IdentityRole(WC.AdminRole));
                 await _roleManager.CreateAsync(new IdentityRole(WC.HeadOfDepartmentRole));
-                await _roleManager.CreateAsync(new IdentityRole(WC.WorkerRole));
+                await _roleManager.CreateAsync(new IdentityRole(WC.TeacherRole));
             }
 
             ReturnUrl = returnUrl;
@@ -132,12 +134,33 @@ namespace workload.Areas.Identity.Pages.Account
                 {
                     if (User.IsInRole(WC.AdminRole))
                     {
-                        //Администратор создает нового пользователя
+                        //Администратор создает нового пользователя = создается админ
                         await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                        using (var db = new ApplicationDbContext())
+                        {
+                            Admin admin = new Admin()
+                            {
+                                Name = Input.Email,
+                                UserId = user.Id
+                            };
+                            db.Admins.Add(admin);
+                            db.SaveChanges();
+                        }
                     }
                     else
                     {
-                        await _userManager.AddToRoleAsync(user, WC.WorkerRole);
+                        //Создается учетная пользователь преподавателя
+                        await _userManager.AddToRoleAsync(user, WC.TeacherRole);
+                        using (var db = new ApplicationDbContext())
+                        {
+                            Teacher teacher = new Teacher()
+                            {
+                                Name = Input.Email,
+                                UserId = user.Id
+                            };
+                            db.Teachers.Add(teacher);
+                            db.SaveChanges();
+                        }
                     }
 
                     _logger.LogInformation("User created a new account with password.");

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workload.Models
@@ -10,18 +12,22 @@ namespace workload.Models
         [Required]
         public string Name { get; set; }
 
-        public int DegreeId { get; set; }
+        public int? DegreeId { get; set; }
         public Degree? Degree{ get; set; }
 
-        public int PositionId { get; set; }
+        public int? PositionId { get; set; }
         public Position? Position { get; set; }
+
+        [Display(Name="Department Name")]
+        public int? DepartmentId { get; set; }
+        [ForeignKey("DepartmentId")]
+        public virtual Department? Department { get; set; }
 
         public List<Report>? Reports { get; set; }
 
-        [Display(Name="Department Name")]
-        public int DepartmentId { get; set; }
-        [ForeignKey("DepartmentId")]
-        public virtual Department? Department { get; set; }
+        [ForeignKey("IdentityUser")]
+        public string UserId { get; set; }
+        public IdentityUser? User { get; set; }
     }
     public class Degree
     {

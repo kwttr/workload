@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workload.Data;
 
@@ -10,9 +11,11 @@ using workload.Data;
 namespace workload.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231015031541_DeleteForeignKeys")]
+    partial class DeleteForeignKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -230,27 +233,6 @@ namespace workload.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("workload.Models.Admin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("workload.Models.Category", b =>
@@ -483,22 +465,18 @@ namespace workload.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("DegreeId")
+                    b.Property<int>("DegreeId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PositionId")
+                    b.Property<int>("PositionId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -507,8 +485,6 @@ namespace workload.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("PositionId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Teachers");
                 });
@@ -575,17 +551,6 @@ namespace workload.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("workload.Models.Admin", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("workload.Models.HeadOfDepartment", b =>
                 {
                     b.HasOne("workload.Models.Department", "Department")
@@ -627,19 +592,19 @@ namespace workload.Migrations
                 {
                     b.HasOne("workload.Models.Degree", "Degree")
                         .WithMany()
-                        .HasForeignKey("DegreeId");
+                        .HasForeignKey("DegreeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("workload.Models.Department", "Department")
                         .WithMany("Teachers")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("workload.Models.Position", "Position")
                         .WithMany()
-                        .HasForeignKey("PositionId");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -648,8 +613,6 @@ namespace workload.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("Position");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("workload.Models.Department", b =>
