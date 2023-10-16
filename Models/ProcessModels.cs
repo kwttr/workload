@@ -25,5 +25,9 @@ namespace workload.Models
         [ForeignKey("ReportId")]
         public Report? Report { get; set; }
 
+        [Display(Name = "Category Type")]
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category? Category { get; set; }
     }
 }

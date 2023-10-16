@@ -136,31 +136,31 @@ namespace workload.Areas.Identity.Pages.Account
                     {
                         //Администратор создает нового пользователя = создается админ
                         await _userManager.AddToRoleAsync(user, WC.AdminRole);
-                        using (var db = new ApplicationDbContext())
-                        {
-                            Admin admin = new Admin()
-                            {
-                                Name = Input.Email,
-                                UserId = user.Id
-                            };
-                            db.Admins.Add(admin);
-                            db.SaveChanges();
-                        }
+                        //using (var db = new ApplicationDbContext())
+                        //{
+                        //    Admin admin = new Admin()
+                        //    {
+                        //        Name = Input.Email,
+                        //        UserId = user.Id
+                        //    };
+                        //    db.Admins.Add(admin);
+                        //    db.SaveChanges();
+                        //}
                     }
                     else
                     {
                         //Создается учетная пользователь преподавателя
                         await _userManager.AddToRoleAsync(user, WC.TeacherRole);
-                        using (var db = new ApplicationDbContext())
-                        {
-                            Teacher teacher = new Teacher()
-                            {
-                                Name = Input.Email,
-                                UserId = user.Id
-                            };
-                            db.Teachers.Add(teacher);
-                            db.SaveChanges();
-                        }
+                        //using (var db = new ApplicationDbContext())
+                        //{
+                        //    Teacher teacher = new Teacher()
+                        //    {
+                        //        Name = Input.Email,
+                        //        UserId = user.Id
+                        //    };
+                        //    db.Teachers.Add(teacher);
+                        //    db.SaveChanges();
+                        //}
                     }
 
                     _logger.LogInformation("User created a new account with password.");

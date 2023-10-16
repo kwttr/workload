@@ -19,6 +19,7 @@ namespace workload.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<ActivityType> Activities { get; set; }
+        public DbSet<ProcessActivityType> ProcessActivityType { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<HeadOfDepartment> HeadOfDepartments { get; set; }

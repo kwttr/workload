@@ -25,9 +25,9 @@ namespace workload.Models
 
         public List<Report>? Reports { get; set; }
 
-        [ForeignKey("IdentityUser")]
-        public string UserId { get; set; }
-        public IdentityUser? User { get; set; }
+        //[ForeignKey("IdentityUser")]
+        //public string UserId { get; set; }
+        //public IdentityUser? User { get; set; }
     }
     public class Degree
     {

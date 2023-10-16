@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using workload.Data;
 using workload.Models;
+using workload.Models.ViewModels;
 
 namespace workload.Controllers
 {
@@ -33,10 +36,77 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Reports.Find(id);
-            if (obj == null)
+            //Заполнение листа ProcessActivityTypes
+            ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
+            {
+                Report = _db.Reports.FirstOrDefault(u => u.Id == id)
+            };
+            var matchingProvessActivities = _db.ProcessActivityType
+                .Where(pa => pa.ReportId == reportDetailsVM.Report.Id).ToList();
+            List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
+
+            foreach(var processActivity in matchingProvessActivities)
+            {
+                processActivityList.Add(processActivity);
+            }
+            reportDetailsVM.ProcessActivityTypes = processActivityList;
+
+            //Заполнение листа CategoryList
+            reportDetailsVM.CategoryList = _db.Categories.ToList();
+
+            if (reportDetailsVM == null)
             {
                 return NotFound();
+            }
+            return View(reportDetailsVM);
+        }
+
+        //GET - CREATE
+        public IActionResult Create()
+        {
+            ReportVM reportVM = new ReportVM()
+            {
+                report = new Report(),
+                TeacherSelectList = _db.Teachers.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+            return View(reportVM);
+        }
+
+        //POST - CREATE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(ReportVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                obj.report.Teacher = _db.Teachers.FirstOrDefault(u => u.Id == obj.report.TeacherId);
+                obj.report.Teacher.Degree = _db.Degree.FirstOrDefault(u => u.Id == obj.report.Teacher.DegreeId);
+                obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
+                obj.report.Rate = 1;
+                List<ProcessActivityType> list = new List<ProcessActivityType>();
+                foreach(var activity in _db.Activities)
+                {
+                    ProcessActivityType procAct = new ProcessActivityType()
+                    {
+                        Name = activity.Name,
+                        NormHours = activity.NormHours,
+                        HoursPlan = 0,
+                        HoursFact = 0,
+                        UnitFact = 0,
+                        UnitPlan = 0,
+                        Report = obj.report,
+                        CategoryId = activity.CategoryId
+                    };
+                    list.Add(procAct);
+                }
+                obj.report.ProcessActivities = list;
+                _db.Reports.Add(obj.report);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View(obj);
         }

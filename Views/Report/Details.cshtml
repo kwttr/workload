@@ -1,39 +1,55 @@
-﻿@model workload.Models.Report
+﻿@model workload.Models.ViewModels.ReportDetailsVM
 
 <form method="post" asp-action="Details">
-    <input asp-for="Id" hidden />
+    <input asp-for="Report.Id" hidden />
     <div class="border p3">
         <div class="form-group row">
             <h2 class="text-info p1-3">View report</h2>
         </div>
         <div class="row">
             <div class="col-8">
+                @foreach(var category in Model.CategoryList)
+                {
+                    <h1>@category.Name</h1>
                 <table class="table table-bordered table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th>
-                                Название вида работы
-                            </th>
-                            <th>
-                                Норма времени (в часах)
-                            </th>
-                            <th>
-                                Категория вида работы
-                            </th>
-                            <th></th>
+                            <th rowspan="4">Название вида работы</th>
+                            <th colspan="6">Объем работы</th>
+                            <tr>
+                                <th colspan="3">планируемый</th>
+                                <th colspan="3">фактический</th>
+                                <tr>
+                                    <th rowspan="2">дата</th>
+                                    <th colspan="2">количество</th>
+                                    <th rowspan="2">дата</th>
+                                    <th colspan="2">количество</th>
+                                </tr>
+                                <tr>
+                                    <th>в час</th>
+                                    <th>в ед.</th>
+                                    <th>в час</th>
+                                    <th>в ед.</th>
+                                </tr>
+                            </tr>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var obj in Model.ProcessActivities)
+                        @foreach (var processActivity in Model.ProcessActivityTypes.Where(u=>u.CategoryId==category.Id))
                         {
                             <tr>
-                                <td width="50%"></td>
-                                <td width="10%"></td>
-                                <td width="30%"></td>
+                                <td>@processActivity.Name</td>
+                                <td>@processActivity.DatePlan</td>
+                                <td>@processActivity.HoursPlan</td>
+                                <td>@processActivity.UnitPlan</td>
+                                <td>@processActivity.DateFact</td>
+                                <td>@processActivity.HoursFact</td>
+                                <td>@processActivity.UnitFact</td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                }
                 <div class="form-group row">
                     <div class="col-8 offset-4 row">
                         <div class="col">

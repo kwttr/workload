@@ -1,0 +1,57 @@
+﻿@model workload.Models.ViewModels.ReportVM
+
+<form method="post" asp-action="Create">
+    <div class="border p3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-info p1-3">Add Report</h2>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="report.Title"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="report.Title" class="form-control" />
+                        <span asp-validation-for="report.Title" class="text-danger"></span>
+                    </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-4">
+                            <label asp-for="report.TeacherId"></label>
+                        </div>
+                        <div class="col-8">
+                            <select asp-for="report.TeacherId" asp-items="@Model.TeacherSelectList" class="form-control">
+                                <option disabled selected>--Select Teacher--</option>
+                            </select>
+                            <span asp-validation-for="report.TeacherId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+
+                        <div class="col">
+                            <input type="submit" class="btn btn-info w-100" value="Create" />
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success w-100">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                @*KEEP THIS EMPTY*@
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}

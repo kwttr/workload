@@ -25,7 +25,7 @@ namespace workload.Controllers
 
             foreach(var obj in objList)
             {
-                obj.Category = _db.Categories.FirstOrDefault(u => u.Id == obj.CategoryId);
+                obj.Category = _db.Categories.FirstOrDefault(u => u.Id == obj.CategoryId);  
             }
             return View(objList);
         }

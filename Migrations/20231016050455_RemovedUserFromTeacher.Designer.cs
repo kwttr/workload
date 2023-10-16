@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workload.Data;
 
@@ -10,9 +11,11 @@ using workload.Data;
 namespace workload.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231016050455_RemovedUserFromTeacher")]
+    partial class RemovedUserFromTeacher
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -410,9 +413,6 @@ namespace workload.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("DateFact")
                         .HasColumnType("TEXT");
 
@@ -443,8 +443,6 @@ namespace workload.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("ReportId");
 
                     b.ToTable("ProcessActivityType");
@@ -457,12 +455,13 @@ namespace workload.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CurrentDegree")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double?>("Rate")
+                    b.Property<double>("Rate")
                         .HasColumnType("REAL");
 
                     b.Property<int>("TeacherId")
@@ -597,19 +596,11 @@ namespace workload.Migrations
 
             modelBuilder.Entity("workload.Models.ProcessActivityType", b =>
                 {
-                    b.HasOne("workload.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("workload.Models.Report", "Report")
                         .WithMany("ProcessActivities")
                         .HasForeignKey("ReportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
 
                     b.Navigation("Report");
                 });
