@@ -1,0 +1,12 @@
+D:\projects\workload_Utility\bin\Debug\net6.0\workload_Utility.deps.json
+D:\projects\workload_Utility\bin\Debug\net6.0\workload_Utility.dll
+D:\projects\workload_Utility\bin\Debug\net6.0\workload_Utility.pdb
+D:\projects\workload_Utility\obj\Debug\net6.0\workload_Utility.csproj.AssemblyReference.cache
+D:\projects\workload_Utility\obj\Debug\net6.0\workload_Utility.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\workload_Utility\obj\Debug\net6.0\workload_Utility.AssemblyInfoInputs.cache
+D:\projects\workload_Utility\obj\Debug\net6.0\workload_Utility.AssemblyInfo.cs
+D:\projects\workload_Utility\obj\Debug\net6.0\workload_Utility.csproj.CoreCompileInputs.cache
+D:\projects\workload_Utility\obj\Debug\net6.0\workload_Utility.dll
+D:\projects\workload_Utility\obj\Debug\net6.0\refint\workload_Utility.dll
+D:\projects\workload_Utility\obj\Debug\net6.0\workload_Utility.pdb
+D:\projects\workload_Utility\obj\Debug\net6.0\ref\workload_Utility.dll

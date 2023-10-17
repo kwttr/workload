@@ -1,0 +1,17 @@
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.csproj.AssemblyReference.cache
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.AssemblyInfoInputs.cache
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.AssemblyInfo.cs
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.csproj.CoreCompileInputs.cache
+D:\projects\workload_DataAccess\bin\Debug\net6.0\workload_DataAccess.deps.json
+D:\projects\workload_DataAccess\bin\Debug\net6.0\workload_DataAccess.dll
+D:\projects\workload_DataAccess\bin\Debug\net6.0\workload_DataAccess.pdb
+D:\projects\workload_DataAccess\bin\Debug\net6.0\workload_Models.dll
+D:\projects\workload_DataAccess\bin\Debug\net6.0\workload_Models.pdb
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.csproj.CopyComplete
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.dll
+D:\projects\workload_DataAccess\obj\Debug\net6.0\refint\workload_DataAccess.dll
+D:\projects\workload_DataAccess\obj\Debug\net6.0\workload_DataAccess.pdb
+D:\projects\workload_DataAccess\obj\Debug\net6.0\ref\workload_DataAccess.dll
+D:\projects\workload_DataAccess\bin\Debug\net6.0\workload_Utility.dll
+D:\projects\workload_DataAccess\bin\Debug\net6.0\workload_Utility.pdb
