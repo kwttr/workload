@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using workload_Data;
+using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
 using workload_Utility;
@@ -14,20 +15,15 @@ namespace workload.Controllers
     [Authorize(Roles = WC.AdminRole)]
     public class ActivityTypeController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IActivityTypeRepository _actRepo;
 
-        public ActivityTypeController(ApplicationDbContext db)
+        public ActivityTypeController(IActivityTypeRepository actRepo)
         {
-            _db = db;
+            _actRepo = actRepo;
         }
         public IActionResult Index()
         {
-            IEnumerable<ActivityType> objList = _db.Activities;
-
-            foreach(var obj in objList)
-            {
-                obj.Category = _db.Categories.FirstOrDefault(u => u.Id == obj.CategoryId);  
-            }
+            IEnumerable<ActivityType> objList = _actRepo.GetAll(includeProperties: "Category");
             return View(objList);
         }
 
@@ -37,11 +33,7 @@ namespace workload.Controllers
             ActivityTypeVM activityTypeVM = new ActivityTypeVM()
             {
                 ActivityType = new ActivityType(),
-                CategorySelectList = _db.Categories.Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                })
+                CategorySelectList = _actRepo.GetAllDropdownList(WC.CategoryName)
             };
             if (id == null)
             {
@@ -49,7 +41,7 @@ namespace workload.Controllers
             }
             else
             {
-                activityTypeVM.ActivityType = _db.Activities.Find(id);
+                activityTypeVM.ActivityType = _actRepo.Find(id.GetValueOrDefault());
                 if(activityTypeVM.ActivityType == null)
                 {
                     return NotFound();
@@ -66,13 +58,13 @@ namespace workload.Controllers
             if (ModelState.IsValid)
             {
                 if(activityTypeVM.ActivityType == null || activityTypeVM.ActivityType.Id == 0) {
-                    _db.Activities.Add(activityTypeVM.ActivityType);
+                    _actRepo.Add(activityTypeVM.ActivityType);
                 }
                 else
                 {
-                    _db.Activities.Update(activityTypeVM.ActivityType);
+                    _actRepo.Update(activityTypeVM.ActivityType);
                 }
-                _db.SaveChanges();
+                _actRepo.Save();
                 return RedirectToAction("Index");
             }
             return View();
@@ -85,7 +77,7 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-            var obj = _db.Activities.Find(id);
+            var obj = _actRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
@@ -99,13 +91,13 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirm(int? id)
         {
-            var obj = _db.Activities.Find(id);
+            var obj = _actRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Activities.Remove(obj);
-            _db.SaveChanges();
+            _actRepo.Remove(obj);
+            _actRepo.Save();
             return RedirectToAction("Index");
         }
     }

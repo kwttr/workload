@@ -6,26 +6,31 @@ using System.Data;
 using workload_Data;
 using workload_Models;
 using workload_Models.ViewModels;
+using workload_DataAccess.Repository.IRepository;
 
 namespace workload.Controllers
 {
     [Authorize(Roles = WC.AdminRole)]
     public class ReportController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IReportRepository _repRepo;
+        private readonly ICategoryRepository _categoryRepo;
+        private readonly ITeacherRepository _teacherRepo;
+        private readonly IActivityTypeRepository _activityTypeRepo;
+        private readonly IProcessActivityTypeRepository _processActivityTypeRepo;
 
-        public ReportController(ApplicationDbContext db)
+        public ReportController(IReportRepository repRepo, ICategoryRepository categoryRepo, ITeacherRepository teacherRepo, IActivityTypeRepository activityTypeRepo, IProcessActivityTypeRepository processActivityTypeRepository)
         {
-            _db = db;
+            _repRepo = repRepo;
+            _categoryRepo = categoryRepo;
+            _teacherRepo = teacherRepo;
+            _activityTypeRepo = activityTypeRepo;
+            _processActivityTypeRepo = processActivityTypeRepository;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Report> objList = _db.Reports;
-            foreach (var obj in objList)
-            {
-                obj.Teacher = _db.Teachers.FirstOrDefault(u => u.Id == obj.TeacherId);
-            }
+            IEnumerable<Report> objList = _repRepo.GetAll(includeProperties:"Teacher");
             return View(objList);
         }
         
@@ -36,23 +41,19 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-            //Заполнение листа ProcessActivityTypes
             ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
             {
-                Report = _db.Reports.FirstOrDefault(u => u.Id == id)
+                Report = _repRepo.Find(id.GetValueOrDefault()),
+                CategoryList = _categoryRepo.GetAll().ToList(),
             };
-            var matchingProvessActivities = _db.ProcessActivityType
-                .Where(pa => pa.ReportId == reportDetailsVM.Report.Id).ToList();
-            List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
 
-            foreach(var processActivity in matchingProvessActivities)
+            List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
+            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u=>u.ReportId == reportDetailsVM.Report.Id).ToList();
+            foreach(var processActivity in matchingProcessActivities)
             {
                 processActivityList.Add(processActivity);
             }
             reportDetailsVM.ProcessActivityTypes = processActivityList;
-
-            //Заполнение листа CategoryList
-            reportDetailsVM.CategoryList = _db.Categories.ToList();
 
             if (reportDetailsVM == null)
             {
@@ -67,11 +68,8 @@ namespace workload.Controllers
             ReportVM reportVM = new ReportVM()
             {
                 report = new Report(),
-                TeacherSelectList = _db.Teachers.Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
-                })
+                TeacherSelectList = _repRepo.GetAllDropdownList(WC.TeacherName),
+
             };
             return View(reportVM);
         }
@@ -83,12 +81,11 @@ namespace workload.Controllers
         {
             if (ModelState.IsValid)
             {
-                obj.report.Teacher = _db.Teachers.FirstOrDefault(u => u.Id == obj.report.TeacherId);
-                obj.report.Teacher.Degree = _db.Degree.FirstOrDefault(u => u.Id == obj.report.Teacher.DegreeId);
+                obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId,includeProperties:"Degree");
                 obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
                 obj.report.Rate = 1;
                 List<ProcessActivityType> list = new List<ProcessActivityType>();
-                foreach(var activity in _db.Activities)
+                foreach(var activity in _activityTypeRepo.GetAll())
                 {
                     ProcessActivityType procAct = new ProcessActivityType()
                     {
@@ -104,8 +101,8 @@ namespace workload.Controllers
                     list.Add(procAct);
                 }
                 obj.report.ProcessActivities = list;
-                _db.Reports.Add(obj.report);
-                _db.SaveChanges();
+                _repRepo.Add(obj.report);
+                _repRepo.Save();
                 return RedirectToAction("Index");
             }
             return View(obj);
