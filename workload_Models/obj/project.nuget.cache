@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UBIyXOKaaxXFZ1tgzZHtbCuqkHUOyHXkeWxRSi33+3ei5u52jIuvyV+Yv3cuwQqf1a2T9dR6EImOwZBLm8Z08w==",
+  "dgSpecHash": "rF3mmlFTkSD4+c31t/vFJVOVjxMbQrTkpSl/lKhGma1Y+lx/l65Bk0k7Z96TeYhmkwIIpuyV8x6bZ1JzEjaKpg==",
   "success": true,
-  "projectFilePath": "D:\\projects\\workload_Models\\workload_Models.csproj",
+  "projectFilePath": "D:\\projects\\kursovaya\\workload_Models\\workload_Models.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kerbix\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.2.0\\microsoft.aspnetcore.antiforgery.2.2.0.nupkg.sha512",
     "C:\\Users\\Kerbix\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

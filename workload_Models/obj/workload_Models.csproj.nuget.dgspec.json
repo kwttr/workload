@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\projects\\workload_Models\\workload_Models.csproj": {}
+    "D:\\projects\\kursovaya\\workload_Models\\workload_Models.csproj": {}
   },
   "projects": {
-    "D:\\projects\\workload_Models\\workload_Models.csproj": {
+    "D:\\projects\\kursovaya\\workload_Models\\workload_Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\projects\\workload_Models\\workload_Models.csproj",
+        "projectUniqueName": "D:\\projects\\kursovaya\\workload_Models\\workload_Models.csproj",
         "projectName": "workload_Models",
-        "projectPath": "D:\\projects\\workload_Models\\workload_Models.csproj",
+        "projectPath": "D:\\projects\\kursovaya\\workload_Models\\workload_Models.csproj",
         "packagesPath": "C:\\Users\\Kerbix\\.nuget\\packages\\",
-        "outputPath": "D:\\projects\\workload_Models\\obj\\",
+        "outputPath": "D:\\projects\\kursovaya\\workload_Models\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\VSaddons\\Shared\\NuGetPackages"

@@ -8,4 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = workload_DataAccess
-build_property.ProjectDir = D:\projects\workload_DataAccess\
+build_property.ProjectDir = D:\projects\kursovaya\workload_DataAccess\

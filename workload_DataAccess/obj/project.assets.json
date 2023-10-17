@@ -7555,11 +7555,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\projects\\workload_DataAccess\\workload_DataAccess.csproj",
+      "projectUniqueName": "D:\\projects\\kursovaya\\workload_DataAccess\\workload_DataAccess.csproj",
       "projectName": "workload_DataAccess",
-      "projectPath": "D:\\projects\\workload_DataAccess\\workload_DataAccess.csproj",
+      "projectPath": "D:\\projects\\kursovaya\\workload_DataAccess\\workload_DataAccess.csproj",
       "packagesPath": "C:\\Users\\Kerbix\\.nuget\\packages\\",
-      "outputPath": "D:\\projects\\workload_DataAccess\\obj\\",
+      "outputPath": "D:\\projects\\kursovaya\\workload_DataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\VSaddons\\Shared\\NuGetPackages"
@@ -7580,11 +7580,11 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\projects\\workload_Models\\workload_Models.csproj": {
-              "projectPath": "D:\\projects\\workload_Models\\workload_Models.csproj"
+            "D:\\projects\\kursovaya\\workload_Models\\workload_Models.csproj": {
+              "projectPath": "D:\\projects\\kursovaya\\workload_Models\\workload_Models.csproj"
             },
-            "D:\\projects\\workload_Utility\\workload_Utility.csproj": {
-              "projectPath": "D:\\projects\\workload_Utility\\workload_Utility.csproj"
+            "D:\\projects\\kursovaya\\workload_Utility\\workload_Utility.csproj": {
+              "projectPath": "D:\\projects\\kursovaya\\workload_Utility\\workload_Utility.csproj"
             }
           }
         }
