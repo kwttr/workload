@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using workload_Data;
@@ -58,6 +59,7 @@ namespace workload.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
+        public IEnumerable<SelectListItem> Roles;
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -103,6 +105,9 @@ namespace workload.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            public string SelectedRole { get; set; }
+            public string FullName { get; set; }
         }
 
 
@@ -114,6 +119,7 @@ namespace workload.Areas.Identity.Pages.Account
                 await _roleManager.CreateAsync(new IdentityRole(WC.HeadOfDepartmentRole));
                 await _roleManager.CreateAsync(new IdentityRole(WC.TeacherRole));
             }
+            Roles = new SelectList(_roleManager.Roles.ToList(), "Name", "Name");
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -130,38 +136,43 @@ namespace workload.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
                 if (result.Succeeded)
                 {
                     if (User.IsInRole(WC.AdminRole))
                     {
                         //Администратор создает нового пользователя = создается админ
-                        await _userManager.AddToRoleAsync(user, WC.AdminRole);
-                        //using (var db = new ApplicationDbContext())
-                        //{
-                        //    Admin admin = new Admin()
-                        //    {
-                        //        Name = Input.Email,
-                        //        UserId = user.Id
-                        //    };
-                        //    db.Admins.Add(admin);
-                        //    db.SaveChanges();
-                        //}
+                        if (Input.SelectedRole == WC.AdminRole) await _userManager.AddToRoleAsync(user, WC.AdminRole);
                     }
-                    else
+                    if (Input.SelectedRole == WC.HeadOfDepartmentRole)
                     {
-                        //Создается учетная пользователь преподавателя
-                        await _userManager.AddToRoleAsync(user, WC.TeacherRole);
-                        //using (var db = new ApplicationDbContext())
-                        //{
-                        //    Teacher teacher = new Teacher()
-                        //    {
-                        //        Name = Input.Email,
-                        //        UserId = user.Id
-                        //    };
-                        //    db.Teachers.Add(teacher);
-                        //    db.SaveChanges();
-                        //}
+                        await _userManager.AddToRoleAsync(user, WC.HeadOfDepartmentRole);
+                        using (var db = new ApplicationDbContext())
+                        {
+                            HeadOfDepartment headOfDepartment = new HeadOfDepartment()
+                            {
+                                Name = Input.Email,
+                                UserId = user.Id
+                            };
+                            db.HeadOfDepartments.Add(headOfDepartment);
+                            db.SaveChanges();
+                        }
+                    }
+                    if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.HeadOfDepartmentRole))
+                    {
+                        if (Input.SelectedRole == WC.TeacherRole)
+                        {
+                            await _userManager.AddToRoleAsync(user, WC.TeacherRole);
+                            using (var db = new ApplicationDbContext())
+                            {
+                                Teacher teacher = new Teacher()
+                                {
+                                    Name = Input.Email,
+                                    UserId = user.Id
+                                };
+                                db.Teachers.Add(teacher);
+                                db.SaveChanges();
+                            }
+                        }
                     }
 
                     _logger.LogInformation("User created a new account with password.");

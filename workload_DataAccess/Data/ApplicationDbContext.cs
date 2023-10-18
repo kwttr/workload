@@ -17,7 +17,6 @@ namespace workload_Data
 
         public DbSet<Department> Department { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Admin> Admins { get; set; }
         public DbSet<ActivityType> Activities { get; set; }
         public DbSet<ProcessActivityType> ProcessActivityType { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -25,6 +24,7 @@ namespace workload_Data
         public DbSet<HeadOfDepartment> HeadOfDepartments { get; set; }
         public DbSet<Degree> Degree { get; set; }
         public DbSet<Position> Position { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

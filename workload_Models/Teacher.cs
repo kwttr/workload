@@ -11,6 +11,11 @@ namespace workload_Models
         [Required]
         public string Name { get; set; }
 
+
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public IdentityUser? User { get; set; }
+
         public int? DegreeId { get; set; }
         public Degree? Degree{ get; set; }
 
