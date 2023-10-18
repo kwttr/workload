@@ -39,6 +39,12 @@
                                 </ul>
                             </li>
                         }
+                        @if (User.IsInRole(workload_Utility.WC.TeacherRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="TeacherProfile" asp-action="Index">Teacher Profile</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

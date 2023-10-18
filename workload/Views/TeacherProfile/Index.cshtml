@@ -1,0 +1,32 @@
+﻿@model workload_Models.ViewModels.TeacherProfileVM
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Category List</h2>
+        </div>
+    </div>
+
+    <br /><br />
+
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Category name
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <td width="50%"></td>
+                        <td class="text-center">
+                            <div class="w-75 btn-group" role="group">
+                                <a asp-route-Id="" asp-action="ViewActivities" class="btn btn-primary mx-2">View Activities</a>
+                            </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+</div>
