@@ -162,7 +162,7 @@ namespace workload.Areas.Identity.Pages.Account
                             {
                                 HeadOfDepartment headOfDepartment = new HeadOfDepartment()
                                 {
-                                    Name = Input.Email,
+                                    Name = Input.FullName,
                                     UserId = user.Id
                                 };
                                 db.HeadOfDepartments.Add(headOfDepartment);
@@ -178,7 +178,7 @@ namespace workload.Areas.Identity.Pages.Account
                                 {
                                     Teacher teacher = new Teacher()
                                     {
-                                        Name = Input.Email,
+                                        Name = Input.FullName,
                                         UserId = user.Id
                                     };
                                     db.Teachers.Add(teacher);
