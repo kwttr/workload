@@ -48,6 +48,17 @@
                         <span asp-validation-for="Teacher.PositionId" class="text-danger"></span>
                     </div>
                 </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Teacher.DepartmentId"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="Teacher.DepartmentId" asp-items="@Model.DepartmentSelectList" class="form-control">
+                            <option disabled selected>--Select Department--</option>
+                        </select>
+                        <span asp-validation-for="Teacher.DepartmentId" class="text-danger"></span>
+                    </div>
+                </div>
 
                 <div class="form-group row">
                     <div class="col-8 offset-4 row">

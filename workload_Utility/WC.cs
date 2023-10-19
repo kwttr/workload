@@ -10,5 +10,6 @@
         public const string PositionName = "Position";
         public const string CategoryName = "Category";
         public const string TeacherName = "Teacher";
+        public const string DepartmentName = "Department";
     }
 }

@@ -28,27 +28,32 @@ namespace workload.Controllers
         {
             var roleName = WC.TeacherName;
             var usersWIthRoles = _userManager.GetUsersInRoleAsync(roleName).Result.ToList();
-            Teacher teacher = new Teacher();
-            //Teacher<List> objlist = 
-            return View(usersWIthRoles);
+            List<Teacher> objlist = new List<Teacher>();
+            foreach(var user in usersWIthRoles)
+            {
+                objlist.Add(_teachRepo.Find(user.Id));
+            }
+            return View(objlist);
         }
 
         //GET - UPSERT
-        public IActionResult Upsert(int? id)
+        public IActionResult Upsert(string? id)
         {
             TeacherVM teacherVM = new TeacherVM()
             {
                 Teacher = new Teacher(),
                 DegreeSelectList = _teachRepo.GetAllDropdownList(WC.DegreeName),
-                PositionSelectList = _teachRepo.GetAllDropdownList(WC.PositionName)
+                PositionSelectList = _teachRepo.GetAllDropdownList(WC.PositionName),
+                DepartmentSelectList = _teachRepo.GetAllDropdownList(WC.DepartmentName)
             };
+            teacherVM.Teacher= _teachRepo.Find(id);
             if (id == null)
             {
                 return View(teacherVM);
             }
             else
             {
-                teacherVM.Teacher= _teachRepo.Find(id.GetValueOrDefault());
+                teacherVM.Teacher= _teachRepo.Find(id);
                 if (teacherVM.Teacher == null)
                 {
                     return NotFound();
@@ -79,13 +84,13 @@ namespace workload.Controllers
         }
 
         //GET - DELETE
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(string? id)
         {
-            if (id == 0 || id == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var obj = _teachRepo.Find(id.GetValueOrDefault());
+            var obj = _teachRepo.Find(id);
             if (obj == null)
             {
                 return NotFound();
@@ -97,9 +102,9 @@ namespace workload.Controllers
         //POST - DELETE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirm(int? id)
+        public IActionResult DeleteConfirm(string? id)
         {
-            var obj = _teachRepo.Find(id.GetValueOrDefault());
+            var obj = _teachRepo.Find(id);
             if (obj == null)
             {
                 return NotFound();

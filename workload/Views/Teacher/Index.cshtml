@@ -5,9 +5,6 @@
         <div class="col-6">
             <h2 class="text-primary">Teacher List</h2>
         </div>
-        <div class="col-6 text-right">
-            <a asp-action="Upsert" class="btn btn-primary">Create New Teacher</a>
-        </div>
     </div>
 
     <br /><br />
@@ -30,7 +27,7 @@
                 @foreach(var obj in Model)
                 {
                     <tr>
-                        <td width="50%">@obj.Id</td>
+                        <td width="50%">@obj.FullName</td>
                         <td class="text-center">
                             <div class="w-75 btn-group" role="group">
                                 <a asp-route-Id="@obj.Id" asp-action="Upsert" class="btn btn-primary mx-2">Edit</a>

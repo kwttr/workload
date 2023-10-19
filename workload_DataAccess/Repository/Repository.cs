@@ -26,6 +26,11 @@ namespace workload_DataAccess.Repository
             dbSet.Add(entity);
         }
 
+        public T Find(string id)
+        {
+            return dbSet.Find(id);
+        }
+
         public T Find(int id)
         {
             return dbSet.Find(id);

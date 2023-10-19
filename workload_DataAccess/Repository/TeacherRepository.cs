@@ -37,6 +37,14 @@ namespace workload_DataAccess.Repository
                     Value = i.Id.ToString()
                 });
             }
+            if(obj == WC.DepartmentName)
+            {
+                return _db.Department.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                });
+            }
             return null;
         }
 

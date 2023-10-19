@@ -7,6 +7,7 @@ namespace workload_Models
     public class Teacher : IdentityUser
     {
         public string FullName { get; set; }
+
         public int DegreeId { get; set; }
         public Degree? Degree{ get; set; }
 
@@ -20,6 +21,7 @@ namespace workload_Models
 
         public List<Report>? Reports { get; set; }
     }
+
     public class Degree
     {
         [Key]

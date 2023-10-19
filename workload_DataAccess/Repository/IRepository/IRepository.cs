@@ -12,6 +12,8 @@ namespace workload_DataAccess.Repository.IRepository
     {
         T Find(int id);
 
+        T Find(string id);
+
         IEnumerable<T> GetAll(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

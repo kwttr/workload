@@ -186,7 +186,7 @@ namespace workload.Areas.Identity.Pages.Account
                             }
                         }
                     }
-                    else if (_userManager.Users.Count() == 1)
+                    else if (_userManager.Users.Count() <= 1)
                     {
                         await _userManager.AddToRoleAsync(user,WC.AdminRole);
                     }
