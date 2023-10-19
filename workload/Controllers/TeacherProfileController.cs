@@ -86,9 +86,9 @@ namespace workload.Controllers
         {
             if(ModelState.IsValid)
             {
-                foreach(var processActivity in reportDetailsVM.ProcessActivityTypes)
+                for(int i = 0; i < reportDetailsVM.ProcessActivityTypes.Count(); i++)
                 {
-                    _processActivityTypeRepo.Update(processActivity);
+                    _processActivityTypeRepo.Update(reportDetailsVM.ProcessActivityTypes[i]);
                 }
                 _processActivityTypeRepo.Save();
                 return RedirectToAction("Index");
