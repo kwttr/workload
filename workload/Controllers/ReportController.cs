@@ -19,7 +19,11 @@ namespace workload.Controllers
         private readonly IActivityTypeRepository _activityTypeRepo;
         private readonly IProcessActivityTypeRepository _processActivityTypeRepo;
 
-        public ReportController(IReportRepository repRepo, ICategoryRepository categoryRepo, ITeacherRepository teacherRepo, IActivityTypeRepository activityTypeRepo, IProcessActivityTypeRepository processActivityTypeRepository)
+        public ReportController(IReportRepository repRepo,
+                                ICategoryRepository categoryRepo,
+                                ITeacherRepository teacherRepo,
+                                IActivityTypeRepository activityTypeRepo,
+                                IProcessActivityTypeRepository processActivityTypeRepository)
         {
             _repRepo = repRepo;
             _categoryRepo = categoryRepo;
@@ -27,6 +31,8 @@ namespace workload.Controllers
             _activityTypeRepo = activityTypeRepo;
             _processActivityTypeRepo = processActivityTypeRepository;
         }
+        [BindProperty]
+        public List<ProcessActivityType> processActivityTypes { get; set; }
 
         public IActionResult Index()
         {

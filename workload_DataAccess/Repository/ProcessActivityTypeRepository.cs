@@ -16,7 +16,6 @@ namespace workload_DataAccess.Repository
         {
             _db = db;
         }
-
         public void Update(ProcessActivityType obj)
         {
             _db.ProcessActivityType.Update(obj);

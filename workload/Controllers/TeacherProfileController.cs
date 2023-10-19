@@ -12,17 +12,23 @@ namespace workload.Controllers
     {
         private readonly IReportRepository _repRepo;
         private readonly ITeacherRepository _teachRepo;
+        private readonly ICategoryRepository _categoryRepo;
+        private readonly IProcessActivityTypeRepository _processActivityTypeRepo;
         private readonly UserManager<IdentityUser> _userManager;
 
 
         public TeacherProfileController(
             IReportRepository reportRepository, 
             ITeacherRepository teachRepo,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            ICategoryRepository categoryRepo,
+            IProcessActivityTypeRepository processActivityTypeRepo)
         {
             _repRepo = reportRepository;
             _teachRepo = teachRepo;
             _userManager = userManager;
+            _categoryRepo = categoryRepo;
+            _processActivityTypeRepo = processActivityTypeRepo;
         }
 
         public async Task<IActionResult> Index()
@@ -30,7 +36,7 @@ namespace workload.Controllers
             var user = await _userManager.GetUserAsync(User);
             TeacherProfileVM vm = new TeacherProfileVM()
             {
-                teacher = _teachRepo.Find(user.Id.FirstOrDefault())
+                teacher = _teachRepo.Find(user.Id)
             };
             //vm.reportList = _repRepo.GetAll().Where(x => x.TeacherId == vm.teacher.Id).ToList();
 
@@ -42,6 +48,51 @@ namespace workload.Controllers
             }
 
             vm.reportList = reports;
+            return View(vm);
+        }
+
+        //GET - UPDATEACTIVITIES
+        public IActionResult UpdateActivities(int? id)
+        {
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+            ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
+            {
+                Report = _repRepo.Find(id.GetValueOrDefault()),
+                CategoryList = _categoryRepo.GetAll().ToList(),
+            };
+
+            List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
+            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVM.Report.Id).ToList();
+            foreach (var processActivity in matchingProcessActivities)
+            {
+                processActivityList.Add(processActivity);
+            }
+            reportDetailsVM.ProcessActivityTypes = processActivityList;
+
+            if (reportDetailsVM == null)
+            {
+                return NotFound();
+            }
+            return View(reportDetailsVM);
+        }
+
+        //POST - UPDATEACTIVITIES
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateActivities(ReportDetailsVM reportDetailsVM)
+        {
+            if(ModelState.IsValid)
+            {
+                foreach(var processActivity in reportDetailsVM.ProcessActivityTypes)
+                {
+                    _processActivityTypeRepo.Update(processActivity);
+                }
+                _processActivityTypeRepo.Save();
+                return RedirectToAction("Index");
+            }
             return View();
         }
     }

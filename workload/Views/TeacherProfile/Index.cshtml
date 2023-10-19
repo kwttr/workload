@@ -3,7 +3,7 @@
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">Category List</h2>
+            <h2 class="text-primary">@Model.teacher.FullName Profile</h2>
         </div>
     </div>
 
@@ -13,20 +13,26 @@
             <thead>
                 <tr>
                     <th>
-                        Category name
+                        Название отчета
                     </th>
-                    <th></th>
+                    <th>
+                        Кнопки управления
+                    </th>
                 </tr>
             </thead>
             <tbody>
+                 @foreach(var obj in Model.reportList)
+                    {
                     <tr>
-                        <td width="50%"></td>
+                        <td width="50%">@obj.Title</td>
                         <td class="text-center">
-                            <div class="w-75 btn-group" role="group">
-                                <a asp-route-Id="" asp-action="ViewActivities" class="btn btn-primary mx-2">View Activities</a>
+                            <div class="w-30 btn-group" role="group">
+                                <a asp-route-Id="@obj.Id" asp-action="UpdateActivities" class="btn btn-primary mx-2">Update Activities</a>
+                                <a asp-route-Id="@obj.Id" asp-action="SendReport" class="btn btn-warning mx-2">Send Report</a>
                             </div>
                         </td>
                     </tr>
+                    }
             </tbody>
         </table>
 </div>
