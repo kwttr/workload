@@ -28,10 +28,9 @@ namespace workload.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            var userId = user.Id;
             TeacherProfileVM vm = new TeacherProfileVM()
             {
-                teacher = _teachRepo.FirstOrDefault(x => x.UserId == userId),
+                teacher = _teachRepo.Find(user.Id.FirstOrDefault())
             };
             //vm.reportList = _repRepo.GetAll().Where(x => x.TeacherId == vm.teacher.Id).ToList();
 

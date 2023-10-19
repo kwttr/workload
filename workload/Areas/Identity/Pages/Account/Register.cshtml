@@ -26,6 +26,7 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <p></p>
             <div class="form-floating">
                 <div class="col-12">
                     <select asp-for="Input.SelectedRole" asp-items="@Model.Roles" class="form-control">
@@ -34,6 +35,34 @@
                     <span asp-validation-for="Input.SelectedRole" class="text-danger"></span>
                 </div>
             </div>
+            <p></p>
+            <div class="form-floating">
+                <div class="col-12">
+                    <select asp-for="Input.DegreeId" asp-items="@Model.Degrees" class="form-control">
+                        <option disabled selected>--Select Degree--</option>
+                    </select>
+                    <span asp-validation-for="Input.DegreeId" class="text-danger"></span>
+                </div>
+            </div>
+            <p></p>
+            <div class="form-floating">
+                <div class="col-12">
+                    <select asp-for="Input.PositionId" asp-items="@Model.Positions" class="form-control">
+                        <option disabled selected>--Select Position--</option>
+                    </select>
+                    <span asp-validation-for="Input.PositionId" class="text-danger"></span>
+                </div>
+            </div>
+            <p></p>
+            <div class="form-floating">
+                <div class="col-12">
+                    <select asp-for="Input.DepartmentId" asp-items="@Model.Departments" class="form-control">
+                        <option disabled selected>--Select Department--</option>
+                    </select>
+                    <span asp-validation-for="Input.DepartmentId" class="text-danger"></span>
+                </div>
+            </div>
+
             @if (User.IsInRole(workload_Utility.WC.AdminRole))
             {
                 <button id="registerSubmit" type="submit" class="w-100 btn btn-warning">Register User</button>

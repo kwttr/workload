@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,15 @@ namespace workload_DataAccess.Repository
             _db = db;
         }
 
+        public IEnumerable<SelectListItem> GetAllDropdownList()
+        {
+            return _db.Department.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+        }
+
         public void Update(Department obj)
         {
             var objFromDb = base.FirstOrDefault(u => u.Id == obj.Id);
@@ -25,5 +35,6 @@ namespace workload_DataAccess.Repository
                 objFromDb.Name = obj.Name;
             }
         }
+
     }
 }

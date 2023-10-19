@@ -11,7 +11,7 @@ namespace workload_Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
 
         }
-        public ApplicationDbContext() { 
+        public ApplicationDbContext() {
             Database.EnsureCreated();
         }
 
@@ -21,10 +21,8 @@ namespace workload_Data
         public DbSet<ProcessActivityType> ProcessActivityType { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Report> Reports { get; set; }
-        public DbSet<HeadOfDepartment> HeadOfDepartments { get; set; }
         public DbSet<Degree> Degree { get; set; }
         public DbSet<Position> Position { get; set; }
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

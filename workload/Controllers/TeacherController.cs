@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 using workload_Data;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
@@ -14,16 +16,21 @@ namespace workload.Controllers
     public class TeacherController : Controller
     {
         private readonly ITeacherRepository _teachRepo;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public TeacherController(ITeacherRepository teachRepo)
+        public TeacherController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager)
         {
             _teachRepo = teachRepo;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Teacher> objList = _teachRepo.GetAll();
-            return View(objList);
+            var roleName = WC.TeacherName;
+            var usersWIthRoles = _userManager.GetUsersInRoleAsync(roleName).Result.ToList();
+            Teacher teacher = new Teacher();
+            //Teacher<List> objlist = 
+            return View(usersWIthRoles);
         }
 
         //GET - UPSERT
@@ -57,7 +64,7 @@ namespace workload.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (teacherVM.Teacher == null || teacherVM.Teacher.Id == 0)
+                if (teacherVM.Teacher == null)
                 {
                     _teachRepo.Add(teacherVM.Teacher);
                 }

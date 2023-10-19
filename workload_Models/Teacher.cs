@@ -4,34 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace workload_Models
 {
-    public class Teacher
+    public class Teacher : IdentityUser
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-
-
-        public string? UserId { get; set; }
-        [ForeignKey("UserId")]
-        public IdentityUser? User { get; set; }
-
-        public int? DegreeId { get; set; }
+        public string FullName { get; set; }
+        public int DegreeId { get; set; }
         public Degree? Degree{ get; set; }
 
-        public int? PositionId { get; set; }
+        public int PositionId { get; set; }
         public Position? Position { get; set; }
 
         [Display(Name="Department Name")]
-        public int? DepartmentId { get; set; }
+        public int DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
         public virtual Department? Department { get; set; }
 
         public List<Report>? Reports { get; set; }
-
-        //[ForeignKey("IdentityUser")]
-        //public string UserId { get; set; }
-        //public IdentityUser? User { get; set; }
     }
     public class Degree
     {

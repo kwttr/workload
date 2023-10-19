@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workload_Data;
 
@@ -10,9 +11,11 @@ using workload_Data;
 namespace workload_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231019041304_IcantRememberWhatIUpdated")]
+    partial class IcantRememberWhatIUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -470,6 +473,19 @@ namespace workload_DataAccess.Migrations
                     b.HasDiscriminator().HasValue("Teacher");
                 });
 
+            modelBuilder.Entity("workload_Models.HeadOfDepartment", b =>
+                {
+                    b.HasBaseType("workload_Models.Teacher");
+
+                    b.Property<int?>("DepartmentId1")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("DepartmentId1")
+                        .IsUnique();
+
+                    b.HasDiscriminator().HasValue("HeadOfDepartment");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -589,8 +605,17 @@ namespace workload_DataAccess.Migrations
                     b.Navigation("Position");
                 });
 
+            modelBuilder.Entity("workload_Models.HeadOfDepartment", b =>
+                {
+                    b.HasOne("workload_Models.Department", null)
+                        .WithOne("HeadOfDepartment")
+                        .HasForeignKey("workload_Models.HeadOfDepartment", "DepartmentId1");
+                });
+
             modelBuilder.Entity("workload_Models.Department", b =>
                 {
+                    b.Navigation("HeadOfDepartment");
+
                     b.Navigation("Teachers");
                 });
 

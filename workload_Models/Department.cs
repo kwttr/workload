@@ -9,7 +9,6 @@ namespace workload_Models
         [Required]
         public string Name { get; set; }
 
-        public List<Report>? Reports { get; set; }
         public List<Teacher>? Teachers { get; set; }
     }
 }

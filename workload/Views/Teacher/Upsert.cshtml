@@ -4,11 +4,10 @@
     var title = "Create Teacher";
 }
 <form method="post">
-    @if (Model.Teacher.Id != 0)
+    @if (Model.Teacher.Id != null)
     {
         title = "Edit Teacher";
         <input asp-for="Teacher.Id" hidden />
-        <input asp-for="Teacher.UserId" hidden />
     }
     <div class="border p3">
         <div class="form-group row">
@@ -18,11 +17,11 @@
             <div class="col-8">
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="Teacher.Name"></label>
+                        <label asp-for="Teacher.FullName"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Teacher.Name" class="form-control" />
-                        <span asp-validation-for="Teacher.Name" class="text-danger"></span>
+                        <input asp-for="Teacher.FullName" class="form-control" />
+                        <span asp-validation-for="Teacher.FullName" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -54,7 +53,7 @@
                     <div class="col-8 offset-4 row">
 
                         <div class="col">
-                            @if (Model.Teacher.Id != 0)
+                            @if (Model.Teacher.Id != null)
                             {
                             //update
                                 <input type="submit" class="btn btn-info w-100" value="Update" />

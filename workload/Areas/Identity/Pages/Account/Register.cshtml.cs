@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using workload_Data;
+using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Utility;
 
@@ -34,6 +35,8 @@ namespace workload.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ITeacherRepository _teachRepo;
+        private readonly IDepartmentRepository _departmentRepo;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -41,7 +44,9 @@ namespace workload.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            ITeacherRepository teachRepo,
+            IDepartmentRepository departmentRepository)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -50,6 +55,8 @@ namespace workload.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _teachRepo = teachRepo;
+            _departmentRepo = departmentRepository;
         }
 
         /// <summary>
@@ -60,6 +67,12 @@ namespace workload.Areas.Identity.Pages.Account
         public InputModel Input { get; set; }
 
         public IEnumerable<SelectListItem> Roles;
+
+        public IEnumerable<SelectListItem> Degrees;
+
+        public IEnumerable<SelectListItem> Positions;
+
+        public IEnumerable<SelectListItem> Departments;
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -108,6 +121,9 @@ namespace workload.Areas.Identity.Pages.Account
 
             public string SelectedRole { get; set; }
             public string FullName { get; set; }
+            public int DegreeId { get; set; }
+            public int PositionId { get; set; }
+            public int DepartmentId { get; set; }
         }
 
 
@@ -119,6 +135,10 @@ namespace workload.Areas.Identity.Pages.Account
                 await _roleManager.CreateAsync(new IdentityRole(WC.HeadOfDepartmentRole));
                 await _roleManager.CreateAsync(new IdentityRole(WC.TeacherRole));
             }
+            Degrees = _teachRepo.GetAllDropdownList(WC.DegreeName);
+            Positions = _teachRepo.GetAllDropdownList(WC.PositionName);
+            Departments = _departmentRepo.GetAllDropdownList();
+
             if (User.IsInRole(WC.HeadOfDepartmentRole))
             {
                 Roles = new SelectList(_roleManager.Roles.Where(x => x.NormalizedName =="TEACHER").ToList(),"Name","Name");
@@ -139,7 +159,7 @@ namespace workload.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 //var user = CreateUser();
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName };
+                var user = new Teacher { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName, PositionId = Input.PositionId, DegreeId = Input.DegreeId, DepartmentId = Input.DepartmentId};
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -149,7 +169,6 @@ namespace workload.Areas.Identity.Pages.Account
                 {
                     if (_userManager.Users.Count() > 1)
                     {
-
                         if (User.IsInRole(WC.AdminRole))
                         {
                             //Администратор создает нового пользователя = создается админ
@@ -158,32 +177,12 @@ namespace workload.Areas.Identity.Pages.Account
                         if (Input.SelectedRole == WC.HeadOfDepartmentRole)
                         {
                             await _userManager.AddToRoleAsync(user, WC.HeadOfDepartmentRole);
-                            using (var db = new ApplicationDbContext())
-                            {
-                                HeadOfDepartment headOfDepartment = new HeadOfDepartment()
-                                {
-                                    Name = Input.FullName,
-                                    UserId = user.Id
-                                };
-                                db.HeadOfDepartments.Add(headOfDepartment);
-                                db.SaveChanges();
-                            }
                         }
                         if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.HeadOfDepartmentRole))
                         {
                             if (Input.SelectedRole == WC.TeacherRole)
                             {
                                 await _userManager.AddToRoleAsync(user, WC.TeacherRole);
-                                using (var db = new ApplicationDbContext())
-                                {
-                                    Teacher teacher = new Teacher()
-                                    {
-                                        Name = Input.FullName,
-                                        UserId = user.Id
-                                    };
-                                    db.Teachers.Add(teacher);
-                                    db.SaveChanges();
-                                }
                             }
                         }
                     }
