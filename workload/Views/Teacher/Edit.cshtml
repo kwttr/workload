@@ -1,18 +1,11 @@
 ﻿@model workload_Models.ViewModels.TeacherVM
 
-@{
-    var title = "Create Teacher";
-}
 <form method="post">
-    @if (Model.Teacher.Id != null)
-    {
-        title = "Edit Teacher";
-        <input asp-for="Teacher.Id" hidden />
-        <input asp-for="Teacher.UserName" hidden/>
-    }
+<input asp-for="Teacher.Id" hidden />
+<input asp-for="Teacher.UserName" hidden/>
     <div class="border p3">
         <div class="form-group row">
-            <h2 class="text-info p1-3">@title</h2>
+            <h2 class="text-info p1-3">Edit Teacher</h2>
         </div>
         <div class="row">
             <div class="col-8">

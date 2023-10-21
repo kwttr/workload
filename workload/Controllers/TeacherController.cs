@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System.Collections.Immutable;
 using workload_Data;
 using workload_DataAccess.Repository.IRepository;
@@ -36,24 +38,24 @@ namespace workload.Controllers
             return View(objlist);
         }
 
-        //GET - UPSERT
-        public IActionResult Upsert(string? id)
+        //GET - EDIT
+        public IActionResult Edit(string? id)
         {
-            TeacherVM teacherVM = new TeacherVM()
-            {
-                Teacher = new Teacher(),
-                DegreeSelectList = _teachRepo.GetAllDropdownList(WC.DegreeName),
-                PositionSelectList = _teachRepo.GetAllDropdownList(WC.PositionName),
-                DepartmentSelectList = _teachRepo.GetAllDropdownList(WC.DepartmentName)
-            };
-            teacherVM.Teacher= _teachRepo.Find(id);
+
             if (id == null)
             {
-                return View(teacherVM);
+                return NotFound();
             }
             else
             {
-                teacherVM.Teacher= _teachRepo.Find(id);
+                TeacherVM teacherVM = new TeacherVM()
+                {
+                    Teacher = new Teacher(),
+                    DegreeSelectList = _teachRepo.GetAllDropdownList(WC.DegreeName),
+                    PositionSelectList = _teachRepo.GetAllDropdownList(WC.PositionName),
+                    DepartmentSelectList = _teachRepo.GetAllDropdownList(WC.DepartmentName)
+                };
+                teacherVM.Teacher = _teachRepo.Find(id);
                 if (teacherVM.Teacher == null)
                 {
                     return NotFound();
@@ -62,21 +64,20 @@ namespace workload.Controllers
             }
         }
 
-        //POST - UPSERT
+        //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(TeacherVM teacherVM)
+        public IActionResult Edit(TeacherVM vm)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                if (teacherVM.Teacher == null)
-                {
-                    _teachRepo.Add(teacherVM.Teacher);
-                }
-                else
-                {
-                    _teachRepo.Update(teacherVM.Teacher);
-                }
+                //КОСТЫЛЬ!!!!!!!
+                Teacher teacher = _teachRepo.Find(vm.Teacher.Id);
+                teacher.FullName = vm.Teacher.FullName;
+                teacher.DepartmentId = vm.Teacher.DepartmentId;
+                teacher.DegreeId = vm.Teacher.DegreeId;
+                teacher.PositionId = vm.Teacher.PositionId;
+                _teachRepo.Update(teacher);
                 _teachRepo.Save();
                 return RedirectToAction("Index");
             }
@@ -95,7 +96,6 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-
             return View(obj);
         }
 
