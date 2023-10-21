@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
+using workload_Utility;
 
 namespace workload.Controllers
 {
+    [Authorize(Roles = WC.HeadOfDepartmentRole)]
     public class HeadOfDepartmentProfileController : Controller
     {
         private readonly ITeacherRepository _teachRepo;
@@ -39,6 +42,7 @@ namespace workload.Controllers
             return View(vm);
         }
 
+        //GET - VIEWREPORT
         public IActionResult ViewReport(int? id)
         {
             if (id == 0 || id == null || id == -1)
@@ -64,6 +68,31 @@ namespace workload.Controllers
                 return NotFound();
             }
             return View(reportDetailsVM);
+        }
+
+        //GET - VIEWALLREPORTS
+        public IActionResult ViewAllReports(string? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                TeacherProfileVM vm = new TeacherProfileVM()
+                {
+                    teacher = _teachRepo.Find(id)
+                };
+                List<Report> reports = new List<Report>();
+                var matchingReports = _repRepo.GetAll().Where(u => u.TeacherId == vm.teacher.Id).ToList();
+                foreach (var report in matchingReports)
+                {
+                    reports.Add(report);
+                }
+
+                vm.reportList = reports;
+                return View(vm);
+            }
         }
     }
 }

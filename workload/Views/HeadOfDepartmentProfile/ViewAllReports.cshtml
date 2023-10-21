@@ -1,0 +1,40 @@
+﻿@model workload_Models.ViewModels.TeacherProfileVM
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">@Model.teacher.FullName Profile</h2>
+        </div>
+         <div class="col-6 text-right">
+        <a asp-action="Index" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+
+    <br /><br />
+
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Название отчета
+                </th>
+                <th>
+                    Кнопки управления
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var obj in Model.reportList)
+            {
+                <tr>
+                    <td width="50%">@obj.Title</td>
+                    <td class="text-center">
+                        <div class="w-30 btn-group" role="group">
+                            <a asp-route-Id="@obj.Id" asp-action="ViewReport" class="btn btn-primary mx-2">Посмотреть отчет</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
