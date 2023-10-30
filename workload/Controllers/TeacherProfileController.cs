@@ -120,7 +120,10 @@ namespace workload.Controllers
                 Report = _repRepo.Find(id.GetValueOrDefault()),
                 CategoryList = _categoryRepo.GetAll().ToList(),
             };
-
+            if (reportDetailsVM.Report == null)
+            {
+                return NotFound();
+            }
             List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
             var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVM.Report.Id).ToList();
             foreach (var processActivity in matchingProcessActivities)
