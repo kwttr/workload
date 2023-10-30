@@ -23,6 +23,7 @@ namespace workload_Data
         public DbSet<Report> Reports { get; set; }
         public DbSet<Degree> Degree { get; set; }
         public DbSet<Position> Position { get; set; }
+        public DbSet<Status> Status { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -109,6 +110,26 @@ namespace workload_Data
                 }
             };
             modelBuilder.Entity<Position>().HasData(positions);
+
+            var statuses = new Status[]
+            {
+                new Status
+                {
+                    Id=1,
+                    Name="Назначен отчет"
+                },
+                new Status
+                {
+                    Id=2,
+                    Name="Отправлен на проверку"
+                },
+                new Status
+                {
+                    Id=3,
+                    Name="Подтверждено"
+                }
+            };
+            modelBuilder.Entity<Status>().HasData(statuses);
         }
     }
 }

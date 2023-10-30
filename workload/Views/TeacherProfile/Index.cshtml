@@ -27,9 +27,22 @@
                         <td width="50%">@obj.Title</td>
                         <td class="text-center">
                             <div class="w-30 btn-group" role="group">
+                            @if (obj.StatusId == 1)
+                            {
                                 <a asp-route-Id="@obj.Id" asp-action="UpdateActivities" class="btn btn-primary mx-2">Update Activities</a>
                                 <a asp-route-Id="@obj.Id" asp-action="SendReport" class="btn btn-warning mx-2">Send Report</a>
-                            </div>
+                            }
+                            else if(obj.StatusId == 2)
+                            {
+                                <a asp-route-Id="@obj.Id" asp-action="ViewReport" class="btn btn-primary mx-2">View Activities</a>
+                                <button type="button" class="btn btn-dark" disabled>On review</button>
+                            }
+                            else if(obj.StatusId == 3)
+                            {
+                                <a asp-route-Id="@obj.Id" asp-action="ViewReport" class="btn btn-primary mx-2">View Activities</a>
+                                <button type="button" class="btn btn-success" disabled>Approved</button>
+                            }
+                        </div>
                         </td>
                     </tr>
                     }

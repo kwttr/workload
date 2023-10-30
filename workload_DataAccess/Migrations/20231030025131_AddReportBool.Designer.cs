@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workload_Data;
 
@@ -10,9 +11,11 @@ using workload_Data;
 namespace workload_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231030025131_AddReportBool")]
+    partial class AddReportBool
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -426,11 +429,11 @@ namespace workload_DataAccess.Migrations
                     b.Property<string>("CurrentDegree")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double?>("Rate")
                         .HasColumnType("REAL");
-
-                    b.Property<int>("StatusId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("TeacherId")
                         .IsRequired()
@@ -442,43 +445,9 @@ namespace workload_DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StatusId");
-
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Reports");
-                });
-
-            modelBuilder.Entity("workload_Models.Status", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Status");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Назначен отчет"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Отправлен на проверку"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Подтверждено"
-                        });
                 });
 
             modelBuilder.Entity("workload_Models.Teacher", b =>
@@ -590,19 +559,11 @@ namespace workload_DataAccess.Migrations
 
             modelBuilder.Entity("workload_Models.Report", b =>
                 {
-                    b.HasOne("workload_Models.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("workload_Models.Teacher", "Teacher")
                         .WithMany("Reports")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Status");
 
                     b.Navigation("Teacher");
                 });
