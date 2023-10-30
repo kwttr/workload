@@ -19,7 +19,15 @@ namespace workload_Models
         public string? CurrentDegree { get; set; }
         public double? Rate { get; set; }
 
+        public int StatusId { get; set; }
+        public Status? Status { get; set; }
+
         //Display in form
         public List<ProcessActivityType>? ProcessActivities { get; set; }
+    }
+    public class Status
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

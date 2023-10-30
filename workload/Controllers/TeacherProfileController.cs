@@ -95,5 +95,45 @@ namespace workload.Controllers
             }
             return View();
         }
+
+        //SENDREPORT
+        public IActionResult SendReport(int? id)
+        {
+            if(id != null)
+            {
+                Report obj = _repRepo.Find(id.GetValueOrDefault());
+                obj.StatusId= 2;
+                _repRepo.Save();
+            }
+            return RedirectToAction("Index");
+        }
+
+        //GET - VIEWREPORT
+        public IActionResult ViewReport(int? id)
+        {
+            if (id == 0 || id == null || id == -1)
+            {
+                return NotFound();
+            }
+            ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
+            {
+                Report = _repRepo.Find(id.GetValueOrDefault()),
+                CategoryList = _categoryRepo.GetAll().ToList(),
+            };
+
+            List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
+            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVM.Report.Id).ToList();
+            foreach (var processActivity in matchingProcessActivities)
+            {
+                processActivityList.Add(processActivity);
+            }
+            reportDetailsVM.ProcessActivityTypes = processActivityList;
+
+            if (reportDetailsVM == null)
+            {
+                return NotFound();
+            }
+            return View(reportDetailsVM);
+        }
     }
 }

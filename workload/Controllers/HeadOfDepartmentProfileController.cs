@@ -85,6 +85,7 @@ namespace workload.Controllers
                 };
                 List<Report> reports = new List<Report>();
                 var matchingReports = _repRepo.GetAll().Where(u => u.TeacherId == vm.teacher.Id).ToList();
+                matchingReports.Reverse();
                 foreach (var report in matchingReports)
                 {
                     reports.Add(report);
@@ -92,6 +93,23 @@ namespace workload.Controllers
 
                 vm.reportList = reports;
                 return View(vm);
+            }
+        }
+
+        //APPROVEREPORT
+        public IActionResult ApproveReport(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                Report obj = _repRepo.Find(id.GetValueOrDefault());
+                obj.StatusId = 3;
+                _repRepo.Update(obj);
+                _repRepo.Save();
+                return RedirectToAction("Index");
             }
         }
     }
