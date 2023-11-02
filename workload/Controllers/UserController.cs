@@ -15,12 +15,12 @@ using workload_Utility;
 namespace workload.Controllers
 {
     [Authorize(Roles = WC.AdminRole)]
-    public class TeacherController : Controller
+    public class UserController : Controller
     {
         private readonly ITeacherRepository _teachRepo;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public TeacherController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager)
+        public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
@@ -28,14 +28,16 @@ namespace workload.Controllers
 
         public IActionResult Index()
         {
-            var roleName = WC.TeacherName;
-            var usersWIthRoles = _userManager.GetUsersInRoleAsync(roleName).Result.ToList();
-            List<Teacher> objlist = new List<Teacher>();
-            foreach(var user in usersWIthRoles)
-            {
-                objlist.Add(_teachRepo.Find(user.Id));
-            }
-            return View(objlist);
+            var users = _userManager.Users.ToList();
+
+            //var roleName = WC.TeacherName;
+            //var usersWIthRoles = _userManager.GetUsersInRoleAsync(roleName).Result.ToList();
+            //List<Teacher> objlist = new List<Teacher>();
+            //foreach(var user in usersWIthRoles)
+            //{
+            //    objlist.Add(_teachRepo.Find(user.Id));
+            //}
+            return View(users);
         }
 
         //GET - EDIT
