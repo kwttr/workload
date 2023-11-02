@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
+using workload_Models.ViewModels;
 using workload_Utility;
 
 namespace workload.Controllers
@@ -10,10 +11,12 @@ namespace workload.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _depRepo;
+        private readonly ITeacherRepository _teacherRepo;
 
-        public DepartmentController(IDepartmentRepository depRepo)
+        public DepartmentController(IDepartmentRepository depRepo, ITeacherRepository teacherRepo)
         {
             _depRepo = depRepo;
+            _teacherRepo = teacherRepo;
         }
         public IActionResult Index()
         {
@@ -24,7 +27,8 @@ namespace workload.Controllers
         //Просмотр работников кафедры
         public IActionResult ViewWorkers(int? id)
         {
-            return View();
+            IEnumerable<Teacher> objList = _teacherRepo.GetAll().Where(x=>x.DepartmentId==id);
+            return View(objList);
         }
 
         //GET - UPSERT
