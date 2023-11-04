@@ -55,6 +55,7 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(ActivityTypeVM activityTypeVM)
         {
+            activityTypeVM.ActivityType.NormHours = Convert.ToDouble(activityTypeVM.ActivityType.NormHours);
             if (ModelState.IsValid)
             {
                 if(activityTypeVM.ActivityType == null || activityTypeVM.ActivityType.Id == 0) {
@@ -67,7 +68,8 @@ namespace workload.Controllers
                 _actRepo.Save();
                 return RedirectToAction("Index");
             }
-            return View();
+            activityTypeVM.CategorySelectList = _actRepo.GetAllDropdownList(WC.CategoryName);
+            return View(activityTypeVM);
         }
 
         //GET - DELETE

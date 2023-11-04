@@ -55,10 +55,10 @@
                                     <input asp-for="ProcessActivityTypes[catCount].Id" hidden />
                                 <tr>
                                     <td>@Model.ProcessActivityTypes[catCount].Name</td>
-                                    <td><input asp-for="ProcessActivityTypes[catCount].DatePlan" class="form-text" /></td>
+                                    <td><input type="datetime-local" asp-for="ProcessActivityTypes[catCount].DatePlan" class="form-text" /></td>
                                     <td><input asp-for="ProcessActivityTypes[catCount].HoursPlan" class="form-control form-control-sm" /></td>
                                     <td><input asp-for="ProcessActivityTypes[catCount].UnitPlan" class="form-control form-control-sm" /></td>
-                                    <td><input asp-for="ProcessActivityTypes[catCount].DateFact" class="form-text"/></td>
+                                    <td><input type="datetime-local" asp-for="ProcessActivityTypes[catCount].DateFact" class="form-text" /></td>
                                     <td><input asp-for="ProcessActivityTypes[catCount].HoursFact" class="form-control form-control-sm" /></td>
                                     <td><input asp-for="ProcessActivityTypes[catCount].UnitFact" class="form-control form-control-sm" /></td>
                                     <td>@Model.ProcessActivityTypes[catCount].NormHours</td>

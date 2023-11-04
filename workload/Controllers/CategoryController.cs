@@ -10,10 +10,12 @@ namespace workload.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _catRepo;
+        private readonly IActivityTypeRepository _activityTypeRepo;
 
-        public CategoryController(ICategoryRepository catRepo)
+        public CategoryController(ICategoryRepository catRepo, IActivityTypeRepository activityTypeRepo)
         {
             _catRepo = catRepo;
+            _activityTypeRepo = activityTypeRepo;
         }
         public IActionResult Index()
         {
@@ -23,8 +25,8 @@ namespace workload.Controllers
         
         public IActionResult ViewActivities(int? id)
         {
-            //Просмотр видов работ текущей категории
-            return View();
+            IEnumerable<ActivityType> objList = _activityTypeRepo.GetAll(includeProperties: "Category").Where(x => x.CategoryId == id);
+            return View(objList);
         }
     }
 }

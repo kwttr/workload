@@ -9,12 +9,12 @@ namespace workload_Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public int NormHours { get; set; }
+        public double NormHours { get; set; }
         [Display(Name="Category Type")]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
-        public ActivityType(string name, int normHours, int categoryId)
+        public ActivityType(string name, double normHours, int categoryId)
         {
             Name = name;
             NormHours = normHours;
@@ -22,7 +22,7 @@ namespace workload_Models
         }
 
         public ActivityType(){ }
-        public ActivityType(int id, string name, int normHours, int categoryId, Category? category)
+        public ActivityType(int id, string name, double normHours, int categoryId, Category? category)
         {
             Id = id;
             Name = name;

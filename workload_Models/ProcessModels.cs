@@ -9,16 +9,16 @@ namespace workload_Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-        public int NormHours { get; set; }
+        public double NormHours { get; set; }
 
         public string? DatePlan { get; set; }
         public string? DateFact { get; set; }
 
-        public int HoursPlan { get; set; }
-        public int HoursFact { get; set; }
+        public double HoursPlan { get; set; }
+        public double HoursFact { get; set; }
 
-        public int UnitPlan { get; set; }
-        public int UnitFact { get; set; }
+        public double UnitPlan { get; set; }
+        public double UnitFact { get; set; }
 
         [Display(Name = "Report Id")]
         public int ReportId { get; set; }
