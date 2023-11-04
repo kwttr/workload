@@ -30,13 +30,6 @@ namespace workload.Controllers
         {
             var users = _userManager.Users.ToList();
 
-            //var roleName = WC.TeacherName;
-            //var usersWIthRoles = _userManager.GetUsersInRoleAsync(roleName).Result.ToList();
-            //List<Teacher> objlist = new List<Teacher>();
-            //foreach(var user in usersWIthRoles)
-            //{
-            //    objlist.Add(_teachRepo.Find(user.Id));
-            //}
             return View(users);
         }
 

@@ -16,19 +16,25 @@ namespace workload.Controllers
         private readonly IReportRepository _repRepo;
         private readonly ICategoryRepository _categoryRepo;
         private readonly IProcessActivityTypeRepository _processActivityTypeRepo;
+        private readonly ITeacherRepository _teacherRepo;
+        private readonly IActivityTypeRepository _activityTypeRepo;
 
         public HeadOfDepartmentProfileController(
             ITeacherRepository teachRepo,
             UserManager<IdentityUser> userManager,
             IReportRepository reportRepo,
             ICategoryRepository categoryRepo,
-            IProcessActivityTypeRepository processActivityTypeRepo)
+            IProcessActivityTypeRepository processActivityTypeRepo,
+            ITeacherRepository teacherRepo,
+            IActivityTypeRepository activityTypeRepo)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
             _repRepo = reportRepo;
             _categoryRepo = categoryRepo;
             _processActivityTypeRepo = processActivityTypeRepo;
+            _teacherRepo = teacherRepo;
+            _activityTypeRepo = activityTypeRepo;
         }
 
         public async Task<IActionResult> Index()
@@ -111,6 +117,70 @@ namespace workload.Controllers
                 _repRepo.Save();
                 return RedirectToAction("Index");
             }
+        }
+
+        //DECLINEREPORT
+        public IActionResult DeclineReport(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                Report obj = _repRepo.Find(id.GetValueOrDefault());
+                obj.StatusId = 1;
+                _repRepo.Update(obj);
+                _repRepo.Save();
+                return RedirectToAction("Index");
+            }
+        }
+
+        //GET - CREATENEWREPORT
+        public IActionResult CreateNewReport(string? id)
+        {
+            ReportVM reportVM = new ReportVM()
+            {
+                report = new Report(),
+                teacher = _teachRepo.Find(id)
+            };
+            reportVM.report.TeacherId = id;
+            return View(reportVM);
+        }
+
+        //POST - CREATENEWREPOPRT
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateNewReport(ReportVM obj)
+        {
+            if (ModelState.IsValid)
+            {
+                obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId, includeProperties: "Degree");
+                obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
+                obj.report.Rate = 1;
+                obj.report.StatusId = 1;
+                List<ProcessActivityType> list = new List<ProcessActivityType>();
+                foreach (var activity in _activityTypeRepo.GetAll())
+                {
+                    ProcessActivityType procAct = new ProcessActivityType()
+                    {
+                        Name = activity.Name,
+                        NormHours = activity.NormHours,
+                        HoursPlan = 0,
+                        HoursFact = 0,
+                        UnitFact = 0,
+                        UnitPlan = 0,
+                        Report = obj.report,
+                        CategoryId = activity.CategoryId
+                    };
+                    list.Add(procAct);
+                }
+                obj.report.ProcessActivities = list;
+                _repRepo.Add(obj.report);
+                _repRepo.Save();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
         }
     }
 }

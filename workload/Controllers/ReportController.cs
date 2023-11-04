@@ -74,8 +74,7 @@ namespace workload.Controllers
             ReportVM reportVM = new ReportVM()
             {
                 report = new Report(),
-                TeacherSelectList = _repRepo.GetAllDropdownList(WC.TeacherName),
-
+                TeacherSelectList = _repRepo.GetAllDropdownList(WC.TeacherName)
             };
             return View(reportVM);
         }
