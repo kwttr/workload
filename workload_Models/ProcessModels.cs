@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workload_Models.ModelBinders;
 
 namespace workload_Models
 {
@@ -9,16 +11,21 @@ namespace workload_Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-        public double NormHours { get; set; }
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        public decimal NormHours { get; set; }
 
         public string? DatePlan { get; set; }
         public string? DateFact { get; set; }
 
-        public double HoursPlan { get; set; }
-        public double HoursFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        public decimal HoursPlan { get; set; }
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        public decimal HoursFact { get; set; }
 
-        public double UnitPlan { get; set; }
-        public double UnitFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        public decimal UnitPlan { get; set; }
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        public decimal UnitFact { get; set; }
 
         [Display(Name = "Report Id")]
         public int ReportId { get; set; }

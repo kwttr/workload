@@ -55,7 +55,6 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(ActivityTypeVM activityTypeVM)
         {
-            activityTypeVM.ActivityType.NormHours = Convert.ToDouble(activityTypeVM.ActivityType.NormHours);
             if (ModelState.IsValid)
             {
                 if(activityTypeVM.ActivityType == null || activityTypeVM.ActivityType.Id == 0) {

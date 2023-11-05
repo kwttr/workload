@@ -13,12 +13,12 @@ namespace workload_Models
         public string Name { get; set; }
 
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))] 
-        public double NormHours { get; set; }
+        public decimal NormHours { get; set; }
         [Display(Name="Category Type")]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
-        public ActivityType(string name, double normHours, int categoryId)
+        public ActivityType(string name, decimal normHours, int categoryId)
         {
             Name = name;
             NormHours = normHours;
@@ -26,7 +26,7 @@ namespace workload_Models
         }
 
         public ActivityType(){ }
-        public ActivityType(int id, string name, double normHours, int categoryId, Category? category)
+        public ActivityType(int id, string name, decimal normHours, int categoryId, Category? category)
         {
             Id = id;
             Name = name;
