@@ -91,9 +91,8 @@ namespace workload.Controllers
                     _processActivityTypeRepo.Update(reportDetailsVM.ProcessActivityTypes[i]);
                 }
                 _processActivityTypeRepo.Save();
-                return RedirectToAction("Index");
             }
-            return View();
+            return RedirectToAction("Index");
         }
 
         //SENDREPORT
