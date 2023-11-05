@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workload_Models.ModelBinders;
 
 namespace workload_Models
 {
@@ -9,6 +11,8 @@ namespace workload_Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))] 
         public double NormHours { get; set; }
         [Display(Name="Category Type")]
         public int CategoryId { get; set; }
