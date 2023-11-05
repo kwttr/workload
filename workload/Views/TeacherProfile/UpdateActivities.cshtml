@@ -56,14 +56,16 @@
                                 <tr>
                                     <td>@Model.ProcessActivityTypes[catCount].Name</td>
                                     <td><input type="datetime-local" asp-for="ProcessActivityTypes[catCount].DatePlan" class="form-text" /></td>
-                                    <td><input asp-for="ProcessActivityTypes[catCount].HoursPlan" class="form-control form-control-sm" /></td>
+                                    <td><input asp-for="ProcessActivityTypes[catCount].HoursPlan" class="form-control form-control-sm" />
+                                        <span asp-validation-for="ProcessActivityTypes[catCount].HoursPlan" class="text-danger"></span>
+                                    </td>
                                     <td><input asp-for="ProcessActivityTypes[catCount].UnitPlan" class="form-control form-control-sm" /></td>
                                     <td><input type="datetime-local" asp-for="ProcessActivityTypes[catCount].DateFact" class="form-text" /></td>
                                     <td><input asp-for="ProcessActivityTypes[catCount].HoursFact" class="form-control form-control-sm" /></td>
                                     <td><input asp-for="ProcessActivityTypes[catCount].UnitFact" class="form-control form-control-sm" /></td>
                                     <td>@Model.ProcessActivityTypes[catCount].NormHours</td>
                                 </tr>
-                                catCount++;
+                                catCount++; 
                             }
                         </tbody>
                     </table>
@@ -85,11 +87,19 @@
         </div>
     </div>
 </form>
-
-@section Scripts{
-
+@section Scripts {
     @{
         <partial name="_ValidationScriptsPartial" />
     }
+    <script>
+        // переопределение валидации на стороне клиента
+        $.validator.methods.range = function (value, element, param) {
+            var globalizedValue = value.replace(",", ".");
+            return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+        }
 
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+        }
+    </script>
 }
