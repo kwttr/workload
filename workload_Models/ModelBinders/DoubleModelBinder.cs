@@ -23,7 +23,7 @@ namespace workload_Models.ModelBinders
             try {
                 var doubleValue = valueProviderResult.FirstValue;
 
-                var parsedDouble = Double.Parse(doubleValue, CultureInfo.InvariantCulture);
+                var parsedDouble = Decimal.Parse(doubleValue, CultureInfo.InvariantCulture);
 
                 bindingContext.Result = ModelBindingResult.Success(parsedDouble);
             } catch (Exception ex) {
