@@ -12,7 +12,8 @@ namespace workload_Models
         [Required]
         public string Name { get; set; }
 
-        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))] 
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [DisplayFormat(DataFormatString = "{0:#,##0.##########}")]
         public decimal NormHours { get; set; }
         [Display(Name="Category Type")]
         public int CategoryId { get; set; }
