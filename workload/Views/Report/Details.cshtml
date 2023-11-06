@@ -40,13 +40,13 @@
                         {
                             <tr>
                                 <td>@processActivity.Name</td>
-                                <td>@processActivity.DatePlan</td>
-                                <td>@processActivity.HoursPlan</td>
-                                <td>@processActivity.UnitPlan</td>
-                                <td>@processActivity.DateFact</td>
-                                <td>@processActivity.HoursFact</td>
-                                <td>@processActivity.UnitFact</td>
-                                <td style="text-align: center; vertical-align:middle;">@processActivity.NormHours</td>
+                                <td>@Html.DisplayFor(Model=>processActivity.DatePlan)</td>
+                                <td>@Html.DisplayFor(Model=>processActivity.HoursPlan)</td>
+                                <td>@Html.DisplayFor(Model=>processActivity.UnitPlan)</td>
+                                <td>@Html.DisplayFor(Model=>processActivity.DateFact)</td>
+                                <td>@Html.DisplayFor(Model=>processActivity.HoursFact)</td>
+                                <td>@Html.DisplayFor(Model=>processActivity.UnitFact)</td>
+                                <td style="text-align: center; vertical-align:middle;">@Html.DisplayFor(Model=>processActivity.NormHours)</td>
                             </tr>
                         }
                     </tbody>
