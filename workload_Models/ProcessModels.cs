@@ -12,23 +12,24 @@ namespace workload_Models
 
         public string Name { get; set; }
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal NormHours { get; set; }
 
         public string? DatePlan { get; set; }
         public string? DateFact { get; set; }
 
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
-        [DisplayFormat(DataFormatString = "{0:#,##0.##########}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal HoursPlan { get; set; }
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
-        [DisplayFormat(DataFormatString = "{0:#,##0.##########}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal HoursFact { get; set; }
 
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
-        [DisplayFormat(DataFormatString = "{0:#,##0.##########}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal UnitPlan { get; set; }
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
-        [DisplayFormat(DataFormatString = "{0:#,##0.##########}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal UnitFact { get; set; }
 
         [Display(Name = "Report Id")]

@@ -13,7 +13,7 @@ namespace workload_Models
         public string Name { get; set; }
 
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
-        [DisplayFormat(DataFormatString = "{0:#,##0.##########}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal NormHours { get; set; }
         [Display(Name="Category Type")]
         public int CategoryId { get; set; }

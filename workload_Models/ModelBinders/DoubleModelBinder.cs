@@ -23,6 +23,8 @@ namespace workload_Models.ModelBinders
             try {
                 var doubleValue = valueProviderResult.FirstValue;
 
+                doubleValue = doubleValue.Replace(".", ",");
+
                 var parsedDouble = decimal.Parse(doubleValue);
 
                 bindingContext.Result = ModelBindingResult.Success(parsedDouble);
