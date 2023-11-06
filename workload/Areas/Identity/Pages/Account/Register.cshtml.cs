@@ -176,7 +176,18 @@ namespace workload.Areas.Identity.Pages.Account
                         }
                         if (Input.SelectedRole == WC.HeadOfDepartmentRole)
                         {
+                            //нужно найти список всех юзеров в этой кафедре, дальше проверить наличие у юзеров роли зав.кафедры. Если нулл - регаем. Нет - ошибка.
+                            var usersWithRoleHod = _userManager.GetUsersInRoleAsync(WC.HeadOfDepartmentRole).Result;
+                            foreach(var obj in usersWithRoleHod)
+                            {
+                                var teacher = _teachRepo.Find(obj.Id);
+                                if (teacher.DepartmentId == Input.DepartmentId)
+                                {
+                                    return Page();
+                                }
+                            }
                             await _userManager.AddToRoleAsync(user, WC.HeadOfDepartmentRole);
+                            await _userManager.AddToRoleAsync(user, WC.TeacherRole);
                         }
                         if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.HeadOfDepartmentRole))
                         {
