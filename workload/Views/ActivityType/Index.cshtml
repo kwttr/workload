@@ -26,6 +26,9 @@
                     <th>
                         Категория вида работы
                     </th>
+                    <th>
+                        Дополнительная информация
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -34,8 +37,9 @@
                 {
                     <tr>
                         <td width="50%">@obj.Name</td>
-                        <td width="10%">@Html.DisplayFor(model=>obj.NormHours)</td>
-                        <td width="30%">@obj.Category.Name</td>
+                        <td width="7%">@Html.DisplayFor(model=>obj.NormHours)</td>
+                        <td width="25%">@obj.Category.Name</td>
+                        <td width="10%">@obj.AdditionalInfo</td>
                         <td class="text-center">
                             <div class="w-100 btn-group" role="group">
                                 <a asp-route-Id="@obj.Id" asp-action="Upsert" class="btn btn-primary mx-2">Edit</a>

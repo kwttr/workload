@@ -19,6 +19,8 @@ namespace workload_Models
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
+        [Display(Name="Additional Info")]
+        public string? AdditionalInfo { get; set; }
         public ActivityType(string name, decimal normHours, int categoryId)
         {
             Name = name;
