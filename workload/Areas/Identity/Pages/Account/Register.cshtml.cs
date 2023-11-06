@@ -183,6 +183,7 @@ namespace workload.Areas.Identity.Pages.Account
                                 var teacher = _teachRepo.Find(obj.Id);
                                 if (teacher.DepartmentId == Input.DepartmentId)
                                 {
+                                    _userManager.DeleteAsync(user);
                                     return Page();
                                 }
                             }
