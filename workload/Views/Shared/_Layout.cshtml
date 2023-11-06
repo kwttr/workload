@@ -39,16 +39,16 @@
                                 </ul>
                             </li>
                         }
+                        @if (User.IsInRole(workload_Utility.WC.HeadOfDepartmentRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="HeadOfDepartmentProfile" asp-action="Index">Head Of Department Profile</a>
+                            </li>
+                        }
                         @if (User.IsInRole(workload_Utility.WC.TeacherRole))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="TeacherProfile" asp-action="Index">Teacher Profile</a>
-                            </li>
-                        }
-                        @if (User.IsInRole(workload_Utility.WC.HeadOfDepartmentRole))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="HeadOfDepartmentProfile" asp-action="Index">Профиль зав кафедры</a>
                             </li>
                         }
                     </ul>
