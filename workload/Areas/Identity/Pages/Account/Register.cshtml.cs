@@ -132,6 +132,7 @@ namespace workload.Areas.Identity.Pages.Account
         {
             if(!await _roleManager.RoleExistsAsync(WC.AdminRole))
             {
+                _roleManager.RoleValidators.Clear();
                 _roleManager.RoleValidators.Add(new MyRoleValidator());
                 List<Department> depList = _departmentRepo.GetAll().ToList();
                 await _roleManager.CreateAsync(new CustomRole
@@ -141,16 +142,24 @@ namespace workload.Areas.Identity.Pages.Account
                 });
                 foreach(var obj in  depList)
                 {
-                    await _roleManager.CreateAsync(new CustomRole
+                    var result = await _roleManager.CreateAsync(new CustomRole
                     {
                         Name = WC.HeadOfDepartmentRole,
                         DepartmentId = obj.Id
                     });
-                    await _roleManager.CreateAsync(new CustomRole
+                    if (!result.Succeeded)
+                    {
+                        throw new InvalidOperationException("Failed to create HeadOfDepartmentRole");
+                    }
+                    result = await _roleManager.CreateAsync(new CustomRole
                     {
                         Name = WC.TeacherRole,
                         DepartmentId = obj.Id
                     });
+                    if (!result.Succeeded)
+                    {
+                        throw new InvalidOperationException("Failed to create TeacherRole");
+                    }
                 }
             }
             Degrees = _teachRepo.GetAllDropdownList(WC.DegreeName);
