@@ -6,7 +6,7 @@ using workload_Models;
 
 namespace workload_Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser,CustomRole,string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {
 
@@ -33,6 +33,18 @@ namespace workload_Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<CustomRole>()
+                .HasOne(c => c.Department)
+                .WithMany()
+                .HasForeignKey(c => c.DepartmentId);
+
+            modelBuilder.Entity<CustomRole>(entity =>
+            {
+                entity.HasIndex(e => e.Name).IsUnique(false);
+                entity.HasIndex(e=>e.NormalizedName).IsUnique(false);
+                entity.HasIndex(x => new { x.NormalizedName,x.DepartmentId}).IsUnique();
+            });
 
             var categories = new Category[]{
                 new Category{
@@ -130,6 +142,21 @@ namespace workload_Data
                 }
             };
             modelBuilder.Entity<Status>().HasData(statuses);
+
+            var departments = new Department[]
+            {
+                new Department
+                {
+                    Id=1,
+                    Name = "Кафедра информатики"
+                },
+                new Department
+                {
+                    Id=2,
+                    Name = "Кафедра математики"
+                }
+            };
+            modelBuilder.Entity<Department>().HasData(departments);
         }
     }
 }

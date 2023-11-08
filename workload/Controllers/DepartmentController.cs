@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
@@ -12,11 +13,13 @@ namespace workload.Controllers
     {
         private readonly IDepartmentRepository _depRepo;
         private readonly ITeacherRepository _teacherRepo;
+        private readonly RoleManager<CustomRole> _roleManager;
 
-        public DepartmentController(IDepartmentRepository depRepo, ITeacherRepository teacherRepo)
+        public DepartmentController(IDepartmentRepository depRepo, ITeacherRepository teacherRepo, RoleManager<CustomRole> roleManager)
         {
             _depRepo = depRepo;
             _teacherRepo = teacherRepo;
+            _roleManager = roleManager;
         }
         public IActionResult Index()
         {
@@ -50,6 +53,21 @@ namespace workload.Controllers
             }
         }
 
+        public async void CreateRoles(int id)
+        {
+            _roleManager.RoleValidators.Add(new MyRoleValidator());
+            await _roleManager.CreateAsync(new CustomRole
+            {
+                Name = WC.HeadOfDepartmentRole,
+                DepartmentId = id
+            });
+            await _roleManager.CreateAsync(new CustomRole
+            {
+                Name = WC.TeacherRole,
+                DepartmentId = id
+            });
+        }
+
         //POST - UPSERT
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,6 +84,7 @@ namespace workload.Controllers
                     _depRepo.Update(obj);
                 }
                 _depRepo.Save();
+                CreateRoles(obj.Id);
                 return RedirectToAction("Index");
             }
             return View();

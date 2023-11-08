@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -34,7 +35,7 @@ namespace workload.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<CustomRole> _roleManager;
         private readonly ITeacherRepository _teachRepo;
         private readonly IDepartmentRepository _departmentRepo;
 
@@ -44,7 +45,7 @@ namespace workload.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<CustomRole> roleManager,
             ITeacherRepository teachRepo,
             IDepartmentRepository departmentRepository)
         {
@@ -131,9 +132,26 @@ namespace workload.Areas.Identity.Pages.Account
         {
             if(!await _roleManager.RoleExistsAsync(WC.AdminRole))
             {
-                await _roleManager.CreateAsync(new IdentityRole(WC.AdminRole));
-                await _roleManager.CreateAsync(new IdentityRole(WC.HeadOfDepartmentRole));
-                await _roleManager.CreateAsync(new IdentityRole(WC.TeacherRole));
+                _roleManager.RoleValidators.Add(new MyRoleValidator());
+                List<Department> depList = _departmentRepo.GetAll().ToList();
+                await _roleManager.CreateAsync(new CustomRole
+                {
+                    Name = WC.AdminRole,
+                    DepartmentId = 1
+                });
+                foreach(var obj in  depList)
+                {
+                    await _roleManager.CreateAsync(new CustomRole
+                    {
+                        Name = WC.HeadOfDepartmentRole,
+                        DepartmentId = obj.Id
+                    });
+                    await _roleManager.CreateAsync(new CustomRole
+                    {
+                        Name = WC.TeacherRole,
+                        DepartmentId = obj.Id
+                    });
+                }
             }
             Degrees = _teachRepo.GetAllDropdownList(WC.DegreeName);
             Positions = _teachRepo.GetAllDropdownList(WC.PositionName);
