@@ -55,6 +55,7 @@ namespace workload.Controllers
 
         public async void CreateRoles(int id)
         {
+            _roleManager.RoleValidators.Clear();
             _roleManager.RoleValidators.Add(new MyRoleValidator());
             await _roleManager.CreateAsync(new CustomRole
             {
