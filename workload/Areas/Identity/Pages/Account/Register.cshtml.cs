@@ -168,11 +168,19 @@ namespace workload.Areas.Identity.Pages.Account
 
             if (User.IsInRole(WC.HeadOfDepartmentRole))
             {
-                Roles = new SelectList(_roleManager.Roles.Where(x => x.NormalizedName =="TEACHER").ToList(),"Name","Name");
+                Roles = _roleManager.Roles.Where(x => x.NormalizedName == "TEACHER").Select(i => new SelectListItem
+                {
+                    Text = i.Name + " " + i.Department.Name,
+                    Value = i.Id.ToString()
+                });
             }
             else
             {
-                Roles = new SelectList(_roleManager.Roles.ToList(), "Name", "Name");
+                Roles = _roleManager.Roles.Select(i => new SelectListItem
+                {
+                    Text = i.Name + " " + i.Department.Name,
+                    Value = i.Id.ToString()
+                });
             }
 
             ReturnUrl = returnUrl;
