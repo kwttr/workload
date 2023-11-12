@@ -49,8 +49,8 @@
                     <div class="col-8">
                         @for (int i = 0; i < Model.RolesSelectList.Count(); i++)
                         {
-                            <input class="form-check-input" type="checkbox" value="@Model.RolesSelectList[i]" @Model.SelectedRoles.Contains(Model.RolesSelectList[i].Name) ? "checked" : "") />
-                            <label class="form-check-label">@Model.RolesSelectList[i].Name</label><br />
+                            <input class="form-check-input" name="SelectedRoles" type="checkbox" value="@Model.RolesSelectList[i].Name" @(Model.SelectedRoles.Contains(Model.RolesSelectList[i].Name) ? "checked" : "")/>
+                            <label class="form-check-label">@Model.RolesSelectList[i]</label><br />
                         }
                     </div>
                 </div>

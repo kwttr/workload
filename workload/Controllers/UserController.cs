@@ -37,7 +37,7 @@ namespace workload.Controllers
         }
 
         //GET - EDIT
-        public async Task<IActionResult> EditAsync(string? id)
+        public IActionResult Edit(string? id)
         {
 
             if (id == null)
@@ -46,7 +46,7 @@ namespace workload.Controllers
             }
             else
             {
-                var roles = await _roleManager.Roles.ToListAsync();
+                var roles = _roleManager.Roles.ToListAsync().Result;
                 TeacherVM teacherVM = new TeacherVM()
                 {
                     Teacher = new Teacher(),
@@ -56,8 +56,7 @@ namespace workload.Controllers
                     RolesSelectList = roles
                 };
                 teacherVM.Teacher = _teachRepo.Find(id);
-                var list = await _userManager.GetRolesAsync(teacherVM.Teacher);
-                teacherVM.SelectedRoles = list.ToList();
+                teacherVM.SelectedRoles = _userManager.GetRolesAsync(teacherVM.Teacher).Result.ToList();
                 if (teacherVM.Teacher == null)
                 {
                     return NotFound();
@@ -74,7 +73,7 @@ namespace workload.Controllers
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(TeacherVM vm)
+        public IActionResult Edit(TeacherVM vm)
         {
             if(ModelState.IsValid)
             {
@@ -85,17 +84,17 @@ namespace workload.Controllers
                 teacher.PositionId = vm.Teacher.PositionId;
 
                 //РОЛИ
-                var roles = await _userManager.GetRolesAsync(vm.Teacher);
-                if(vm.SelectedRoles!=null)
+                var roles = _userManager.GetRolesAsync(vm.Teacher).Result;
+                if (vm.SelectedRoles!=null)
                 {
-                    foreach(var role in roles)
+                    foreach (var role in roles)
                     {
                         if (!vm.SelectedRoles.Contains(role))
                         {
-                            await _userManager.RemoveFromRoleAsync(teacher, role);
+                            _userManager.RemoveFromRoleAsync(teacher, role);
                         }
                     }
-                    foreach(var obj in vm.SelectedRoles)
+                    foreach (var obj in vm.SelectedRoles)
                     {
                         AddRoleToUser(obj, teacher);
                     }
