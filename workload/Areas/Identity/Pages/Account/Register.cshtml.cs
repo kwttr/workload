@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using NuGet.Versioning;
 using workload_Data;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
@@ -72,8 +73,6 @@ namespace workload.Areas.Identity.Pages.Account
         public IEnumerable<SelectListItem> Degrees;
 
         public IEnumerable<SelectListItem> Positions;
-
-        public IEnumerable<SelectListItem> Departments;
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -124,7 +123,6 @@ namespace workload.Areas.Identity.Pages.Account
             public string FullName { get; set; }
             public int DegreeId { get; set; }
             public int PositionId { get; set; }
-            public int DepartmentId { get; set; }
         }
 
 
@@ -144,7 +142,7 @@ namespace workload.Areas.Identity.Pages.Account
                 {
                     var result = await _roleManager.CreateAsync(new CustomRole
                     {
-                        Name = WC.HeadOfDepartmentRole,
+                        Name = WC.HeadOfDepartmentRole+obj.Id.ToString(),
                         DepartmentId = obj.Id
                     });
                     if (!result.Succeeded)
@@ -153,7 +151,7 @@ namespace workload.Areas.Identity.Pages.Account
                     }
                     result = await _roleManager.CreateAsync(new CustomRole
                     {
-                        Name = WC.TeacherRole,
+                        Name = WC.TeacherRole+obj.Id.ToString(),
                         DepartmentId = obj.Id
                     });
                     if (!result.Succeeded)
@@ -164,7 +162,6 @@ namespace workload.Areas.Identity.Pages.Account
             }
             Degrees = _teachRepo.GetAllDropdownList(WC.DegreeName);
             Positions = _teachRepo.GetAllDropdownList(WC.PositionName);
-            Departments = _departmentRepo.GetAllDropdownList();
 
             if (User.IsInRole(WC.HeadOfDepartmentRole))
             {
@@ -193,8 +190,7 @@ namespace workload.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                //var user = CreateUser();
-                var user = new Teacher { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName, PositionId = Input.PositionId, DegreeId = Input.DegreeId, DepartmentId = Input.DepartmentId};
+                var user = new Teacher { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName, PositionId = Input.PositionId, DegreeId = Input.DegreeId };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -202,40 +198,42 @@ namespace workload.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    var role = _roleManager.Roles.FirstOrDefault(r=>r.Id==Input.SelectedRole);
                     if (_userManager.Users.Count() > 1)
                     {
                         if (User.IsInRole(WC.AdminRole))
                         {
                             //Администратор создает нового пользователя = создается админ
-                            if (Input.SelectedRole == WC.AdminRole) await _userManager.AddToRoleAsync(user, WC.AdminRole);
+                            if (role.Name.Contains(WC.AdminRole)) await _userManager.AddToRoleAsync(user, role.Name);
                         }
-                        if (Input.SelectedRole == WC.HeadOfDepartmentRole)
+                        if (role.Name.Contains(WC.HeadOfDepartmentRole))
                         {
                             //нужно найти список всех юзеров в этой кафедре, дальше проверить наличие у юзеров роли зав.кафедры. Если нулл - регаем. Нет - ошибка.
-                            var usersWithRoleHod = _userManager.GetUsersInRoleAsync(WC.HeadOfDepartmentRole).Result;
-                            foreach(var obj in usersWithRoleHod)
+                            var usersWithRoleHod = _userManager.GetUsersInRoleAsync(Input.SelectedRole).Result;
+                            if (usersWithRoleHod.Count()>0)
                             {
-                                var teacher = _teachRepo.Find(obj.Id);
-                                if (teacher.DepartmentId == Input.DepartmentId)
-                                {
-                                    _userManager.DeleteAsync(user);
-                                    return Page();
-                                }
+                                await _userManager.DeleteAsync(user);
+                                return Page();
                             }
-                            await _userManager.AddToRoleAsync(user, WC.HeadOfDepartmentRole);
-                            await _userManager.AddToRoleAsync(user, WC.TeacherRole);
+                            await _userManager.AddToRoleAsync(user,role.Name);
                         }
                         if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.HeadOfDepartmentRole))
                         {
-                            if (Input.SelectedRole == WC.TeacherRole)
+                            if (role.Name .Contains(WC.TeacherRole))
                             {
-                                await _userManager.AddToRoleAsync(user, WC.TeacherRole);
+                                var resultrole = await _userManager.AddToRoleAsync(user, role.Name);
+                                if (!resultrole.Succeeded)
+                                {
+                                    await _userManager.DeleteAsync(user);
+                                    throw new InvalidOperationException("Failed to create TeacherRole");
+                                }
                             }
                         }
                     }
                     else if (_userManager.Users.Count() <= 1)
                     {
-                        await _userManager.AddToRoleAsync(user,WC.AdminRole);
+                        var res = await _userManager.AddToRoleAsync(user,role.Name);
+                        if(!res.Succeeded) { }
                     }
                     _logger.LogInformation("User created a new account with password.");
 

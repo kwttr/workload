@@ -30,7 +30,7 @@ namespace workload.Controllers
         //Просмотр работников кафедры
         public IActionResult ViewWorkers(int? id)
         {
-            IEnumerable<Teacher> objList = _teacherRepo.GetAll().Where(x=>x.DepartmentId==id);
+            IEnumerable<Teacher> objList = _teacherRepo.GetAll();/*.Where(x=>x.DepartmentId==id);*/
             return View(objList);
         }
 

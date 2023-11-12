@@ -14,11 +14,6 @@ namespace workload_Models
         public int PositionId { get; set; }
         public Position? Position { get; set; }
 
-        [Display(Name="Department Name")]
-        public int DepartmentId { get; set; }
-        [ForeignKey("DepartmentId")]
-        public virtual Department? Department { get; set; }
-
         public List<Report>? Reports { get; set; }
     }
 

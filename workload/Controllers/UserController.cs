@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -19,11 +20,13 @@ namespace workload.Controllers
     {
         private readonly ITeacherRepository _teachRepo;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<CustomRole> _roleManager;
 
-        public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager)
+        public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager, RoleManager<CustomRole> roleManager)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -34,7 +37,7 @@ namespace workload.Controllers
         }
 
         //GET - EDIT
-        public IActionResult Edit(string? id)
+        public async Task<IActionResult> EditAsync(string? id)
         {
 
             if (id == null)
@@ -43,14 +46,18 @@ namespace workload.Controllers
             }
             else
             {
+                var roles = await _roleManager.Roles.ToListAsync();
                 TeacherVM teacherVM = new TeacherVM()
                 {
                     Teacher = new Teacher(),
                     DegreeSelectList = _teachRepo.GetAllDropdownList(WC.DegreeName),
                     PositionSelectList = _teachRepo.GetAllDropdownList(WC.PositionName),
-                    DepartmentSelectList = _teachRepo.GetAllDropdownList(WC.DepartmentName)
+                    DepartmentSelectList = _teachRepo.GetAllDropdownList(WC.DepartmentName),
+                    RolesSelectList = roles
                 };
                 teacherVM.Teacher = _teachRepo.Find(id);
+                var list = await _userManager.GetRolesAsync(teacherVM.Teacher);
+                teacherVM.SelectedRoles = list.ToList();
                 if (teacherVM.Teacher == null)
                 {
                     return NotFound();
@@ -59,19 +66,41 @@ namespace workload.Controllers
             }
         }
 
+        public async void AddRoleToUser(string id,Teacher user)
+        {
+            await _userManager.AddToRoleAsync(user, id);
+        }
+
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(TeacherVM vm)
+        public async Task<IActionResult> EditAsync(TeacherVM vm)
         {
             if(ModelState.IsValid)
             {
                 //КОСТЫЛЬ!!!!!!!
                 Teacher teacher = _teachRepo.Find(vm.Teacher.Id);
                 teacher.FullName = vm.Teacher.FullName;
-                teacher.DepartmentId = vm.Teacher.DepartmentId;
                 teacher.DegreeId = vm.Teacher.DegreeId;
                 teacher.PositionId = vm.Teacher.PositionId;
+
+                //РОЛИ
+                var roles = await _userManager.GetRolesAsync(vm.Teacher);
+                if(vm.SelectedRoles!=null)
+                {
+                    foreach(var role in roles)
+                    {
+                        if (!vm.SelectedRoles.Contains(role))
+                        {
+                            await _userManager.RemoveFromRoleAsync(teacher, role);
+                        }
+                    }
+                    foreach(var obj in vm.SelectedRoles)
+                    {
+                        AddRoleToUser(obj, teacher);
+                    }
+                }
+
                 _teachRepo.Update(teacher);
                 _teachRepo.Save();
                 return RedirectToAction("Index");

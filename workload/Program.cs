@@ -16,6 +16,7 @@ options.UseSqlite("Filename = Database.db"));
 
 builder.Services.AddIdentity<IdentityUser, CustomRole>()
     .AddRoleManager<CustomRoleManager>()
+    .AddUserManager<CustomUserManager<IdentityUser>>()
     .AddDefaultTokenProviders().AddDefaultUI()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 

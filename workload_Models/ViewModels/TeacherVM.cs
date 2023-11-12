@@ -8,6 +8,8 @@ namespace workload_Models.ViewModels
         public IEnumerable<SelectListItem>? DegreeSelectList { get; set; }
         public IEnumerable<SelectListItem>? PositionSelectList { get; set; }
         public IEnumerable<SelectListItem>? DepartmentSelectList { get; set; }
+        public List<CustomRole>? RolesSelectList { get; set; }
+        public List<string>? SelectedRoles { get; set; }
     }
     public class TeacherProfileVM
     {

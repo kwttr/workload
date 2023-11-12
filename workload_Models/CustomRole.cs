@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
@@ -10,6 +12,9 @@ namespace workload_Models
         public int DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
         public Department? Department { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal? Rate { get; set; }
 
         public CustomRole() { }
     }
@@ -24,6 +29,27 @@ namespace workload_Models
             ILogger<RoleManager<CustomRole>> logger)
             : base(store, roleValidators, keyNormalizer, errors, logger)
         {
+        }
+    }
+
+    public class CustomUserManager<TUser> : UserManager<TUser> where TUser : class
+    {
+        private readonly RoleManager<CustomRole> _roleManager;
+
+        public CustomUserManager(
+            IUserStore<TUser> store,
+            IOptions<IdentityOptions> optionsAccessor,
+            IPasswordHasher<TUser> passwordHasher,
+            IEnumerable<IUserValidator<TUser>> userValidators,
+            IEnumerable<IPasswordValidator<TUser>> passwordValidators,
+            ILookupNormalizer keyNormalizer,
+            IdentityErrorDescriber errors,
+            IServiceProvider services,
+            ILogger<UserManager<TUser>> logger,
+            RoleManager<CustomRole> roleManager)
+            : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
+        {
+            _roleManager = roleManager;
         }
     }
 

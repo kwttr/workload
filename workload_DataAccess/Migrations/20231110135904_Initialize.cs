@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace workload_DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class initialize : Migration
+    public partial class Initialize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -113,6 +113,7 @@ namespace workload_DataAccess.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     DepartmentId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Rate = table.Column<decimal>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
@@ -166,8 +167,7 @@ namespace workload_DataAccess.Migrations
                         name: "FK_AspNetUsers_Department_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Department",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Position_PositionId",
                         column: x => x.PositionId,
@@ -422,6 +422,12 @@ namespace workload_DataAccess.Migrations
                 name: "IX_AspNetRoles_Name",
                 table: "AspNetRoles",
                 column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoles_NormalizedName_DepartmentId",
+                table: "AspNetRoles",
+                columns: new[] { "NormalizedName", "DepartmentId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",

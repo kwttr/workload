@@ -11,8 +11,8 @@ using workload_Data;
 namespace workload_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231108122839_initialize")]
-    partial class initialize
+    [Migration("20231110135904_Initialize")]
+    partial class Initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -282,6 +282,9 @@ namespace workload_DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("Rate")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -290,6 +293,9 @@ namespace workload_DataAccess.Migrations
 
                     b.HasIndex("NormalizedName")
                         .HasDatabaseName("RoleNameIndex");
+
+                    b.HasIndex("NormalizedName", "DepartmentId")
+                        .IsUnique();
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -517,7 +523,7 @@ namespace workload_DataAccess.Migrations
                     b.Property<int>("DegreeId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int?>("DepartmentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FullName")
@@ -663,11 +669,9 @@ namespace workload_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workload_Models.Department", "Department")
+                    b.HasOne("workload_Models.Department", null)
                         .WithMany("Teachers")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.HasOne("workload_Models.Position", "Position")
                         .WithMany()
@@ -676,8 +680,6 @@ namespace workload_DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Degree");
-
-                    b.Navigation("Department");
 
                     b.Navigation("Position");
                 });
