@@ -9,6 +9,8 @@
 
     <br /><br />
 
+        @if (Model.reportList.Count > 0)
+        {
         <table class="table table-bordered table-striped" style="width:100%">
             <thead>
                 <tr>
@@ -21,7 +23,7 @@
                 </tr>
             </thead>
             <tbody>
-                 @foreach(var obj in Model.reportList)
+            @foreach(var obj in Model.reportList)
                     {
                     <tr>
                         <td width="50%">@obj.Title</td>
@@ -45,7 +47,12 @@
                         </div>
                         </td>
                     </tr>
-                    }
+                }
             </tbody>
         </table>
+        }
+        else
+        {
+            <p>No reports assigned to you</p>
+        }
 </div>
