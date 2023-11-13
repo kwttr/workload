@@ -134,6 +134,8 @@ namespace workload.Areas.Identity.Pages.Account
                         var claim = new List<Claim>();
                         foreach (var depId in depIds)
                         {
+                            var claims = await _userManager.GetClaimsAsync(user);
+                            if(claims.Any(c=>c.Type==CustomClaimTypes.DepartmentId && c.Value == depId.ToString())) { continue; }
                             claim.Add(new Claim(CustomClaimTypes.DepartmentId, depId.ToString()));
                         }
                         await _userManager.AddClaimsAsync(user, claim);
