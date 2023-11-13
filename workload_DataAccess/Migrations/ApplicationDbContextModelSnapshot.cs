@@ -219,7 +219,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activities", (string)null);
                 });
 
             modelBuilder.Entity("workload_Models.Category", b =>
@@ -234,7 +234,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -309,7 +309,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Degree");
+                    b.ToTable("Degree", (string)null);
 
                     b.HasData(
                         new
@@ -346,7 +346,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department");
+                    b.ToTable("Department", (string)null);
 
                     b.HasData(
                         new
@@ -373,7 +373,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Position");
+                    b.ToTable("Position", (string)null);
 
                     b.HasData(
                         new
@@ -446,7 +446,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasIndex("ReportId");
 
-                    b.ToTable("ProcessActivityType");
+                    b.ToTable("ProcessActivityType", (string)null);
                 });
 
             modelBuilder.Entity("workload_Models.Report", b =>
@@ -478,7 +478,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
                 });
 
             modelBuilder.Entity("workload_Models.Status", b =>
@@ -493,7 +493,7 @@ namespace workload_DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Status");
+                    b.ToTable("Status", (string)null);
 
                     b.HasData(
                         new

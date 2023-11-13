@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using workload_Models;
+using System.Security.Claims;
+using workload_DataAccess.ClaimTypes;
 
 namespace workload.Areas.Identity.Pages.Account
 {
@@ -21,11 +24,15 @@ namespace workload.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<CustomRole> _roleManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, RoleManager<CustomRole> roleManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -114,6 +121,27 @@ namespace workload.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByNameAsync(Input.Email);
+                    var rolesName = await _userManager.GetRolesAsync(user);
+                    var depIds = new List<int>();
+                    foreach(var role in rolesName)
+                    {
+                        var userRole = await _roleManager.FindByNameAsync(role);
+                        depIds.Add(userRole.DepartmentId);
+                    }
+                    if (depIds.Count > 0)
+                    {
+                        var claim = new List<Claim>();
+                        foreach (var depId in depIds)
+                        {
+                            claim.Add(new Claim(CustomClaimTypes.DepartmentId, depId.ToString()));
+                        }
+                        await _userManager.AddClaimsAsync(user, claim);
+                    }
+                    else if(depIds.Count == 1)
+                    {
+                        var claim = new Claim(CustomClaimTypes.DepartmentId, depIds.ToString());
+                    }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

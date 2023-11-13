@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -39,16 +40,10 @@
                                 </ul>
                             </li>
                         }
-                        @if (User.IsInRole(workload_Utility.WC.HeadOfDepartmentRole))
+                        @if (!User.IsInRole(workload_Utility.WC.AdminRole))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="HeadOfDepartmentProfile" asp-action="Index">Head Of Department Profile</a>
-                            </li>
-                        }
-                        @if (User.IsInRole(workload_Utility.WC.TeacherRole))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TeacherProfile" asp-action="Index">Teacher Profile</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
                             </li>
                         }
                     </ul>

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Remoting;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -22,6 +23,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using NuGet.Versioning;
 using workload_Data;
+using workload_DataAccess.ClaimTypes;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Utility;
@@ -236,6 +238,9 @@ namespace workload.Areas.Identity.Pages.Account
                         if(!res.Succeeded) { }
                     }
                     _logger.LogInformation("User created a new account with password.");
+
+                    var claim = new Claim("CustomClaimType", "DepartmentId");
+                    await _userManager.AddClaimAsync(user, claim);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
