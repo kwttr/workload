@@ -14,6 +14,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using workload_Models;
+using System.Security.Claims;
+using workload_Utility.ClaimTypes;
+using System.Text.RegularExpressions;
 
 namespace workload.Areas.Identity.Pages.Account
 {
@@ -21,11 +25,15 @@ namespace workload.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<CustomRole> _roleManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, RoleManager<CustomRole> roleManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -114,6 +122,44 @@ namespace workload.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+
+                    //Выдача Claims
+                    var user = await _userManager.FindByNameAsync(Input.Email);
+                    var rolesName = await _userManager.GetRolesAsync(user);
+                    var depIds = new List<int>();
+                    var roles = new List<string>();
+                    foreach(var role in rolesName)
+                    {
+                        var resultrole = Regex.Replace(role, @"\d", "");
+                        if (!roles.Contains(resultrole)) roles.Add(resultrole);
+                        var userRole = await _roleManager.FindByNameAsync(role);
+                        depIds.Add(userRole.DepartmentId);
+                    }
+                    if (depIds.Count != 0)
+                    {
+                        var claim = new List<Claim>();
+                        foreach (var depId in depIds)
+                        {
+                            var claims = await _userManager.GetClaimsAsync(user);
+                            if(claims.Any(c=>c.Type==CustomClaimTypes.DepartmentId && c.Value == depId.ToString())) { continue; }
+                            claim.Add(new Claim(CustomClaimTypes.DepartmentId, depId.ToString()));
+                        }
+                        await _userManager.AddClaimsAsync(user, claim);
+                    }
+                    //TOFIX: Убрать вхождение цифр в ролях и закидывать только Teacher и Head Of Department как Claims
+                    if(roles.Count != 0)
+                    {
+                        var claim = new List<Claim>();
+                        foreach(var role in roles)
+                        {
+                            var claims = await _userManager.GetClaimsAsync(user);
+                            if(claims.Any(c=>c.Type==CustomClaimTypes.RoleAccess && c.Value == role)) { continue; }
+                            claim.Add(new Claim(CustomClaimTypes.RoleAccess, role));
+                        }
+                        await _userManager.AddClaimsAsync(user, claim);
+                    }
+
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

@@ -11,40 +11,14 @@ using workload_Data;
 namespace workload_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231015033925_AddUsersToCategories")]
-    partial class AddUsersToCategories
+    [Migration("20231110135904_Initialize")]
+    partial class Initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -79,6 +53,10 @@ namespace workload_DataAccess.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -131,6 +109,10 @@ namespace workload_DataAccess.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -218,41 +200,29 @@ namespace workload_DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AdditionalInfo")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("NormHours")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("NormHours")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("DepartmentId");
+
                     b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("workload_Models.Admin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("workload_Models.Category", b =>
@@ -290,6 +260,44 @@ namespace workload_DataAccess.Migrations
                             Id = 4,
                             Name = "Профориентационная и воспитательная работа"
                         });
+                });
+
+            modelBuilder.Entity("workload_Models.CustomRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("Rate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("NormalizedName")
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.HasIndex("NormalizedName", "DepartmentId")
+                        .IsUnique();
+
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("workload_Models.Degree", b =>
@@ -342,26 +350,18 @@ namespace workload_DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Department");
-                });
 
-            modelBuilder.Entity("workload_Models.HeadOfDepartment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("HeadOfDepartments");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Кафедра информатики"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Кафедра математики"
+                        });
                 });
 
             modelBuilder.Entity("workload_Models.Position", b =>
@@ -412,35 +412,40 @@ namespace workload_DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("DateFact")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DatePlan")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("HoursFact")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("HoursFact")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("HoursPlan")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("HoursPlan")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("NormHours")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("NormHours")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ReportId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UnitFact")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("UnitFact")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("UnitPlan")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("UnitPlan")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ReportId");
 
@@ -454,17 +459,17 @@ namespace workload_DataAccess.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CurrentDegree")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("Rate")
+                    b.Property<double?>("Rate")
                         .HasColumnType("REAL");
 
-                    b.Property<int>("TeacherId")
+                    b.Property<int>("StatusId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("TeacherId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -472,36 +477,61 @@ namespace workload_DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Reports");
                 });
 
-            modelBuilder.Entity("workload_Models.Teacher", b =>
+            modelBuilder.Entity("workload_Models.Status", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DegreeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DepartmentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PositionId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Status");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Назначен отчет"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Отправлен на проверку"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Подтверждено"
+                        });
+                });
+
+            modelBuilder.Entity("workload_Models.Teacher", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("DegreeId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserId")
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<int>("PositionId")
+                        .HasColumnType("INTEGER");
 
                     b.HasIndex("DegreeId");
 
@@ -509,14 +539,12 @@ namespace workload_DataAccess.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Teachers");
+                    b.HasDiscriminator().HasValue("Teacher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("workload_Models.CustomRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -543,7 +571,7 @@ namespace workload_DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("workload_Models.CustomRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -573,19 +601,18 @@ namespace workload_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("workload_Models.Admin", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                    b.HasOne("workload_Models.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Category");
+
+                    b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("workload_Models.HeadOfDepartment", b =>
+            modelBuilder.Entity("workload_Models.CustomRole", b =>
                 {
                     b.HasOne("workload_Models.Department", "Department")
                         .WithMany()
@@ -598,26 +625,38 @@ namespace workload_DataAccess.Migrations
 
             modelBuilder.Entity("workload_Models.ProcessActivityType", b =>
                 {
+                    b.HasOne("workload_Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("workload_Models.Report", "Report")
                         .WithMany("ProcessActivities")
                         .HasForeignKey("ReportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Report");
                 });
 
             modelBuilder.Entity("workload_Models.Report", b =>
                 {
-                    b.HasOne("workload_Models.Department", null)
-                        .WithMany("Reports")
-                        .HasForeignKey("DepartmentId");
+                    b.HasOne("workload_Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("workload_Models.Teacher", "Teacher")
                         .WithMany("Reports")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Status");
 
                     b.Navigation("Teacher");
                 });
@@ -630,11 +669,9 @@ namespace workload_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workload_Models.Department", "Department")
+                    b.HasOne("workload_Models.Department", null)
                         .WithMany("Teachers")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId");
 
                     b.HasOne("workload_Models.Position", "Position")
                         .WithMany()
@@ -642,23 +679,13 @@ namespace workload_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Degree");
 
-                    b.Navigation("Department");
-
                     b.Navigation("Position");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("workload_Models.Department", b =>
                 {
-                    b.Navigation("Reports");
-
                     b.Navigation("Teachers");
                 });
 

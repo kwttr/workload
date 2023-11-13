@@ -44,7 +44,7 @@ namespace workload.Controllers
             {
                 Teacher = _teachRepo.Find(user.Id)
             };
-            vm.ListTeacher = _teachRepo.GetAll(includeProperties:"Reports").Where(x => x.DepartmentId == vm.Teacher.DepartmentId);
+            vm.ListTeacher = _teachRepo.GetAll(includeProperties:"Reports")/*.Where(x => x.DepartmentId == vm.Teacher.DepartmentId)*/;
             return View(vm);
         }
 

@@ -54,14 +54,6 @@
                 </div>
             </div>
             <p></p>
-            <div class="form-floating">
-                <div class="col-12">
-                    <select asp-for="Input.DepartmentId" asp-items="@Model.Departments" class="form-control">
-                        <option disabled selected>--Select Department--</option>
-                    </select>
-                    <span asp-validation-for="Input.DepartmentId" class="text-danger"></span>
-                </div>
-            </div>
 
             @if (User.IsInRole(workload_Utility.WC.AdminRole))
             {

@@ -44,16 +44,19 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="Teacher.DepartmentId"></label>
+                        <label>Role list</label>
                     </div>
                     <div class="col-8">
-                        <select asp-for="Teacher.DepartmentId" asp-items="@Model.DepartmentSelectList" class="form-control">
-                            <option disabled selected>--Select Department--</option>
-                        </select>
-                        <span asp-validation-for="Teacher.DepartmentId" class="text-danger"></span>
+                        @for (int i = 0; i < Model.RolesSelectList.Count(); i++)
+                        {
+                            <input class="form-check-input" name="SelectedRoles" type="checkbox" value="@Model.RolesSelectList[i].Name" @(Model.SelectedRoles.Contains(Model.RolesSelectList[i].Name) ? "checked" : "")/>
+                            <label class="form-check-label">@Model.RolesSelectList[i]</label><br />
+                        }
                     </div>
                 </div>
+                <div>
 
+                </div>
                 <div class="form-group row">
                     <div class="col-8 offset-4 row">
 
