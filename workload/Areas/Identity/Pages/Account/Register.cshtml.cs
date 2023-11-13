@@ -238,8 +238,7 @@ namespace workload.Areas.Identity.Pages.Account
                         if(!res.Succeeded) { }
                     }
                     _logger.LogInformation("User created a new account with password.");
-
-                    var claim = new Claim("CustomClaimType", "DepartmentId");
+                    var claim = new Claim(CustomClaimTypes.DepartmentId, role.DepartmentId.ToString());
                     await _userManager.AddClaimAsync(user, claim);
 
                     var userId = await _userManager.GetUserIdAsync(user);
