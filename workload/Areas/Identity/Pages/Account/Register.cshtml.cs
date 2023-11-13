@@ -2,31 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Runtime.Remoting;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using NuGet.Versioning;
-using workload_Data;
-using workload_DataAccess.ClaimTypes;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Utility;
+using workload_Utility.ClaimTypes;
 
 namespace workload.Areas.Identity.Pages.Account
 {
@@ -238,6 +228,8 @@ namespace workload.Areas.Identity.Pages.Account
                         if(!res.Succeeded) { }
                     }
                     _logger.LogInformation("User created a new account with password.");
+
+                    //Выдача Claims
                     var claim = new Claim(CustomClaimTypes.DepartmentId, role.DepartmentId.ToString());
                     await _userManager.AddClaimAsync(user, claim);
 

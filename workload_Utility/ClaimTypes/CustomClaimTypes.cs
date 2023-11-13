@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace workload_DataAccess.ClaimTypes
+namespace workload_Utility.ClaimTypes
 {
     public static class CustomClaimTypes
     {
         public const string DepartmentId = "DepartmentId";
+        public const string RoleAccess = "Role";
     }
 }
