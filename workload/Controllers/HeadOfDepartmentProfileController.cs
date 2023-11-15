@@ -8,7 +8,7 @@ using workload_Utility;
 
 namespace workload.Controllers
 {
-    [Authorize(Roles = WC.HeadOfDepartmentRole)]
+    [Authorize]
     public class HeadOfDepartmentProfileController : Controller
     {
         private readonly ITeacherRepository _teachRepo;
@@ -37,9 +37,9 @@ namespace workload.Controllers
             _activityTypeRepo = activityTypeRepo;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = _userManager.GetUserAsync(User).Result;
             HeadOfDepartmentProfileVM vm = new HeadOfDepartmentProfileVM()
             {
                 Teacher = _teachRepo.Find(user.Id)
@@ -60,7 +60,6 @@ namespace workload.Controllers
                 Report = _repRepo.Find(id.GetValueOrDefault()),
                 CategoryList = _categoryRepo.GetAll().ToList(),
             };
-
             List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
             var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVM.Report.Id).ToList();
             foreach (var processActivity in matchingProcessActivities)

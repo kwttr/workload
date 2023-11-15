@@ -18,6 +18,7 @@ using workload_Models;
 using System.Security.Claims;
 using workload_Utility.ClaimTypes;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace workload.Areas.Identity.Pages.Account
 {
@@ -134,29 +135,30 @@ namespace workload.Areas.Identity.Pages.Account
                         if (!roles.Contains(resultrole)) roles.Add(resultrole);
                         var userRole = await _roleManager.FindByNameAsync(role);
                         depIds.Add(userRole.DepartmentId);
-                    }
-                    if (depIds.Count != 0)
-                    {
-                        var claim = new List<Claim>();
-                        foreach (var depId in depIds)
+                        
+                        var customClaim = new CustomClaim
                         {
-                            var claims = await _userManager.GetClaimsAsync(user);
-                            if(claims.Any(c=>c.Type==CustomClaimTypes.DepartmentId && c.Value == depId.ToString())) { continue; }
-                            claim.Add(new Claim(CustomClaimTypes.DepartmentId, depId.ToString()));
-                        }
-                        await _userManager.AddClaimsAsync(user, claim);
-                    }
-                    //TOFIX: Убрать вхождение цифр в ролях и закидывать только Teacher и Head Of Department как Claims
-                    if(roles.Count != 0)
-                    {
-                        var claim = new List<Claim>();
-                        foreach(var role in roles)
+                            RoleAccess = resultrole,
+                            DepartmentId = userRole.DepartmentId.ToString()
+                        };
+                        var userClaims = await _userManager.GetClaimsAsync(user);
+                        List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+                        foreach(var userClaim in userClaims)
                         {
-                            var claims = await _userManager.GetClaimsAsync(user);
-                            if(claims.Any(c=>c.Type==CustomClaimTypes.RoleAccess && c.Value == role)) { continue; }
-                            claim.Add(new Claim(CustomClaimTypes.RoleAccess, role));
+                            deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(userClaim.Value));
                         }
-                        await _userManager.AddClaimsAsync(user, claim);
+                        foreach(var deserializedClaim in deserializedClaims)
+                        {
+                            if (customClaim.Equals(deserializedClaim))
+                            {
+                                var dfg = 23;
+                            }
+                        }
+                        if (!deserializedClaims.Contains(customClaim))
+                        {
+                            var claim = new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(customClaim));
+                            await _userManager.AddClaimAsync(user, claim);
+                        }
                     }
 
 
