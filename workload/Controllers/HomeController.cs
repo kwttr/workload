@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using workload_Models;
 
@@ -15,7 +16,12 @@ namespace workload.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                var claims = User.Claims;
+                return View();
+            }
+            else return Redirect("Identity/Account/Login");
         }
 
         public IActionResult Privacy()

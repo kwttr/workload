@@ -24,6 +24,7 @@ namespace workload_Data
         public DbSet<Degree> Degree { get; set; }
         public DbSet<Position> Position { get; set; }
         public DbSet<Status> Status { get; set; }
+        public DbSet<TeacherDepartment> TeacherDepartment { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,6 +38,19 @@ namespace workload_Data
             modelBuilder.Entity<CustomRole>()
                 .HasOne(c => c.Department)
                 .WithMany()
+                .HasForeignKey(c => c.DepartmentId);
+
+            modelBuilder.Entity<TeacherDepartment>()
+                .HasKey(c => new { c.TeacherId, c.DepartmentId });
+
+            modelBuilder.Entity<TeacherDepartment>()
+                .HasOne<Teacher>(c => c.Teacher)
+                .WithMany(d => d.TeacherDepartments)
+                .HasForeignKey(c => c.TeacherId);
+
+            modelBuilder.Entity<TeacherDepartment>()
+                .HasOne<Department>(d => d.Department)
+                .WithMany(d => d.TeacherDepartments)
                 .HasForeignKey(c => c.DepartmentId);
 
             modelBuilder.Entity<CustomRole>(entity =>
@@ -157,6 +171,94 @@ namespace workload_Data
                 }
             };
             modelBuilder.Entity<Department>().HasData(departments);
+
+            var activityTypes = new ActivityType[]
+            {
+                new ActivityType
+                {
+                    Id=1,
+                    Name="Подготовка к изданию учебных пособий",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=2,
+                    Name="Подготовка новой рабочей программы учебной дисциплины / программы дополнительного (профессионального) образования",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType {
+                    Id=3,
+                    Name="Обновление рабочих программ учебной дисциплины / программы дополнительного (профессионального) образования",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=4,
+                    Name="Подготовка новых методических разработок",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=5,
+                    Name="Составление программы практики",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=6,
+                    Name="Обновление методических разработок",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=7,
+                    Name="Подготовка к лекциям, семинарским, практическим и лабораторным занятиям с применением интерактивных форм обучения",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=8,
+                    Name="Подготовка конспектов лекций для впервые изучаемых дисциплин",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=9,
+                    Name="Подготовка к семинарским, практическим и лабораторным занятиям для впервые изучаемых дисциплин",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=10,
+                    Name="Подготовка конспектов лекций к семинарским, практическим и лабораторным занятиям",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=11,
+                    Name="Полная актуализация комплекта учебно-методических материалов электронного курса для технологии дистанционного обучения",
+                    CategoryId=1,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=12,
+                    Name="Прочие",
+                    CategoryId=1,
+                    NormHours=0
+                }
+            };
+            modelBuilder.Entity<ActivityType>().HasData(activityTypes);
         }
     }
 }

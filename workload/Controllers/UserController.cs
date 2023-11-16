@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
 using System.Collections.Immutable;
 using workload_Data;
+using workload_DataAccess.Repository;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
@@ -21,12 +22,14 @@ namespace workload.Controllers
         private readonly ITeacherRepository _teachRepo;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<CustomRole> _roleManager;
+        private readonly ITeacherDepartmentRepository _teachDepRepo;
 
-        public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager, RoleManager<CustomRole> roleManager)
+        public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager, RoleManager<CustomRole> roleManager, ITeacherDepartmentRepository teachDepRepo)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
             _roleManager = roleManager;
+            _teachDepRepo = teachDepRepo;
         }
 
         public IActionResult Index()
@@ -83,10 +86,11 @@ namespace workload.Controllers
                 teacher.DegreeId = vm.Teacher.DegreeId;
                 teacher.PositionId = vm.Teacher.PositionId;
 
-                //РОЛИ
-                var roles = _userManager.GetRolesAsync(vm.Teacher).Result;
-                if (vm.SelectedRoles!=null)
+                //РОЛИ И КАФЕДРА
+                var roles = _userManager.GetRolesAsync(teacher).Result;
+                if (vm.SelectedRoles != null)
                 {
+                    //РОЛИ
                     foreach (var role in roles)
                     {
                         if (!vm.SelectedRoles.Contains(role))
@@ -98,10 +102,39 @@ namespace workload.Controllers
                     {
                         AddRoleToUser(obj, teacher);
                     }
-                }
 
+                    //КАФЕДРА
+                    roles=_userManager.GetRolesAsync(teacher).Result;
+                    List<TeacherDepartment> newTeachDep = new List<TeacherDepartment>();
+                    foreach(var role in roles)
+                    {
+                        var depRole = _roleManager.FindByNameAsync(role).Result;
+                        newTeachDep.Add(new TeacherDepartment() { DepartmentId = depRole.DepartmentId, TeacherId = teacher.Id });
+                    }
+                    var oldTeachDep = _teachDepRepo.GetAll(c => c.TeacherId == teacher.Id).ToList();
+                    var removedItems = oldTeachDep.Where(oldDep => !newTeachDep.Any(newDep => newDep.DepartmentId == oldDep.DepartmentId)).ToList();
+                    var count = oldTeachDep.RemoveAll(oldDep => !newTeachDep.Any(newDep => newDep.DepartmentId == oldDep.DepartmentId));
+                    if(count > 0)
+                    {
+                        foreach (var item in removedItems)
+                        {
+                            _teachDepRepo.Remove(item);
+                        }
+                    }
+                    newTeachDep = newTeachDep.GroupBy(x => x.DepartmentId).Select(g => g.First()).ToList();
+                    foreach(var item in newTeachDep)
+                    {
+                        if (!oldTeachDep.Contains(item))
+                        {
+                            _teachDepRepo.Add(item);
+                        }
+                    }
+
+                }
+                _teachDepRepo.Save();
                 _teachRepo.Update(teacher);
                 _teachRepo.Save();
+
                 return RedirectToAction("Index");
             }
             return View();

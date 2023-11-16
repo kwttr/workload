@@ -13,9 +13,6 @@ namespace workload_Models
         [ForeignKey("DepartmentId")]
         public Department? Department { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
-        public decimal? Rate { get; set; }
-
         public CustomRole() { }
     }
 

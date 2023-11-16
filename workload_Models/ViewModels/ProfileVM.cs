@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace workload_Models.ViewModels
 {
-    public class HeadOfDepartmentProfileVM
+    public class ProfileVM
     {
-        public Teacher Teacher { get; set; }
-        public List<Teacher>? ListTeacher { get; set; }
+        public string Role { get; set; }
+        public int DepartmentId { get; set; }
     }
 }

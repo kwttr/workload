@@ -18,6 +18,8 @@ using workload_Models;
 using System.Security.Claims;
 using workload_Utility.ClaimTypes;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using workload_DataAccess.Repository.IRepository;
 
 namespace workload.Areas.Identity.Pages.Account
 {
@@ -28,7 +30,10 @@ namespace workload.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<CustomRole> _roleManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, RoleManager<CustomRole> roleManager, UserManager<IdentityUser> userManager)
+        public LoginModel(SignInManager<IdentityUser> signInManager,
+                          ILogger<LoginModel> logger,
+                          RoleManager<CustomRole> roleManager,
+                          UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -134,31 +139,24 @@ namespace workload.Areas.Identity.Pages.Account
                         if (!roles.Contains(resultrole)) roles.Add(resultrole);
                         var userRole = await _roleManager.FindByNameAsync(role);
                         depIds.Add(userRole.DepartmentId);
-                    }
-                    if (depIds.Count != 0)
-                    {
-                        var claim = new List<Claim>();
-                        foreach (var depId in depIds)
+                        
+                        var customClaim = new CustomClaim
                         {
-                            var claims = await _userManager.GetClaimsAsync(user);
-                            if(claims.Any(c=>c.Type==CustomClaimTypes.DepartmentId && c.Value == depId.ToString())) { continue; }
-                            claim.Add(new Claim(CustomClaimTypes.DepartmentId, depId.ToString()));
-                        }
-                        await _userManager.AddClaimsAsync(user, claim);
-                    }
-                    //TOFIX: Убрать вхождение цифр в ролях и закидывать только Teacher и Head Of Department как Claims
-                    if(roles.Count != 0)
-                    {
-                        var claim = new List<Claim>();
-                        foreach(var role in roles)
+                            RoleAccess = resultrole,
+                            DepartmentId = userRole.DepartmentId.ToString()
+                        };
+                        var userClaims = await _userManager.GetClaimsAsync(user);
+                        List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+                        foreach(var userClaim in userClaims)
                         {
-                            var claims = await _userManager.GetClaimsAsync(user);
-                            if(claims.Any(c=>c.Type==CustomClaimTypes.RoleAccess && c.Value == role)) { continue; }
-                            claim.Add(new Claim(CustomClaimTypes.RoleAccess, role));
+                            deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(userClaim.Value));
                         }
-                        await _userManager.AddClaimsAsync(user, claim);
+                        if (!deserializedClaims.Contains(customClaim))
+                        {
+                            var claim = new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(customClaim));
+                            await _userManager.AddClaimAsync(user, claim);
+                        }
                     }
-
 
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
