@@ -1,5 +1,6 @@
 ﻿@using System.Security.Claims;
 @using workload_Utility.ClaimTypes;
+@using workload_Utility;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,9 +26,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-@*                        @if (User.HasClaim(CustomClaimTypes.RoleAccess,"Admin"))
-                        {*@
-                            <li class="nav-item dropdown">
+                        @if (User.IsInRole(WC.AdminRole))
+                        {
+                        <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Content Management
                                 </a>
@@ -40,25 +41,7 @@
                                     <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create user</a>
                                 </ul>
                             </li>
-@*                        }*@
-                        @if (User.Identity.IsAuthenticated || !User.IsInRole(workload_Utility.WC.AdminRole))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
-                            </li>   
                         }
-@*                        @if (User.HasClaim(CustomClaimTypes.RoleAccess, "HeadOfDepartment"))
-                        {*@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="HeadOfDepartmentProfile" asp-action="Index">Head Of Department Profile</a>
-                            </li>
-@*                        }
-                        @if (User.HasClaim(CustomClaimTypes.RoleAccess, "Teacher"))
-                        {*@
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TeacherProfile" asp-action="Index">Teacher Profile</a>
-                            </li>
-@*                        }*@
                     </ul>
                 </div>
             </div>

@@ -9,6 +9,6 @@ namespace workload_Models.ViewModels
     public class HeadOfDepartmentProfileVM
     {
         public Teacher Teacher { get; set; }
-        public IEnumerable<Teacher>? ListTeacher { get; set; }
+        public List<Teacher>? ListTeacher { get; set; }
     }
 }

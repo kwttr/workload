@@ -19,6 +19,7 @@ using System.Security.Claims;
 using workload_Utility.ClaimTypes;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using workload_DataAccess.Repository.IRepository;
 
 namespace workload.Areas.Identity.Pages.Account
 {
@@ -29,7 +30,10 @@ namespace workload.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<CustomRole> _roleManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, RoleManager<CustomRole> roleManager, UserManager<IdentityUser> userManager)
+        public LoginModel(SignInManager<IdentityUser> signInManager,
+                          ILogger<LoginModel> logger,
+                          RoleManager<CustomRole> roleManager,
+                          UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -147,20 +151,12 @@ namespace workload.Areas.Identity.Pages.Account
                         {
                             deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(userClaim.Value));
                         }
-                        foreach(var deserializedClaim in deserializedClaims)
-                        {
-                            if (customClaim.Equals(deserializedClaim))
-                            {
-                                var dfg = 23;
-                            }
-                        }
                         if (!deserializedClaims.Contains(customClaim))
                         {
                             var claim = new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(customClaim));
                             await _userManager.AddClaimAsync(user, claim);
                         }
                     }
-
 
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);

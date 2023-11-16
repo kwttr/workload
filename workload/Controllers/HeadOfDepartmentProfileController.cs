@@ -18,6 +18,7 @@ namespace workload.Controllers
         private readonly IProcessActivityTypeRepository _processActivityTypeRepo;
         private readonly ITeacherRepository _teacherRepo;
         private readonly IActivityTypeRepository _activityTypeRepo;
+        private readonly ITeacherDepartmentRepository _teacherDepartmentRepo;
 
         public HeadOfDepartmentProfileController(
             ITeacherRepository teachRepo,
@@ -26,7 +27,8 @@ namespace workload.Controllers
             ICategoryRepository categoryRepo,
             IProcessActivityTypeRepository processActivityTypeRepo,
             ITeacherRepository teacherRepo,
-            IActivityTypeRepository activityTypeRepo)
+            IActivityTypeRepository activityTypeRepo,
+            ITeacherDepartmentRepository teacherDepartmentRepo)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
@@ -35,16 +37,22 @@ namespace workload.Controllers
             _processActivityTypeRepo = processActivityTypeRepo;
             _teacherRepo = teacherRepo;
             _activityTypeRepo = activityTypeRepo;
+            _teacherDepartmentRepo = teacherDepartmentRepo;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
             var user = _userManager.GetUserAsync(User).Result;
             HeadOfDepartmentProfileVM vm = new HeadOfDepartmentProfileVM()
             {
-                Teacher = _teachRepo.Find(user.Id)
+                Teacher = _teachRepo.Find(user.Id),
+                ListTeacher = new List<Teacher>()
             };
-            vm.ListTeacher = _teachRepo.GetAll(includeProperties:"Reports")/*.Where(x => x.DepartmentId == vm.Teacher.DepartmentId)*/;
+            var listTeachers = _teacherDepartmentRepo.GetAll(d=>d.DepartmentId==id);
+            foreach(var teacher in listTeachers)
+            {
+                vm.ListTeacher.Add(_teachRepo.FirstOrDefault(x => x.Id == teacher.TeacherId, includeProperties: "Reports"));
+            }
             return View(vm);
         }
 

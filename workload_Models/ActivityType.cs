@@ -22,10 +22,6 @@ namespace workload_Models
         public Category? Category { get; set; }
         [Display(Name="Additional Info")]
 
-        public int DepartmentId { get; set; }
-        [ForeignKey("DepartmentId")]
-        public Department? Department { get; set; }
-
         public string? AdditionalInfo { get; set; }
 
         public ActivityType(string name, decimal normHours, int categoryId)

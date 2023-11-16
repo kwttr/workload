@@ -31,6 +31,7 @@ namespace workload.Areas.Identity.Pages.Account
         private readonly RoleManager<CustomRole> _roleManager;
         private readonly ITeacherRepository _teachRepo;
         private readonly IDepartmentRepository _departmentRepo;
+        private readonly ITeacherDepartmentRepository _teacherDepartmentRepo;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -40,7 +41,8 @@ namespace workload.Areas.Identity.Pages.Account
             IEmailSender emailSender,
             RoleManager<CustomRole> roleManager,
             ITeacherRepository teachRepo,
-            IDepartmentRepository departmentRepository)
+            IDepartmentRepository departmentRepository,
+            ITeacherDepartmentRepository teacherDepartmentRepo)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -51,6 +53,7 @@ namespace workload.Areas.Identity.Pages.Account
             _roleManager = roleManager;
             _teachRepo = teachRepo;
             _departmentRepo = departmentRepository;
+            _teacherDepartmentRepo = teacherDepartmentRepo;
         }
 
         /// <summary>
@@ -227,6 +230,11 @@ namespace workload.Areas.Identity.Pages.Account
                         var res = await _userManager.AddToRoleAsync(user,role.Name);
                         if(!res.Succeeded) { }
                     }
+
+                    TeacherDepartment teacherDepartment = new TeacherDepartment() { DepartmentId=role.DepartmentId, TeacherId=user.Id };
+                    _teacherDepartmentRepo.Add(teacherDepartment);
+                    _teacherDepartmentRepo.Save();
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

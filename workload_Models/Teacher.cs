@@ -14,6 +14,8 @@ namespace workload_Models
         public int PositionId { get; set; }
         public Position? Position { get; set; }
 
+        public List<TeacherDepartment>? TeacherDepartments { get; set; }
+
         public List<Report>? Reports { get; set; }
     }
 
@@ -24,11 +26,39 @@ namespace workload_Models
         [Required]
         public string Name { get; set; }
     }
+
     public class Position
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+    }
+
+    public class Department
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required]
+        public string Name { get; set; }
+
+        public List<TeacherDepartment>? TeacherDepartments { get; set; }
+    }
+
+    public class TeacherDepartment
+    {
+        public string TeacherId { get; set; }
+        public Teacher? Teacher { get; set; }
+        public int DepartmentId { get; set; }
+        public Department? Department { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is TeacherDepartment other)
+            {
+                return this.DepartmentId == other.DepartmentId;
+            }
+            return false;
+        }
     }
 }

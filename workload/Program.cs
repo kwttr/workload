@@ -27,6 +27,7 @@ builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IProcessActivityTypeRepository, ProcessActivityTypeRepository>();
+builder.Services.AddScoped<ITeacherDepartmentRepository, TeacherDepartmentRepository>();
 
 var app = builder.Build();
 

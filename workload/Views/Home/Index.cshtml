@@ -1,7 +1,32 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Newtonsoft.Json;
+@using workload_Utility.ClaimTypes;
+@{
+    var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
+    List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+    foreach(var claim in claims)
+    {
+        deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
+    }
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Home page</h2>
+        </div>
+    </div>
+
+    <br /><br />
+
+    @foreach(var claim in deserializedClaims.Where(c => c.RoleAccess == "HeadOfDepartment"))
+    {
+        <a asp-route-id="@claim.DepartmentId" asp-controller="HeadOfDepartmentProfile" asp-action="Index" class="btn btn-primary">Кафедра @claim.DepartmentId</a>
+    }
+    <br /><br />
+
+    @if (deserializedClaims.Any(c => c.RoleAccess == "Teacher"))
+    {
+        <h2>Вы являетесь преподавателем. Перейти в профиль:</h2>
+        <a asp-controller="TeacherProfile" asp-action="Index" class="btn btn-primary">Профиль преподавателя</a>
+    }
 </div>
