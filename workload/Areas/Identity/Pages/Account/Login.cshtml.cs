@@ -153,8 +153,7 @@ namespace workload.Areas.Identity.Pages.Account
                         }
                         if (!deserializedClaims.Contains(customClaim))
                         {
-                            var claim = new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(customClaim));
-                            await _userManager.AddClaimAsync(user, claim);
+                            await _userManager.AddClaimAsync(user, new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(customClaim)));
                         }
                     }
 
