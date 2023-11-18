@@ -49,10 +49,6 @@ namespace workload.Controllers
                 ListTeacher = new List<Teacher>()
             };
             var listTeachers = _teacherDepartmentRepo.GetAll(d=>d.DepartmentId==id);
-            foreach(var obj in listTeachers)
-            {
-
-            }
             foreach(var teacher in listTeachers)
             {
                 var teachuser = _userManager.FindByIdAsync(teacher.TeacherId).Result;
