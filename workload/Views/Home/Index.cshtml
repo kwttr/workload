@@ -17,10 +17,14 @@
     </div>
 
     <br /><br />
-
-    @foreach(var claim in deserializedClaims.Where(c => c.RoleAccess == "HeadOfDepartment"))
+    @if (deserializedClaims.Any(c => c.RoleAccess == "HeadOfDepartment"))
     {
-        <a asp-route-id="@claim.DepartmentId" asp-controller="HeadOfDepartmentProfile" asp-action="Index" class="btn btn-primary">Кафедра @claim.DepartmentId</a>
+        <h2>Вы являетесь заведующим кафедр в следующих кафедрах:</h2>
+        @foreach (var claim in deserializedClaims.Where(c => c.RoleAccess == "HeadOfDepartment"))
+        {
+            <a asp-route-id="@claim.DepartmentId" asp-controller="HeadOfDepartmentProfile" asp-action="Index" class="btn btn-primary">Кафедра @claim.DepartmentId</a>
+        }
+
     }
     <br /><br />
 
