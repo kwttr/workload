@@ -203,9 +203,6 @@ namespace workload_DataAccess.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -217,9 +214,93 @@ namespace workload_DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("DepartmentId");
-
                     b.ToTable("Activities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Name = "Подготовка к изданию учебных пособий",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            Name = "Подготовка новой рабочей программы учебной дисциплины / программы дополнительного (профессионального) образования",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 1,
+                            Name = "Обновление рабочих программ учебной дисциплины / программы дополнительного (профессионального) образования",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 1,
+                            Name = "Подготовка новых методических разработок",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 1,
+                            Name = "Составление программы практики",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 1,
+                            Name = "Обновление методических разработок",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 1,
+                            Name = "Подготовка к лекциям, семинарским, практическим и лабораторным занятиям с применением интерактивных форм обучения",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 1,
+                            Name = "Подготовка конспектов лекций для впервые изучаемых дисциплин",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryId = 1,
+                            Name = "Подготовка к семинарским, практическим и лабораторным занятиям для впервые изучаемых дисциплин",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryId = 1,
+                            Name = "Подготовка конспектов лекций к семинарским, практическим и лабораторным занятиям",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CategoryId = 1,
+                            Name = "Полная актуализация комплекта учебно-методических материалов электронного курса для технологии дистанционного обучения",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CategoryId = 1,
+                            Name = "Прочие",
+                            NormHours = 0m
+                        });
                 });
 
             modelBuilder.Entity("workload_Models.Category", b =>
@@ -605,15 +686,7 @@ namespace workload_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workload_Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Category");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("workload_Models.CustomRole", b =>

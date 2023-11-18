@@ -87,7 +87,6 @@ namespace workload_DataAccess.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     NormHours = table.Column<decimal>(type: "TEXT", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false),
                     AdditionalInfo = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -99,12 +98,6 @@ namespace workload_DataAccess.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Activities_Department_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Department",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,7 +106,6 @@ namespace workload_DataAccess.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     DepartmentId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Rate = table.Column<decimal>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
@@ -138,7 +130,6 @@ namespace workload_DataAccess.Migrations
                     FullName = table.Column<string>(type: "TEXT", nullable: true),
                     DegreeId = table.Column<int>(type: "INTEGER", nullable: true),
                     PositionId = table.Column<int>(type: "INTEGER", nullable: true),
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -163,11 +154,6 @@ namespace workload_DataAccess.Migrations
                         principalTable: "Degree",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Department_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Department",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Position_PositionId",
                         column: x => x.PositionId,
@@ -312,6 +298,30 @@ namespace workload_DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TeacherDepartment",
+                columns: table => new
+                {
+                    TeacherId = table.Column<string>(type: "TEXT", nullable: false),
+                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeacherDepartment", x => new { x.TeacherId, x.DepartmentId });
+                    table.ForeignKey(
+                        name: "FK_TeacherDepartment_AspNetUsers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TeacherDepartment_Department_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Department",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProcessActivityType",
                 columns: table => new
                 {
@@ -398,15 +408,29 @@ namespace workload_DataAccess.Migrations
                     { 3, "Подтверждено" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Activities",
+                columns: new[] { "Id", "AdditionalInfo", "CategoryId", "Name", "NormHours" },
+                values: new object[,]
+                {
+                    { 1, null, 1, "Подготовка к изданию учебных пособий", 0m },
+                    { 2, null, 1, "Подготовка новой рабочей программы учебной дисциплины / программы дополнительного (профессионального) образования", 0m },
+                    { 3, null, 1, "Обновление рабочих программ учебной дисциплины / программы дополнительного (профессионального) образования", 0m },
+                    { 4, null, 1, "Подготовка новых методических разработок", 0m },
+                    { 5, null, 1, "Составление программы практики", 0m },
+                    { 6, null, 1, "Обновление методических разработок", 0m },
+                    { 7, null, 1, "Подготовка к лекциям, семинарским, практическим и лабораторным занятиям с применением интерактивных форм обучения", 0m },
+                    { 8, null, 1, "Подготовка конспектов лекций для впервые изучаемых дисциплин", 0m },
+                    { 9, null, 1, "Подготовка к семинарским, практическим и лабораторным занятиям для впервые изучаемых дисциплин", 0m },
+                    { 10, null, 1, "Подготовка конспектов лекций к семинарским, практическим и лабораторным занятиям", 0m },
+                    { 11, null, 1, "Полная актуализация комплекта учебно-методических материалов электронного курса для технологии дистанционного обучения", 0m },
+                    { 12, null, 1, "Прочие", 0m }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_CategoryId",
                 table: "Activities",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Activities_DepartmentId",
-                table: "Activities",
-                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -460,11 +484,6 @@ namespace workload_DataAccess.Migrations
                 column: "DegreeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_DepartmentId",
-                table: "AspNetUsers",
-                column: "DepartmentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_PositionId",
                 table: "AspNetUsers",
                 column: "PositionId");
@@ -494,6 +513,11 @@ namespace workload_DataAccess.Migrations
                 name: "IX_Reports_TeacherId",
                 table: "Reports",
                 column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherDepartment_DepartmentId",
+                table: "TeacherDepartment",
+                column: "DepartmentId");
         }
 
         /// <inheritdoc />
@@ -521,6 +545,9 @@ namespace workload_DataAccess.Migrations
                 name: "ProcessActivityType");
 
             migrationBuilder.DropTable(
+                name: "TeacherDepartment");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -530,6 +557,9 @@ namespace workload_DataAccess.Migrations
                 name: "Reports");
 
             migrationBuilder.DropTable(
+                name: "Department");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
@@ -537,9 +567,6 @@ namespace workload_DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Degree");
-
-            migrationBuilder.DropTable(
-                name: "Department");
 
             migrationBuilder.DropTable(
                 name: "Position");
