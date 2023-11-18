@@ -1,7 +1,7 @@
-﻿@model workload_Models.ViewModels.ReportVM
+﻿@model workload_Models.Report
 
-<form method="post" asp-action="CreateNewReport">
-    <input asp-for="report.TeacherId" hidden/>
+<form method="post" asp-action="Edit">
+    <input asp-for="TeacherId" hidden />
     <div class="border p3">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group row">
@@ -11,20 +11,20 @@
             <div class="col-8">
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="report.Title"></label>
+                        <label asp-for="Title"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="report.Title" class="form-control" />
-                        <span asp-validation-for="report.Title" class="text-danger"></span>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="report.Rate"></label>
+                        <label asp-for="Rate"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="report.Rate" class="form-control" />
-                        <span asp-validation-for="report.Rate" class="text-danger"></span>
+                        <input asp-for="Rate" class="form-control" />
+                        <span asp-validation-for="Rate" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -32,10 +32,10 @@
                     <div class="col-8 offset-4 row">
 
                         <div class="col">
-                            <input type="submit" class="btn btn-info w-100" value="Create" />
+                            <input type="submit" class="btn btn-info w-100" value="Edit" />
                         </div>
                         <div class="col">
-                            <a asp-route-id="@Model.report.TeacherId" asp-action="ViewAllReports" class="btn btn-success w-100">Back</a>
+                            <a asp-route-id="@Model.TeacherId" asp-action="ViewAllReports" class="btn btn-success w-100">Back</a>
                         </div>
                     </div>
                 </div>
