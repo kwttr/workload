@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@model List<IdentityUser>
+@model List<Teacher>
 
 <div class="container p-3">
     <div class="row pt-4">
@@ -28,7 +28,7 @@
                 @foreach(var obj in Model)
                 {
                     <tr>
-                        <td width="50%">@obj.UserName</td>
+                        <td width="50%">@obj.FullName</td>
                         <td class="text-center">
                             <div class="w-75 btn-group" role="group">
                                 <a asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary mx-2">Edit</a>

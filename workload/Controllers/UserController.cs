@@ -40,8 +40,12 @@ namespace workload.Controllers
         public IActionResult Index()
         {
             var users = _userManager.Users.ToList();
-
-            return View(users);
+            List<Teacher> objList= new List<Teacher>();
+            foreach(var user in users)
+            {
+                objList.Add(_teachRepo.Find(user.Id));
+            }
+            return View(objList);
         }
 
         //GET - EDIT
