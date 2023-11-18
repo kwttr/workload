@@ -122,7 +122,7 @@ namespace workload.Controllers
                 obj.StatusId = 3;
                 _repRepo.Update(obj);
                 _repRepo.Save();
-                return RedirectToAction("Index");
+                return RedirectToAction("ViewAllReports", new { Id = obj.TeacherId});
             }
         }
 
@@ -139,7 +139,7 @@ namespace workload.Controllers
                 obj.StatusId = 1;
                 _repRepo.Update(obj);
                 _repRepo.Save();
-                return RedirectToAction("Index");
+                return RedirectToAction("ViewAllReports", new { Id = obj.TeacherId });
             }
         }
 
@@ -185,7 +185,7 @@ namespace workload.Controllers
                 obj.report.ProcessActivities = list;
                 _repRepo.Add(obj.report);
                 _repRepo.Save();
-                return RedirectToAction("Index");
+                return RedirectToAction("ViewAllReports",new {Id = obj.report.TeacherId});
             }
             return View(obj);
         }

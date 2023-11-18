@@ -46,6 +46,10 @@
                             {
                                 <button type="button" class="btn btn-warning" disabled>Ждет рассмотрения</button>
                             }
+                            @if(obj.StatusId == 3)
+                            {
+                                <button type="button" class="btn btn-success" disabled>Отчет утвержден</button>
+                            }
                         </div>
                     </td>
                 </tr>

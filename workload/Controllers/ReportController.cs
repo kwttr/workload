@@ -71,6 +71,7 @@ namespace workload.Controllers
         //GET - CREATE
         public IActionResult Create()
         {
+            
             ReportVM reportVM = new ReportVM()
             {
                 report = new Report(),
