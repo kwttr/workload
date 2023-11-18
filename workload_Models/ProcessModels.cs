@@ -11,24 +11,24 @@ namespace workload_Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal NormHours { get; set; }
 
         public string? DatePlan { get; set; }
         public string? DateFact { get; set; }
 
-        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal HoursPlan { get; set; }
-        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal HoursFact { get; set; }
 
-        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal UnitPlan { get; set; }
-        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal UnitFact { get; set; }
 

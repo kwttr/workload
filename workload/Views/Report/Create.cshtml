@@ -28,6 +28,15 @@
                             <span asp-validation-for="report.TeacherId" class="text-danger"></span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <div class="col-4">
+                            <label asp-for="report.Rate"></label>
+                        </div>
+                        <div class="col-8">
+                            <input asp-for="report.Rate" class="form-control" />
+                            <span asp-validation-for="report.Rate" class="text-danger"></span>
+                        </div>
+                    </div>
 
                 <div class="form-group row">
                     <div class="col-8 offset-4 row">
@@ -48,10 +57,19 @@
     </div>
 </form>
 
-@section Scripts{
-
+@section Scripts {
     @{
         <partial name="_ValidationScriptsPartial" />
     }
+    <script>
+        // переопределение валидации на стороне клиента
+        $.validator.methods.range = function (value, element, param) {
+            var globalizedValue = value.replace(".", ",");
+            return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+        }
 
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+        }
+    </script>
 }

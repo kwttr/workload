@@ -7,6 +7,7 @@ using workload_Data;
 using workload_Models;
 using workload_Models.ViewModels;
 using workload_DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
 
 namespace workload.Controllers
 {
@@ -71,7 +72,6 @@ namespace workload.Controllers
         //GET - CREATE
         public IActionResult Create()
         {
-            
             ReportVM reportVM = new ReportVM()
             {
                 report = new Report(),
@@ -89,7 +89,6 @@ namespace workload.Controllers
             {
                 obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId,includeProperties:"Degree");
                 obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
-                obj.report.Rate = 1;
                 obj.report.StatusId = 1;
                 List<ProcessActivityType> list = new List<ProcessActivityType>();
                 foreach(var activity in _activityTypeRepo.GetAll())

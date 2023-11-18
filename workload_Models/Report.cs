@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using workload_Models.ModelBinders;
 
 namespace workload_Models
 {
@@ -17,6 +19,9 @@ namespace workload_Models
         public virtual Teacher? Teacher { get; set; }
 
         public string? CurrentDegree { get; set; }
+        [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true)]
+        [Display(Name = "Ставка преподавателя")]
         public double? Rate { get; set; }
 
         public int StatusId { get; set; }
