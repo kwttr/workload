@@ -127,36 +127,6 @@ namespace workload.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-
-                    //Выдача Claims
-                    var user = await _userManager.FindByNameAsync(Input.Email);
-                    var rolesName = await _userManager.GetRolesAsync(user);
-                    var depIds = new List<int>();
-                    var roles = new List<string>();
-                    foreach(var role in rolesName)
-                    {
-                        var resultrole = Regex.Replace(role, @"\d", "");
-                        if (!roles.Contains(resultrole)) roles.Add(resultrole);
-                        var userRole = await _roleManager.FindByNameAsync(role);
-                        depIds.Add(userRole.DepartmentId);
-                        
-                        var customClaim = new CustomClaim
-                        {
-                            RoleAccess = resultrole,
-                            DepartmentId = userRole.DepartmentId.ToString()
-                        };
-                        var userClaims = await _userManager.GetClaimsAsync(user);
-                        List<CustomClaim> deserializedClaims = new List<CustomClaim>();
-                        foreach(var userClaim in userClaims)
-                        {
-                            deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(userClaim.Value));
-                        }
-                        if (!deserializedClaims.Contains(customClaim))
-                        {
-                            await _userManager.AddClaimAsync(user, new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(customClaim)));
-                        }
-                    }
-
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
