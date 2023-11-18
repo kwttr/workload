@@ -59,12 +59,12 @@ namespace workload.Controllers
             _roleManager.RoleValidators.Add(new MyRoleValidator());
             await _roleManager.CreateAsync(new CustomRole
             {
-                Name = WC.HeadOfDepartmentRole,
+                Name = WC.HeadOfDepartmentRole+id,
                 DepartmentId = id
             });
             await _roleManager.CreateAsync(new CustomRole
             {
-                Name = WC.TeacherRole,
+                Name = WC.TeacherRole+id,
                 DepartmentId = id
             });
         }
