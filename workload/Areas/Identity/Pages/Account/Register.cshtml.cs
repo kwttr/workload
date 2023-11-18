@@ -3,6 +3,7 @@
 #nullable disable
 
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -164,7 +165,8 @@ namespace workload.Areas.Identity.Pages.Account
             {
                 Roles = _roleManager.Roles.Where(x => x.NormalizedName == "TEACHER").Select(i => new SelectListItem
                 {
-                    Text = i.Name + " " + i.Department.Name,
+
+                    Text = Regex.Replace(i.Name, @"\d", "") + " " + i.Department.Name,
                     Value = i.Id.ToString()
                 });
             }
@@ -172,7 +174,7 @@ namespace workload.Areas.Identity.Pages.Account
             {
                 Roles = _roleManager.Roles.Select(i => new SelectListItem
                 {
-                    Text = i.Name + " " + i.Department.Name,
+                    Text = Regex.Replace(i.Name, @"\d", "") + " " + i.Department.Name,
                     Value = i.Id.ToString()
                 });
             }
