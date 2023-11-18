@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Utility;
@@ -231,9 +233,15 @@ namespace workload.Areas.Identity.Pages.Account
                         if(!res.Succeeded) { }
                     }
 
+                    //Запись в TeacherDepartment
                     TeacherDepartment teacherDepartment = new TeacherDepartment() { DepartmentId=role.DepartmentId, TeacherId=user.Id };
                     _teacherDepartmentRepo.Add(teacherDepartment);
                     _teacherDepartmentRepo.Save();
+
+                    //Выдача Claim
+                    var resultRole = Regex.Replace(role.Name, @"\d", "");
+                    var customClaim = new CustomClaim() { DepartmentId = role.DepartmentId.ToString(), RoleAccess = resultRole };
+                    await _userManager.AddClaimAsync(user, new Claim(CustomClaimType.UserRoleDep,JsonConvert.SerializeObject(customClaim)));
 
                     _logger.LogInformation("User created a new account with password.");
 

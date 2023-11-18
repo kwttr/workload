@@ -5,14 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using NuGet.Versioning;
 using SQLitePCL;
 using System.Collections.Immutable;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 using workload_Data;
 using workload_DataAccess.Repository;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
 using workload_Utility;
+using workload_Utility.ClaimTypes;
 
 namespace workload.Controllers
 {
@@ -73,6 +78,32 @@ namespace workload.Controllers
             await _userManager.AddToRoleAsync(user, id);
         }
 
+        public void RemoveClaim(string id, string role)
+        {
+            var user = _userManager.FindByIdAsync(id).Result;
+            CustomRole tempRole = _roleManager.FindByNameAsync(role).Result;
+            string roleaccess = Regex.Replace(role, @"\d", "");
+            CustomClaim claim = new CustomClaim() { DepartmentId = tempRole.DepartmentId.ToString(), RoleAccess = roleaccess };
+            var userClaim = _userManager.GetClaimsAsync(user).Result.FirstOrDefault(c=>c.Type == "UserRoleDep" && c.Value == JsonConvert.SerializeObject(claim));
+            if (userClaim != null)
+            {
+                _userManager.RemoveClaimAsync(user, userClaim);
+            }
+        }
+
+        public void AddClaim(string id,string role)
+        {
+            var user = _userManager.FindByIdAsync(id).Result;
+            CustomRole tempRole = _roleManager.FindByNameAsync(role).Result;
+            string roleaccess = Regex.Replace(role, @"\d", "");
+            CustomClaim claim = new CustomClaim() { DepartmentId = tempRole.DepartmentId.ToString(), RoleAccess = roleaccess };
+            var userClaim = _userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == "UserRoleDep" && c.Value == JsonConvert.SerializeObject(claim));
+            if (userClaim == null)
+            {
+                _userManager.AddClaimAsync(user, new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(claim)));
+            }
+        }
+
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -96,11 +127,13 @@ namespace workload.Controllers
                         if (!vm.SelectedRoles.Contains(role))
                         {
                             _userManager.RemoveFromRoleAsync(teacher, role);
+                            RemoveClaim(teacher.Id,role);
                         }
                     }
                     foreach (var obj in vm.SelectedRoles)
                     {
                         AddRoleToUser(obj, teacher);
+                        AddClaim(teacher.Id, obj);
                     }
 
                     //КАФЕДРА

@@ -11,29 +11,14 @@ using workload_Data;
 namespace workload_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231116031320_AddTeacherDepartment2")]
-    partial class AddTeacherDepartment2
+    [Migration("20231118041509_Initialize")]
+    partial class Initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
-
-            modelBuilder.Entity("DepartmentTeacher", b =>
-                {
-                    b.Property<int>("TeacherDepartmentsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("TeachersId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("TeacherDepartmentsId", "TeachersId");
-
-                    b.HasIndex("TeachersId");
-
-                    b.ToTable("DepartmentTeacher");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -221,9 +206,6 @@ namespace workload_DataAccess.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -235,9 +217,93 @@ namespace workload_DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("DepartmentId");
-
                     b.ToTable("Activities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = 1,
+                            Name = "Подготовка к изданию учебных пособий",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = 1,
+                            Name = "Подготовка новой рабочей программы учебной дисциплины / программы дополнительного (профессионального) образования",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = 1,
+                            Name = "Обновление рабочих программ учебной дисциплины / программы дополнительного (профессионального) образования",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 1,
+                            Name = "Подготовка новых методических разработок",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = 1,
+                            Name = "Составление программы практики",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CategoryId = 1,
+                            Name = "Обновление методических разработок",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CategoryId = 1,
+                            Name = "Подготовка к лекциям, семинарским, практическим и лабораторным занятиям с применением интерактивных форм обучения",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CategoryId = 1,
+                            Name = "Подготовка конспектов лекций для впервые изучаемых дисциплин",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CategoryId = 1,
+                            Name = "Подготовка к семинарским, практическим и лабораторным занятиям для впервые изучаемых дисциплин",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CategoryId = 1,
+                            Name = "Подготовка конспектов лекций к семинарским, практическим и лабораторным занятиям",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CategoryId = 1,
+                            Name = "Полная актуализация комплекта учебно-методических материалов электронного курса для технологии дистанционного обучения",
+                            NormHours = 0m
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CategoryId = 1,
+                            Name = "Прочие",
+                            NormHours = 0m
+                        });
                 });
 
             modelBuilder.Entity("workload_Models.Category", b =>
@@ -295,9 +361,6 @@ namespace workload_DataAccess.Migrations
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal?>("Rate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -531,6 +594,21 @@ namespace workload_DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("workload_Models.TeacherDepartment", b =>
+                {
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TeacherId", "DepartmentId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("TeacherDepartment");
+                });
+
             modelBuilder.Entity("workload_Models.Teacher", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -550,21 +628,6 @@ namespace workload_DataAccess.Migrations
                     b.HasIndex("PositionId");
 
                     b.HasDiscriminator().HasValue("Teacher");
-                });
-
-            modelBuilder.Entity("DepartmentTeacher", b =>
-                {
-                    b.HasOne("workload_Models.Department", null)
-                        .WithMany()
-                        .HasForeignKey("TeacherDepartmentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("workload_Models.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -626,15 +689,7 @@ namespace workload_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("workload_Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Category");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("workload_Models.CustomRole", b =>
@@ -686,6 +741,25 @@ namespace workload_DataAccess.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("workload_Models.TeacherDepartment", b =>
+                {
+                    b.HasOne("workload_Models.Department", "Department")
+                        .WithMany("TeacherDepartments")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("workload_Models.Teacher", "Teacher")
+                        .WithMany("TeacherDepartments")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Teacher");
+                });
+
             modelBuilder.Entity("workload_Models.Teacher", b =>
                 {
                     b.HasOne("workload_Models.Degree", "Degree")
@@ -705,6 +779,11 @@ namespace workload_DataAccess.Migrations
                     b.Navigation("Position");
                 });
 
+            modelBuilder.Entity("workload_Models.Department", b =>
+                {
+                    b.Navigation("TeacherDepartments");
+                });
+
             modelBuilder.Entity("workload_Models.Report", b =>
                 {
                     b.Navigation("ProcessActivities");
@@ -713,6 +792,8 @@ namespace workload_DataAccess.Migrations
             modelBuilder.Entity("workload_Models.Teacher", b =>
                 {
                     b.Navigation("Reports");
+
+                    b.Navigation("TeacherDepartments");
                 });
 #pragma warning restore 612, 618
         }
