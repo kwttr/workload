@@ -113,5 +113,59 @@ namespace workload.Controllers
             }
             return View(obj);
         }
+
+        //GET - EDIT
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                Report report = _repRepo.FirstOrDefault(r => r.Id == id);
+                return View(report);
+            }
+        }
+
+        //POST - EDIT
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Report report)
+        {
+            if (ModelState.IsValid)
+            {
+                _repRepo.Update(report);
+                _repRepo.Save();
+            }
+            return RedirectToAction("Index");
+        }
+
+        //GET - DELETE
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                Report report = _repRepo.FirstOrDefault(r => r.Id == id);
+                return View(report);
+            }
+        }
+
+        //POST - DELETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Report report)
+        {
+            if (ModelState.IsValid)
+            {
+                _repRepo.Remove(report);
+                _repRepo.Save();
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
