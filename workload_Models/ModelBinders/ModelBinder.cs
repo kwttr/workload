@@ -28,7 +28,6 @@ namespace workload_Models.ModelBinders
 
                 var parsedDouble = decimal.Parse(doubleValue);
                 bindingContext.Result = ModelBindingResult.Success(parsedDouble);
-
             }
             catch (Exception ex)
             {

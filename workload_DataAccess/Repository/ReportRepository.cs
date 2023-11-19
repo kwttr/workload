@@ -53,7 +53,7 @@ namespace workload_DataAccess.Repository
                     Body body = mainPart.Document.AppendChild(new Body());
 
                     //Добавление текста в документ
-                    Table table = CreateTable(mainPart);
+                    Table table = CreateTable(obj);
                     body.Append(table);
 
                     mainPart.Document.Save();
@@ -63,17 +63,19 @@ namespace workload_DataAccess.Repository
             }
         }
 
-        public static Table CreateTable(MainDocumentPart mainPart)
+        public static Table CreateTable(Report obj)
         {
+
+
             // Создаем таблицу
             Table table = new Table();
-
-            // Добавляем ячейки и информацию
+            
+            // Добавляем заголовок таблицы
             for (int i = 0; i < 4; i++)
             {
                 TableRow row = new TableRow();
 
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < 7; j++)
                 {
                     TableCell cell = new TableCell();
 
@@ -85,13 +87,49 @@ namespace workload_DataAccess.Repository
                     if ((i == 0 && j == 0) || i == 0 && j == 7) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
                     else if (j == 0 || j == 7) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
 
-                    if (i == 0 && j == 1) cell.AppendChild(new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }));
-                    if (i == 0 && j < 7 && j>1) cell.AppendChild(new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }));
+                    if (i == 0 && j == 1) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 6 }));
+                    if (i == 1 && j == 1) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
+                    if (i == 1 && j == 4) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
 
+                    if (i == 2 && j == 1) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 3 && j == 1) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if (i == 2 && j == 4) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 3 && j == 4) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if (i == 2 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    if (i == 2 && j == 5) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    
+                    if ((i == 0 && j > 1 && j < 7) || (i == 1 && j > 1 && j < 4) || (i == 1 && j > 4 && j < 7) || (i==2&&j==3)||(i==2&&j==6)) continue;
                     row.Append(cell);
                 }
                 table.Append(row);
             }
+
+            // Добавление тела таблицы
+            foreach(var procAct in obj.ProcessActivities)
+            {
+                if (procAct.DatePlan == null) procAct.DatePlan = "";
+                if (procAct.DateFact == null) procAct.DateFact = "";
+                TableRow procRow = new TableRow();
+                for(int i = 0; i < 7; i++)
+                {
+                    TableCell cell = new TableCell();
+                    string cellText = string.Empty;
+                    if (i == 0) cellText = procAct.Name;
+                    if (i == 1) cellText = procAct.DatePlan;
+                    if (i == 2) cellText = procAct.HoursPlan.ToString();
+                    if (i == 3) cellText = procAct.UnitPlan.ToString();
+                    if (i == 4) cellText = procAct.DateFact;
+                    if (i == 5) cellText = procAct.HoursFact.ToString();
+                    if (i == 6) cellText = procAct.UnitFact.ToString();
+                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
+                    cell.Append(paragraph);
+                    procRow.Append(cell);
+                }
+                table.Append(procRow);
+            }
+
             // Добавляем границы таблицы
             TableProperties tableProperties = new TableProperties(
                 new TableBorders(
@@ -122,7 +160,6 @@ namespace workload_DataAccess.Repository
                     case 4: return ""; // Дополнительная пустота, если нужно
                     case 5: return ""; // Дополнительная пустота, если нужно
                     case 6: return "";
-                    case 7: return "Норма часов";
                     default: return string.Empty;
                 }
             }
@@ -137,7 +174,6 @@ namespace workload_DataAccess.Repository
                     case 4: return "фактический";
                     case 5: return "";
                     case 6: return "";
-                    case 7: return "";
                     default: return string.Empty;
                 }
             }
@@ -146,13 +182,12 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 0: return "";
-                    case 1: return "";
+                    case 1: return "дата";
                     case 2: return "количество";
                     case 3: return "";
-                    case 4: return "";
+                    case 4: return "дата";
                     case 5: return "количество";
                     case 6: return "";
-                    case 7: return "";
                     default: return string.Empty;
                 }
             }
@@ -167,7 +202,6 @@ namespace workload_DataAccess.Repository
                     case 4: return "дата";
                     case 5: return "в час";
                     case 6: return "в ед.";
-                    case 7: return "";
                     default: return string.Empty;
                 }
             }

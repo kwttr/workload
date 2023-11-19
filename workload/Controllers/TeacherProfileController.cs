@@ -150,7 +150,7 @@ namespace workload.Controllers
             }
             else
             {
-                Report obj = _repRepo.Find(id.GetValueOrDefault());
+                Report obj = _repRepo.FirstOrDefault(r=>r.Id==id, includeProperties: "ProcessActivities");
                 MemoryStream stream = _repRepo.Export(obj);
                 return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Document.docx");
             }
