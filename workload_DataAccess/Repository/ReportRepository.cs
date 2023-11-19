@@ -82,8 +82,12 @@ namespace workload_DataAccess.Repository
                     Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
                     cell.Append(paragraph);
 
-                    if(j!=0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
-                    else cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+                    if ((i == 0 && j == 0) || i == 0 && j == 7) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    else if (j == 0 || j == 7) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if (i == 0 && j == 1) cell.AppendChild(new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 0 && j < 7 && j>1) cell.AppendChild(new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }));
+
                     row.Append(cell);
                 }
                 table.Append(row);
@@ -112,9 +116,9 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 0: return "Название вида работы";
-                    case 1: return "Планируемый объем работы";
+                    case 1: return "Объем работы";
                     case 2: return ""; // Пустота между планируемым и фактическим объемом
-                    case 3: return "Фактический объем работы";
+                    case 3: return "";
                     case 4: return ""; // Дополнительная пустота, если нужно
                     case 5: return ""; // Дополнительная пустота, если нужно
                     case 6: return "";
