@@ -65,74 +65,110 @@ namespace workload_DataAccess.Repository
 
         public static Table CreateTable(MainDocumentPart mainPart)
         {
+            // Создаем таблицу
             Table table = new Table();
 
-            // Создаем заголовки столбцов
-            TableRow headerRow = new TableRow();
+            // Добавляем ячейки и информацию
+            for (int i = 0; i < 4; i++)
+            {
+                TableRow row = new TableRow();
 
-            TableCell headerCell1 = CreateHeaderCell("Название вида работы", 4);
-            headerRow.AppendChild(headerCell1);
+                for (int j = 0; j < 8; j++)
+                {
+                    TableCell cell = new TableCell();
 
-            TableCell headerCell2 = CreateHeaderCell("Объем работы", 4);
-            headerRow.AppendChild(headerCell2);
+                    // Добавляем текст в ячейку
+                    string cellText = GetHeaderText(i, j);
+                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
+                    cell.Append(paragraph);
 
-            TableCell headerCell3 = CreateHeaderCell("Норма часов", 4);
-            headerRow.AppendChild(headerCell3);
+                    if(j!=1) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    else cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+                    row.Append(cell);
+                }
+                table.Append(row);
+            }
+            // Добавляем границы таблицы
+            TableProperties tableProperties = new TableProperties(
+                new TableBorders(
+                    new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 }
+                )
+            );
 
-            table.AppendChild(headerRow);
-
-            // Создаем строки для планируемого объема работы
-            TableRow plannedRow = new TableRow();
-
-            TableCell plannedCell = CreateCell("Планируемый", 1, 3);
-            plannedRow.AppendChild(plannedCell);
-
-            TableCell plannedDateCell = CreateCell("Дата", 1, 1);
-            plannedRow.AppendChild(plannedDateCell);
-
-            TableCell plannedHourCell = CreateCell("В час", 1, 1);
-            plannedRow.AppendChild(plannedHourCell);
-
-            TableCell plannedUnitCell = CreateCell("В ед.", 1, 1);
-            plannedRow.AppendChild(plannedUnitCell);
-
-            table.AppendChild(plannedRow);
-
-            // Создаем строки для фактического объема работы
-            TableRow actualRow = new TableRow();
-
-            TableCell actualCell = CreateCell("Фактический", 1, 3);
-            actualRow.AppendChild(actualCell);
-
-            TableCell actualDateCell = CreateCell("Дата", 1, 1);
-            actualRow.AppendChild(actualDateCell);
-
-            TableCell actualHourCell = CreateCell("В час", 1, 1);
-            actualRow.AppendChild(actualHourCell);
-
-            TableCell actualUnitCell = CreateCell("В ед.", 1, 1);
-            actualRow.AppendChild(actualUnitCell);
-
-            table.AppendChild(actualRow);
-
+            table.Append(tableProperties);
             return table;
         }
 
-        private static TableCell CreateHeaderCell(string cellText, int colspan)
+        static string GetHeaderText(int row, int col)
         {
-            TableCell cell = new TableCell();
-            cell.Append(new TableCellProperties(new GridSpan() { Val = colspan }));
-            cell.Append(new Paragraph(new Run(new Text(cellText))));
-            return cell;
-        }
+            // Возвращает текст для ячейки таблицы в зависимости от её положения
+            if (row == 0)
+            {
+                switch (col)
+                {
+                    case 0: return "Название вида работы";
+                    case 1: return "Планируемый объем работы";
+                    case 2: return ""; // Пустота между планируемым и фактическим объемом
+                    case 3: return "Фактический объем работы";
+                    case 4: return ""; // Дополнительная пустота, если нужно
+                    case 5: return ""; // Дополнительная пустота, если нужно
+                    case 6: return "";
+                    case 7: return "Норма часов";
+                    default: return string.Empty;
+                }
+            }
+            if(row == 1)
+            {
+                switch (col)
+                {
+                    case 0: return "";
+                    case 1: return "Планируемый";
+                    case 2: return "";
+                    case 3: return "";
+                    case 4: return "фактический";
+                    case 5: return "";
+                    case 6: return "";
+                    case 7: return "";
+                    default: return string.Empty;
+                }
+            }
+            if(row == 2)
+            {
+                switch (col)
+                {
+                    case 0: return "";
+                    case 1: return "";
+                    case 2: return "количество";
+                    case 3: return "";
+                    case 4: return "";
+                    case 5: return "количество";
+                    case 6: return "";
+                    case 7: return "";
+                    default: return string.Empty;
+                }
+            }
+            if(row == 3)
+            {
+                switch (col)
+                {
+                    case 0: return "";
+                    case 1: return "дата";
+                    case 2: return "в час";
+                    case 3: return "в ед.";
+                    case 4: return "дата";
+                    case 5: return "в час";
+                    case 6: return "в ед.";
+                    case 7: return "";
+                    default: return string.Empty;
+                }
+            }
 
-        private static TableCell CreateCell(string cellText, int colspan, int rowspan)
-        {
-            TableCell cell = new TableCell();
-            cell.Append(new TableCellProperties(new GridSpan() { Val = colspan }, new VerticalMerge() { Val = MergedCellValues.Restart }));
-            cell.Append(new Paragraph(new Run(new Text(cellText))));
-
-            return cell;
+            return string.Empty;
         }
         #endregion
     }
