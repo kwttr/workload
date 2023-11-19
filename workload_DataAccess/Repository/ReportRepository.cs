@@ -11,7 +11,7 @@ namespace workload_DataAccess.Repository
     public class ReportRepository : Repository<Report>, IReportRepository
     {
         private readonly ApplicationDbContext _db;
-        public ReportRepository(ApplicationDbContext db): base(db)
+        public ReportRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
@@ -53,7 +53,7 @@ namespace workload_DataAccess.Repository
                     Body body = mainPart.Document.AppendChild(new Body());
 
                     //Добавление текста в документ
-                    Table table = CreateTable(mainPart);
+                    Table table = CreateTable(obj);
                     body.Append(table);
 
                     mainPart.Document.Save();
@@ -63,78 +63,150 @@ namespace workload_DataAccess.Repository
             }
         }
 
-        public static Table CreateTable(MainDocumentPart mainPart)
+        public static Table CreateTable(Report obj)
         {
-            // Создание новой таблицы
+
+
+            // Создаем таблицу
             Table table = new Table();
+            
+            // Добавляем заголовок таблицы
+            for (int i = 0; i < 4; i++)
+            {
+                TableRow row = new TableRow();
 
-            TableRow headerRow = new TableRow();
-            headerRow.Append(CreateCell("Название вида работы", 4, 1));
-            headerRow.Append(CreateCell("Объем работы", 1, 6));
-            headerRow.Append(CreateCell("Норма часов", 4, 1));
-            table.Append(headerRow);
+                for (int j = 0; j < 7; j++)
+                {
+                    TableCell cell = new TableCell();
 
-            TableRow subHeaderRow1 = new TableRow();
-            subHeaderRow1.Append(CreateCell("планируемый", 1, 3));
-            subHeaderRow1.Append(CreateCell("фактический", 1, 3));
-            table.Append(subHeaderRow1);
+                    // Добавляем текст в ячейку
+                    string cellText = GetHeaderText(i, j);
+                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
+                    cell.Append(paragraph);
 
-            TableRow subHeaderRow2 = new TableRow();
-            subHeaderRow2.Append(CreateCell("дата", 2, 1));
-            subHeaderRow2.Append(CreateCell("количество", 1, 2));
-            subHeaderRow2.Append(CreateCell("дата", 2, 1));
-            subHeaderRow2.Append(CreateCell("количество", 1, 2));
-            table.Append(subHeaderRow2);
+                    if ((i == 0 && j == 0) || i == 0 && j == 7) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    else if (j == 0 || j == 7) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
 
-            TableRow subHeaderRow3 = new TableRow();
-            subHeaderRow3.Append(CreateCell("в час", 1, 1));
-            subHeaderRow3.Append(CreateCell("в ед.", 1, 1));
-            subHeaderRow3.Append(CreateCell("в час", 1, 1));
-            subHeaderRow3.Append(CreateCell("в ед.", 1, 1));
-            table.Append(subHeaderRow3);
+                    if (i == 0 && j == 1) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 6 }));
+                    if (i == 1 && j == 1) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
+                    if (i == 1 && j == 4) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
 
-            // Создание строки данных
-            TableRow dataRow = new TableRow();
-            dataRow.Append(CreateCell("Данные1"));
-            dataRow.Append(CreateCell("Данные2"));
-            dataRow.Append(CreateCell("Данные3"));
-            dataRow.Append(CreateCell("Данные4"));
-            dataRow.Append(CreateCell("Данные5"));
-            dataRow.Append(CreateCell("Данные6"));
-            dataRow.Append(CreateCell("Данные7"));
-            dataRow.Append(CreateCell("Данные8"));
-            dataRow.Append(CreateCell("Данные9"));
-            table.Append(dataRow);
+                    if (i == 2 && j == 1) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 3 && j == 1) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
 
+                    if (i == 2 && j == 4) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 3 && j == 4) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if (i == 2 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    if (i == 2 && j == 5) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    
+                    if ((i == 0 && j > 1 && j < 7) || (i == 1 && j > 1 && j < 4) || (i == 1 && j > 4 && j < 7) || (i==2&&j==3)||(i==2&&j==6)) continue;
+                    row.Append(cell);
+                }
+                table.Append(row);
+            }
+
+            // Добавление тела таблицы
+            foreach(var procAct in obj.ProcessActivities)
+            {
+                if (procAct.DatePlan == null) procAct.DatePlan = "";
+                if (procAct.DateFact == null) procAct.DateFact = "";
+                TableRow procRow = new TableRow();
+                for(int i = 0; i < 7; i++)
+                {
+                    TableCell cell = new TableCell();
+                    string cellText = string.Empty;
+                    if (i == 0) cellText = procAct.Name;
+                    if (i == 1) cellText = procAct.DatePlan;
+                    if (i == 2) cellText = procAct.HoursPlan.ToString();
+                    if (i == 3) cellText = procAct.UnitPlan.ToString();
+                    if (i == 4) cellText = procAct.DateFact;
+                    if (i == 5) cellText = procAct.HoursFact.ToString();
+                    if (i == 6) cellText = procAct.UnitFact.ToString();
+                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
+                    cell.Append(paragraph);
+                    procRow.Append(cell);
+                }
+                table.Append(procRow);
+            }
+
+            // Добавляем границы таблицы
+            TableProperties tableProperties = new TableProperties(
+                new TableBorders(
+                    new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 }
+                )
+            );
+
+            table.Append(tableProperties);
             return table;
         }
 
-        public static TableCell CreateCell(string text, int rowSpan = 1, int colSpan = 1)
+        static string GetHeaderText(int row, int col)
         {
-            TableCell cell = new TableCell();
-            Paragraph paragraph = new Paragraph();
-            Run run = new Run();
-            run.AppendChild(new Text(text));
-            paragraph.Append(run);
-            cell.Append(paragraph);
-            if (rowSpan > 1)
+            // Возвращает текст для ячейки таблицы в зависимости от её положения
+            if (row == 0)
             {
-                if (cell.TableCellProperties == null)
+                switch (col)
                 {
-                    cell.TableCellProperties = new TableCellProperties();
+                    case 0: return "Название вида работы";
+                    case 1: return "Объем работы";
+                    case 2: return ""; // Пустота между планируемым и фактическим объемом
+                    case 3: return "";
+                    case 4: return ""; // Дополнительная пустота, если нужно
+                    case 5: return ""; // Дополнительная пустота, если нужно
+                    case 6: return "";
+                    default: return string.Empty;
                 }
-                cell.TableCellProperties.AppendChild(new VerticalMerge() { Val = MergedCellValues.Restart });
-                cell.TableCellProperties.AppendChild(new VerticalMerge() { Val = MergedCellValues.Continue });
             }
-            if (colSpan > 1)
+            if(row == 1)
             {
-                if (cell.TableCellProperties == null)
+                switch (col)
                 {
-                    cell.TableCellProperties = new TableCellProperties();
+                    case 0: return "";
+                    case 1: return "Планируемый";
+                    case 2: return "";
+                    case 3: return "";
+                    case 4: return "фактический";
+                    case 5: return "";
+                    case 6: return "";
+                    default: return string.Empty;
                 }
-                cell.TableCellProperties.AppendChild(new GridSpan() { Val = colSpan });
             }
-            return cell;
+            if(row == 2)
+            {
+                switch (col)
+                {
+                    case 0: return "";
+                    case 1: return "дата";
+                    case 2: return "количество";
+                    case 3: return "";
+                    case 4: return "дата";
+                    case 5: return "количество";
+                    case 6: return "";
+                    default: return string.Empty;
+                }
+            }
+            if(row == 3)
+            {
+                switch (col)
+                {
+                    case 0: return "";
+                    case 1: return "дата";
+                    case 2: return "в час";
+                    case 3: return "в ед.";
+                    case 4: return "дата";
+                    case 5: return "в час";
+                    case 6: return "в ед.";
+                    default: return string.Empty;
+                }
+            }
+
+            return string.Empty;
         }
         #endregion
     }
