@@ -12,6 +12,8 @@ namespace workload_DataAccess.Repository.IRepository
     {
         void Update(Report obj);
 
+        MemoryStream Export(Report obj);
+
         IEnumerable<SelectListItem> GetAllDropdownList(string obj);
     }
 }

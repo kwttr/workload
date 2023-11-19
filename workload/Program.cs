@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using workload_Data;
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IProcessActivityTypeRepository, ProcessActivityTypeRepository>();
 builder.Services.AddScoped<ITeacherDepartmentRepository, TeacherDepartmentRepository>();
+builder.Services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 268435456; });
 
 var app = builder.Build();
 

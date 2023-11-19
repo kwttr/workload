@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using workload_DataAccess.Repository.IRepository;
@@ -136,6 +139,21 @@ namespace workload.Controllers
                 return NotFound();
             }
             return View(reportDetailsVM);
+        }
+
+        //EXPORTREPORT
+        public IActionResult ExportReport(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                Report obj = _repRepo.Find(id.GetValueOrDefault());
+                MemoryStream stream = _repRepo.Export(obj);
+                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Document.docx");
+            }
         }
     }
 }
