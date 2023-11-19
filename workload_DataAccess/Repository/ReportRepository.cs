@@ -82,7 +82,7 @@ namespace workload_DataAccess.Repository
                     Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
                     cell.Append(paragraph);
 
-                    if(j!=1) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if(j!=0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
                     else cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
                     row.Append(cell);
                 }
