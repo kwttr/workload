@@ -11,7 +11,7 @@ namespace workload_DataAccess.Repository
     public class ReportRepository : Repository<Report>, IReportRepository
     {
         private readonly ApplicationDbContext _db;
-        public ReportRepository(ApplicationDbContext db): base(db)
+        public ReportRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
@@ -65,75 +65,73 @@ namespace workload_DataAccess.Repository
 
         public static Table CreateTable(MainDocumentPart mainPart)
         {
-            // Создание новой таблицы
             Table table = new Table();
 
+            // Создаем заголовки столбцов
             TableRow headerRow = new TableRow();
-            headerRow.Append(CreateCell("Название вида работы", 4, 1));
-            headerRow.Append(CreateCell("Объем работы", 1, 6));
-            headerRow.Append(CreateCell("Норма часов", 4, 1));
-            table.Append(headerRow);
 
-            TableRow subHeaderRow1 = new TableRow();
-            subHeaderRow1.Append(CreateCell("планируемый", 1, 3));
-            subHeaderRow1.Append(CreateCell("фактический", 1, 3));
-            table.Append(subHeaderRow1);
+            TableCell headerCell1 = CreateHeaderCell("Название вида работы", 4);
+            headerRow.AppendChild(headerCell1);
 
-            TableRow subHeaderRow2 = new TableRow();
-            subHeaderRow2.Append(CreateCell("дата", 2, 1));
-            subHeaderRow2.Append(CreateCell("количество", 1, 2));
-            subHeaderRow2.Append(CreateCell("дата", 2, 1));
-            subHeaderRow2.Append(CreateCell("количество", 1, 2));
-            table.Append(subHeaderRow2);
+            TableCell headerCell2 = CreateHeaderCell("Объем работы", 4);
+            headerRow.AppendChild(headerCell2);
 
-            TableRow subHeaderRow3 = new TableRow();
-            subHeaderRow3.Append(CreateCell("в час", 1, 1));
-            subHeaderRow3.Append(CreateCell("в ед.", 1, 1));
-            subHeaderRow3.Append(CreateCell("в час", 1, 1));
-            subHeaderRow3.Append(CreateCell("в ед.", 1, 1));
-            table.Append(subHeaderRow3);
+            TableCell headerCell3 = CreateHeaderCell("Норма часов", 4);
+            headerRow.AppendChild(headerCell3);
 
-            // Создание строки данных
-            TableRow dataRow = new TableRow();
-            dataRow.Append(CreateCell("Данные1"));
-            dataRow.Append(CreateCell("Данные2"));
-            dataRow.Append(CreateCell("Данные3"));
-            dataRow.Append(CreateCell("Данные4"));
-            dataRow.Append(CreateCell("Данные5"));
-            dataRow.Append(CreateCell("Данные6"));
-            dataRow.Append(CreateCell("Данные7"));
-            dataRow.Append(CreateCell("Данные8"));
-            dataRow.Append(CreateCell("Данные9"));
-            table.Append(dataRow);
+            table.AppendChild(headerRow);
+
+            // Создаем строки для планируемого объема работы
+            TableRow plannedRow = new TableRow();
+
+            TableCell plannedCell = CreateCell("Планируемый", 1, 3);
+            plannedRow.AppendChild(plannedCell);
+
+            TableCell plannedDateCell = CreateCell("Дата", 1, 1);
+            plannedRow.AppendChild(plannedDateCell);
+
+            TableCell plannedHourCell = CreateCell("В час", 1, 1);
+            plannedRow.AppendChild(plannedHourCell);
+
+            TableCell plannedUnitCell = CreateCell("В ед.", 1, 1);
+            plannedRow.AppendChild(plannedUnitCell);
+
+            table.AppendChild(plannedRow);
+
+            // Создаем строки для фактического объема работы
+            TableRow actualRow = new TableRow();
+
+            TableCell actualCell = CreateCell("Фактический", 1, 3);
+            actualRow.AppendChild(actualCell);
+
+            TableCell actualDateCell = CreateCell("Дата", 1, 1);
+            actualRow.AppendChild(actualDateCell);
+
+            TableCell actualHourCell = CreateCell("В час", 1, 1);
+            actualRow.AppendChild(actualHourCell);
+
+            TableCell actualUnitCell = CreateCell("В ед.", 1, 1);
+            actualRow.AppendChild(actualUnitCell);
+
+            table.AppendChild(actualRow);
 
             return table;
         }
 
-        public static TableCell CreateCell(string text, int rowSpan = 1, int colSpan = 1)
+        private static TableCell CreateHeaderCell(string cellText, int colspan)
         {
             TableCell cell = new TableCell();
-            Paragraph paragraph = new Paragraph();
-            Run run = new Run();
-            run.AppendChild(new Text(text));
-            paragraph.Append(run);
-            cell.Append(paragraph);
-            if (rowSpan > 1)
-            {
-                if (cell.TableCellProperties == null)
-                {
-                    cell.TableCellProperties = new TableCellProperties();
-                }
-                cell.TableCellProperties.AppendChild(new VerticalMerge() { Val = MergedCellValues.Restart });
-                cell.TableCellProperties.AppendChild(new VerticalMerge() { Val = MergedCellValues.Continue });
-            }
-            if (colSpan > 1)
-            {
-                if (cell.TableCellProperties == null)
-                {
-                    cell.TableCellProperties = new TableCellProperties();
-                }
-                cell.TableCellProperties.AppendChild(new GridSpan() { Val = colSpan });
-            }
+            cell.Append(new TableCellProperties(new GridSpan() { Val = colspan }));
+            cell.Append(new Paragraph(new Run(new Text(cellText))));
+            return cell;
+        }
+
+        private static TableCell CreateCell(string cellText, int colspan, int rowspan)
+        {
+            TableCell cell = new TableCell();
+            cell.Append(new TableCellProperties(new GridSpan() { Val = colspan }, new VerticalMerge() { Val = MergedCellValues.Restart }));
+            cell.Append(new Paragraph(new Run(new Text(cellText))));
+
             return cell;
         }
         #endregion
