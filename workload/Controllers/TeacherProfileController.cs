@@ -41,7 +41,6 @@ namespace workload.Controllers
             {
                 teacher = _teachRepo.Find(user.Id)
             };
-            //vm.reportList = _repRepo.GetAll().Where(x => x.TeacherId == vm.teacher.Id).ToList();
 
             List<Report> reports = new List<Report>();
             var matchingReports = _repRepo.GetAll().Where(u => u.TeacherId== vm.teacher.Id).ToList();

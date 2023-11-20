@@ -58,16 +58,6 @@ namespace workload_DataAccess.Repository
                     var categories = _catRepo.GetAll().ToList();
                     for (int i = 1; i < 5; i++)
                     {
-                        //if (i != 1)
-                        //{
-                        //    Paragraph emptyString = new Paragraph();
-                        //    Run run = new Run();
-                        //    Text text = new Text("\n");
-                        //    run.Append(text);
-                        //    emptyString.Append(run);
-                        //    body.Append(emptyString);
-                        //}
-
                         Paragraph paragraph = new Paragraph();
                         paragraph.Append(new Run(new Text(i.ToString()+" " + categories[i-1].Name)));
                         paragraph.ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines() { Before = "250", After = "100" });
