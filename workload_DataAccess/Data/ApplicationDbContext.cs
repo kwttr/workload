@@ -256,6 +256,251 @@ namespace workload_Data
                     Name="Прочие",
                     CategoryId=1,
                     NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=13,
+                    Name="Работа в качестве секретаря совета факультета, заседаний кафедры",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=14,
+                    Name="Участие в заседаниях кафедры и совета факультета",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=15,
+                    Name="Работа в методическом совете университета / филиала",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=16,
+                    Name="Ответственный за методическую работу по кафедре, факультету",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=17,
+                    Name="Ответственный за работу в системе дистанционного обучения по кафедре",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=18,
+                    Name="Выполнение обязанностей ответственного за контент сайта структурного подразделения университета",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=19,
+                    Name="Взаимопосещение занятий преподавателями",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=20,
+                    Name="Выполнение поручений по формированию банка тестовых заданий",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=21,
+                    Name="Выполнение поручений по формированию банка тестовых заданий",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=22,
+                    Name="Выполнение поручений по организации производственной практики",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=23,
+                    Name="Выполнение поручений по организации распределения и выполнения ВКР",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=24,
+                    Name="Прочие",
+                    CategoryId=2,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=25,
+                    Name="Участие в заседаниях совета по науке",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=26,
+                    Name="Выполнение исследований по НИР в соответствии с программой исследований (договором) с представлением отчёта, оформленного по ГОСТ 7.32.-2001",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=27,
+                    Name="Подготовка диссертации согласно плану подготовки диссертации сотрудниками университета (указать выполнение глав)",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=28,
+                    Name="Написание и подготовка к изданию монографии",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=29,
+                    Name="Написание и подготовка к изданию научной статьи в журнале, входящем в базу Web of Science, Scopus",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=30,
+                    Name="Написание и подготовка к изданию научной статьи в журнале из перечня ВАК, журнале \"Вестник СибУПК\"",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=31,
+                    Name="Написание и подготовка к изданию научной статьи в сборнике конференций",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=32,
+                    Name="Участие в научно-практических, научно-методических и других научных мероприятиях с подготовкой доклада (международных, национальных, межвузовских, университетских)",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=33,
+                    Name="Руководство студенческим научным кружком с предоставлением протоколов заседаний кружков; руководство студенческим научно-инновационным проектом с предоставлением отчета о работе",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=34,
+                    Name="Руководство НИРС (научные доклады, конкурсы, олимпиады, в т.ч. профориентационные)",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=35,
+                    Name="Организация и проведение мастер-классов, деловых игр и др. в рамках научных инновационных форумов",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=36,
+                    Name="Подготовка заявок на изобретение, конкурсы российских и международных грантов",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=37,
+                    Name="Подготовка и проведение международных, российских и региональных научно-практических конференций (форумов, семинаров) на базе университета",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=38,
+                    Name="Организация и проведение конкурсов (инновационных проектов, стендовых докладов)",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=39,
+                    Name="Организация и проведение мероприятий, подготовка материалов (концепций, рекомендаций и т.п.) по плану взаимодействия с предприятиями потребительской кооперации, Межрегиональной ассоциацией \"Сибирское соглашение\" вузами, научными учреждениями",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=40,
+                    Name="Подготовка отзыва на автореферат докторских и кандидатских диссертаций",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=41,
+                    Name="Прочие",
+                    CategoryId=3,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=42,
+                    Name="Кураторство обучающихся 1 и 2 курсов с проведением еженедельных консультаций",
+                    CategoryId=4,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=43,
+                    Name="Классное руководство СПО, в том числе проведение классных часов",
+                    CategoryId=4,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=44,
+                    Name="Работа с потенциальными абитуриентами в школах, колледжах (с поступлением в университет), не менее 10 человек",
+                    CategoryId=4,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=45,
+                    Name="Организация и проведение мероприятий по воспитательной работе (на факультете, кафедре)",
+                    CategoryId=4,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=46,
+                    Name="Участие в мероприятиях для абитуриентов, проводимых на базе университета",
+                    CategoryId=4,
+                    NormHours=0
+                },
+                new ActivityType
+                {
+                    Id=47,
+                    Name="Прочее",
+                    CategoryId=4,
+                    NormHours=0
                 }
             };
             modelBuilder.Entity<ActivityType>().HasData(activityTypes);
