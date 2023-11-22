@@ -56,6 +56,17 @@ namespace workload_DataAccess.Repository
                     mainPart.Document = new Document();
                     Body body = mainPart.Document.AppendChild(new Body());
 
+                    SectionProperties sectionProperties = mainPart.Document.Body.GetFirstChild<SectionProperties>();
+                    if (sectionProperties == null)
+                    {
+                        sectionProperties = new SectionProperties();
+                        mainPart.Document.Body.InsertAt(sectionProperties, 0);
+                    }
+                    PageMargin pageMargin = new PageMargin() { Top = 0 };
+
+                    // Добавляем PageMargin в SectionProperties
+                    sectionProperties.Append(pageMargin);
+
                     body = CreateTitlePage(body, obj);
 
                     Table titleTable = CreateTitleTable();
@@ -67,11 +78,11 @@ namespace workload_DataAccess.Repository
                     body.Append(signature);
 
                     //Разрыв страницы
-                    Paragraph breakParagraph = new Paragraph();
-                    Run run = new Run();
-                    run.Append(new Break() { Type = BreakValues.Page });
-                    breakParagraph.Append(run);
-                    body.Append(breakParagraph);
+                    //Paragraph breakParagraph = new Paragraph();
+                    //Run run = new Run();
+                    //run.Append(new Break() { Type = BreakValues.Page });
+                    //breakParagraph.Append(run);
+                    //body.Append(breakParagraph);
 
                     //Создаются таблицы на каждую категорию
                     var categories = _catRepo.GetAll().ToList();
@@ -102,29 +113,36 @@ namespace workload_DataAccess.Repository
             paragraph1.Append(new Run(new Text("УТВЕРЖДАЮ \nЗав.Кафедрой _______________________\n" +
                 "______________ ____________________")));
             Indentation indentation = new Indentation() { Left = "4500" };
-            paragraph1.ParagraphProperties = new ParagraphProperties(indentation);
+            paragraph1.ParagraphProperties = new ParagraphProperties(indentation,new SpacingBetweenLines() { Before = "150", After = "0" });
             body.Append(paragraph1);
 
+            Run run = new Run();
+            RunProperties runProperties = new RunProperties();
+            runProperties.Append(new RunFonts() { Ascii = "Arial" });
+            runProperties.Append(new Italic());
+            runProperties.Append(new FontSize() { Val = "7" });
+            run.Append(runProperties);
+            run.Append(new Text("     (подпись)                                                                                     (И.О.Фамилия)"));
             Paragraph paragraph2 = new Paragraph();
-            paragraph2.Append(new Run(new Text("(подпись)                      (И.О.Фамилия)")));
-            Indentation indentation2 = new Indentation() { Left = "4500" };
-            paragraph2.ParagraphProperties = new ParagraphProperties(indentation2);
+            paragraph2.Append(run);
+            Indentation indentation2 = new Indentation() { Left = "5000" };
+            paragraph2.ParagraphProperties = new ParagraphProperties(indentation2, new SpacingBetweenLines() { Before = "0", After = "150" });
             body.Append(paragraph2);
 
             Paragraph paragraph3 = new Paragraph();
-            paragraph3.Append(new Run(new Text("<_____>_____________________ 20____г.")));
+            paragraph3.Append(new Run(new Text("«_____»_____________________ 20____г.")));
             Indentation indentation3 = new Indentation() { Left = "4500" };
             paragraph3.ParagraphProperties = new ParagraphProperties(indentation3);
             body.Append(paragraph3);
 
             Paragraph paragraph4 = new Paragraph();
             paragraph4.Append(new Run(new Text("ИНДИВИДУАЛЬНЫЙ ПЛАН-ОТЧЁТ РАБОТЫ ПРЕПОДАВАТЕЛЯ")));
-            paragraph4.ParagraphProperties = new ParagraphProperties(new Justification() { Val = JustificationValues.Center });
+            paragraph4.ParagraphProperties = new ParagraphProperties(new Justification() { Val = JustificationValues.Center }, new SpacingBetweenLines() { Before = "50", After = "50" });
             body.Append(paragraph4);
 
             Paragraph paragraph5 = new Paragraph();
             paragraph5.Append(new Run(new Text("на __________________ учебный год")));
-            paragraph5.ParagraphProperties = new ParagraphProperties(new Justification() { Val = JustificationValues.Center });
+            paragraph5.ParagraphProperties = new ParagraphProperties(new Justification() { Val = JustificationValues.Center }, new SpacingBetweenLines() { Before = "50", After = "50" });
             body.Append(paragraph5);
             
             Paragraph paragraphTeacherInfo = new Paragraph();
@@ -141,8 +159,6 @@ namespace workload_DataAccess.Repository
             paragraph6.ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines() { Before = "150", After = "150" });
             paragraph6.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
             body.Append(paragraph6);
-
-            
 
             return body;
         }
