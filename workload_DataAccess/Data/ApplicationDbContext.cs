@@ -168,6 +168,11 @@ namespace workload_Data
                 {
                     Id=2,
                     Name = "Кафедра математики"
+                },
+                new Department
+                {
+                    Id=3,
+                    Name="Кафедра экономики"
                 }
             };
             modelBuilder.Entity<Department>().HasData(departments);
