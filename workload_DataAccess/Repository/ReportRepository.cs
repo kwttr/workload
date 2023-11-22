@@ -133,7 +133,7 @@ namespace workload_DataAccess.Repository
                 "\nУченая степень, учёное звание ________________"+
                 "\nКафедра__________________"+
                 "\nДолжность____________________________"+
-                "\nДата Избрания на должность______________________________")));
+                "\nДата избрания на должность______________________________")));
             body.Append(paragraphTeacherInfo);
 
             Paragraph paragraph6 = new Paragraph();
@@ -192,8 +192,24 @@ namespace workload_DataAccess.Repository
                     string cellText = GetMainBodyText(i, j);
                     Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
                     paragraph.ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines() { Before = "0", After = "0" });
-                    paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                    if (j == 0) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                    if ((i == 2 || i == 10) && j == 2) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                    if ((i == 9 || i == 17) && j == 1) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Right });
                     cell.Append(paragraph);
+
+                    if (i == 0 && j == 0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i > 0 && i < 18 && j==0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+
+                    if (i == 1 && j == 1) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 4 }));
+                    if (i == 2 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    if (i == 3 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i > 3 && i < 10 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+                    if (i == 10 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    if (i == 11 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i > 11 && i < 18 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if ((i == 1 && j > 1) || (i == 2 && j == 3) || (i == 10 && j == 3)) continue;
 
                     row.Append(cell);
                 }
@@ -244,7 +260,6 @@ namespace workload_DataAccess.Repository
             return string.Empty;
         }
 
-        //TODO: Заполнить справочник ДВАДЦАТЬ ДВЕ, БЛЯТЬ, СТРОКИ
         public string GetMainBodyText(int row, int col)
         {
             if (row == 0)
@@ -260,7 +275,7 @@ namespace workload_DataAccess.Repository
             {
                 switch (col)
                 {
-                    case 1: return "В том числе";
+                    case 1: return "в том числе";
                     default: return string.Empty;
                 }
             }
@@ -419,7 +434,7 @@ namespace workload_DataAccess.Repository
                     default: return string.Empty;
                 }
             }
-            if (row == 19)
+            if (row == 20)
             {
                 switch (col)
                 {
@@ -428,7 +443,7 @@ namespace workload_DataAccess.Repository
                     default: return string.Empty;
                 }
             }
-            if (row == 20)
+            if (row == 21)
             {
                 switch (col)
                 {
