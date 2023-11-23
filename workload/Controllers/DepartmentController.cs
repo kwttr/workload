@@ -13,13 +13,15 @@ namespace workload.Controllers
     {
         private readonly IDepartmentRepository _depRepo;
         private readonly ITeacherRepository _teacherRepo;
+        private readonly ITeacherDepartmentRepository _teacherDepartmentRepository;
         private readonly RoleManager<CustomRole> _roleManager;
 
-        public DepartmentController(IDepartmentRepository depRepo, ITeacherRepository teacherRepo, RoleManager<CustomRole> roleManager)
+        public DepartmentController(IDepartmentRepository depRepo, ITeacherRepository teacherRepo, RoleManager<CustomRole> roleManager, ITeacherDepartmentRepository teacherDepartmentRepository)
         {
             _depRepo = depRepo;
             _teacherRepo = teacherRepo;
             _roleManager = roleManager;
+            _teacherDepartmentRepository = teacherDepartmentRepository;
         }
         public IActionResult Index()
         {
@@ -30,7 +32,12 @@ namespace workload.Controllers
         //Просмотр работников кафедры
         public IActionResult ViewWorkers(int? id)
         {
-            IEnumerable<Teacher> objList = _teacherRepo.GetAll();/*.Where(x=>x.DepartmentId==id);*/
+            IEnumerable<TeacherDepartment> teachdeps = _teacherDepartmentRepository.GetAll(x=>x.DepartmentId==id);
+            List<Teacher> objList = new List<Teacher>();
+            foreach(var teach in teachdeps)
+            {
+                objList.Add(_teacherRepo.Find(teach.TeacherId));
+            }
             return View(objList);
         }
 
