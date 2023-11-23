@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workload_Data;
 
@@ -10,9 +11,11 @@ using workload_Data;
 namespace workload_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231123005855_reworkModels")]
+    partial class reworkModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -812,7 +815,7 @@ namespace workload_DataAccess.Migrations
                     b.Property<decimal?>("februaryFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("firstSemesterFact")
+                    b.Property<decimal?>("firstSemesterPlan")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("hodName")
@@ -845,7 +848,7 @@ namespace workload_DataAccess.Migrations
                     b.Property<decimal?>("octoberFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("secondSemesterFact")
+                    b.Property<decimal?>("secondSemesterPlan")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("septemberFact")

@@ -8,6 +8,8 @@ using workload_Models;
 using workload_Models.ViewModels;
 using workload_DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
+using workload_Utility.ClaimTypes;
 
 namespace workload.Controllers
 {
@@ -19,18 +21,24 @@ namespace workload.Controllers
         private readonly ITeacherRepository _teacherRepo;
         private readonly IActivityTypeRepository _activityTypeRepo;
         private readonly IProcessActivityTypeRepository _processActivityTypeRepo;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly UserManager<Teacher> _userManager;
 
         public ReportController(IReportRepository repRepo,
                                 ICategoryRepository categoryRepo,
                                 ITeacherRepository teacherRepo,
                                 IActivityTypeRepository activityTypeRepo,
-                                IProcessActivityTypeRepository processActivityTypeRepository)
+                                IProcessActivityTypeRepository processActivityTypeRepository,
+                                IHttpContextAccessor contextAccessor,
+                                UserManager<Teacher> userManager)
         {
             _repRepo = repRepo;
             _categoryRepo = categoryRepo;
             _teacherRepo = teacherRepo;
             _activityTypeRepo = activityTypeRepo;
             _processActivityTypeRepo = processActivityTypeRepository;
+            _contextAccessor = contextAccessor;
+            _userManager = userManager;
         }
         [BindProperty]
         public List<ProcessActivityType> processActivityTypes { get; set; }
@@ -85,13 +93,25 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ReportVM obj)
         {
+            var user = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result;
+            List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+            var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
+            foreach (var claim in claims)
+            {
+                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
+            }
+            var deserializedClaim = deserializedClaims.FirstOrDefault(x => x.RoleAccess == "HeadOfDepartment");
             if (ModelState.IsValid)
             {
-                obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId,includeProperties:"Degree");
+                obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId, includeProperties: "Degree");
                 obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
                 obj.report.StatusId = 1;
+                obj.report.hodName = user.FirstName;
+                obj.report.hodSecondName = user.LastName;
+                obj.report.hodPatronymic = user.Patronymic;
+                obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
                 List<ProcessActivityType> list = new List<ProcessActivityType>();
-                foreach(var activity in _activityTypeRepo.GetAll())
+                foreach (var activity in _activityTypeRepo.GetAll())
                 {
                     ProcessActivityType procAct = new ProcessActivityType()
                     {

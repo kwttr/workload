@@ -1,13 +1,9 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
+using System.Linq;
 
 namespace workload_DataAccess.Repository
 {
@@ -46,7 +42,7 @@ namespace workload_DataAccess.Repository
 
                     body = CreateTitlePage(body, obj);
 
-                    Table titleTable = CreateTitleTable();
+                    Table titleTable = CreateTitleTable(obj);
                     body.Append(titleTable);
 
                     Paragraph signature = new Paragraph();
@@ -80,11 +76,12 @@ namespace workload_DataAccess.Repository
         public static Body CreateTitlePage(Body body, Report obj)
         {
             Paragraph paragraph1 = new Paragraph();
-            paragraph1.Append(new Run(new Text("УТВЕРЖДАЮ \nЗав.Кафедрой _______________________\n" +
-                "______________ ____________________")));
+            paragraph1.Append(new Run(new Text("УТВЕРЖДАЮ \nЗав.Кафедрой " + obj.hodName + " " + obj.hodSecondName + " " + obj.hodPatronymic + "")));
             Indentation indentation = new Indentation() { Left = "4500" };
             paragraph1.ParagraphProperties = new ParagraphProperties(indentation, new SpacingBetweenLines() { Before = "150", After = "0" });
             body.Append(paragraph1);
+
+
 
             Run run = new Run();
             RunProperties runProperties = new RunProperties();
@@ -116,24 +113,24 @@ namespace workload_DataAccess.Repository
             body.Append(paragraph5);
 
             Paragraph paragraphTeacherInfo = new Paragraph();
-            paragraphTeacherInfo.Append(new Run(new Text("Фамилия ______________________________________" +
-                "\nИмя ___________ Отчество _______________" +
-                "\nУченая степень, учёное звание ________________" +
-                "\nКафедра__________________" +
-                "\nДолжность____________________________" +
+            if (obj.Teacher != null)
+                paragraphTeacherInfo.Append(new Run(new Text("Фамилия " + obj.Teacher.LastName +
+                "\nИмя " + obj.Teacher.FirstName + " Отчество " + obj.Teacher.Patronymic +
+                "\nУченая степень, учёное звание " + obj.Teacher.Degree + " " +
+                "\nКафедра" + obj.Department.Name +
+                "\nДолжность" + obj.Teacher.Position +
                 "\nДата избрания на должность______________________________")));
             body.Append(paragraphTeacherInfo);
 
             Paragraph paragraph6 = new Paragraph();
             paragraph6.Append(new Run(new Text("Объем выполняемой работы за учебный год")));
-            paragraph6.ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines() { Before = "150", After = "150" });
+            paragraph6.ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines() { Before = "100", After = "180" });
             paragraph6.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
             body.Append(paragraph6);
-
             return body;
         }
 
-        public Table CreateTitleTable()
+        public Table CreateTitleTable(Report obj)
         {
             //Заголовок
             Table table = new Table();
@@ -175,11 +172,15 @@ namespace workload_DataAccess.Repository
                     TableCell cell = new TableCell();
 
                     //Добавляем текст в ячейку
-                    string cellText = GetMainBodyText(i, j);
+                    string cellText = GetMainBodyText(i, j, obj);
                     Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
                     paragraph.ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines() { Before = "0", After = "0" });
                     if (j == 0) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
-                    if ((i == 2 || i == 10) && j == 2) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                    if (i != 1)
+                    {
+                        paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                    }
+
                     if ((i == 9 || i == 17) && j == 1) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Right });
                     cell.Append(paragraph);
 
@@ -246,7 +247,7 @@ namespace workload_DataAccess.Repository
             return string.Empty;
         }
 
-        public string GetMainBodyText(int row, int col)
+        public string GetMainBodyText(int row, int col, Report obj)
         {
             if (row == 0)
             {
@@ -254,6 +255,27 @@ namespace workload_DataAccess.Repository
                 {
                     case 0: return "1";
                     case 1: return "Учебная работа, всего за учебный год";
+                    case 2: 
+                        decimal sumPlan = 0;
+                        foreach(var procAct in obj.ProcessActivities)
+                        {
+                            sumPlan += procAct.HoursPlan;
+                        }
+                        return sumPlan.ToString("0.#");
+                    case 3:
+                        decimal sumFact = 0;
+                        foreach (var procAct in obj.ProcessActivities)
+                        {
+                            sumFact += procAct.HoursFact;
+                        }
+                        return sumFact.ToString("0.#");
+                    case 4:
+                        decimal sumDeviation = 0;
+                        foreach(var procAct in obj.ProcessActivities)
+                        {
+                            sumDeviation += procAct.HoursPlan - procAct.HoursFact;
+                        }
+                        return Math.Abs(sumDeviation).ToString("0.#");
                     default: return string.Empty;
                 }
             }
@@ -278,6 +300,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- сентябрь";
+                    case 3: return obj.septemberFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -286,6 +309,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- октябрь";
+                    case 3: return obj.octoberFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -294,6 +318,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- ноябрь";
+                    case 3: return obj.novemberFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -302,6 +327,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- декабрь";
+                    case 3: return obj.decemberFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -310,6 +336,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- январь";
+                    case 3: return obj.januaryFact.ToString();
                     default: return string.Empty;
 
                 }
@@ -319,6 +346,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- анкетирование студентов о качестве обучения";
+                    case 3: return obj.surveyFirstSemester.ToString();
                     default: return string.Empty;
                 }
             }
@@ -327,6 +355,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "Итого 1 семестр";
+                    case 3: return obj.firstSemesterFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -343,14 +372,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- февраль";
-                    default: return string.Empty;
-                }
-            }
-            if (row == 11)
-            {
-                switch (col)
-                {
-                    case 1: return "- февраль";
+                    case 3: return obj.februaryFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -359,6 +381,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- март";
+                    case 3: return obj.marchFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -367,6 +390,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- апрель";
+                    case 3: return obj.aprilFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -375,6 +399,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- май";
+                    case 3: return obj.mayFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -383,6 +408,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- июнь";
+                    case 3: return obj.juneFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -391,6 +417,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- анкетирование студентов о качестве обучения";
+                    case 3: return obj.surveySecondSemester.ToString();
                     default: return string.Empty;
                 }
             }
@@ -399,6 +426,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "Итого 2 семестр";
+                    case 3: return obj.secondSemesterFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -408,6 +436,27 @@ namespace workload_DataAccess.Repository
                 {
                     case 0: return "2";
                     case 1: return "Учебно-методическая работа";
+                    case 2:
+                        decimal plan = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 1))
+                        {
+                            plan += procAct.HoursPlan;
+                        }
+                        return plan.ToString("0.#");
+                    case 3:
+                        decimal fact = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 1))
+                        {
+                            fact += procAct.HoursFact;
+                        }
+                        return fact.ToString("0.#");
+                    case 4:
+                        decimal deviation = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 1))
+                        {
+                           deviation += procAct.HoursPlan - procAct.HoursFact;
+                        }
+                        return Math.Abs(deviation).ToString("0.#");
                     default: return string.Empty;
                 }
             }
@@ -417,6 +466,27 @@ namespace workload_DataAccess.Repository
                 {
                     case 0: return "3";
                     case 1: return "Организационно-методическая работа";
+                    case 2:
+                        decimal plan = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 2))
+                        {
+                            plan += procAct.HoursPlan;
+                        }
+                        return plan.ToString("0.#");
+                    case 3:
+                        decimal fact = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 2))
+                        {
+                            fact += procAct.HoursFact;
+                        }
+                        return fact.ToString("0.#");
+                    case 4:
+                        decimal deviation = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 2))
+                        {
+                            deviation += procAct.HoursPlan - procAct.HoursFact;
+                        }
+                        return Math.Abs(deviation).ToString("0.#");
                     default: return string.Empty;
                 }
             }
@@ -426,6 +496,27 @@ namespace workload_DataAccess.Repository
                 {
                     case 0: return "4";
                     case 1: return "Научно-исследовательская и инновационная работа";
+                    case 2:
+                        decimal plan = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 3))
+                        {
+                            plan += procAct.HoursPlan;
+                        }
+                        return plan.ToString("0.#");
+                    case 3:
+                        decimal fact = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 3))
+                        {
+                            fact += procAct.HoursFact;
+                        }
+                        return fact.ToString("0.#");
+                    case 4:
+                        decimal deviation = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 3))
+                        {
+                            deviation += procAct.HoursPlan - procAct.HoursFact;
+                        }
+                        return Math.Abs(deviation).ToString("0.#");
                     default: return string.Empty;
                 }
             }
@@ -435,6 +526,27 @@ namespace workload_DataAccess.Repository
                 {
                     case 0: return "5";
                     case 1: return "Профориентационная и воспитательная работа";
+                    case 2:
+                        decimal plan = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 4))
+                        {
+                            plan += procAct.HoursPlan;
+                        }
+                        return plan.ToString("0.#");
+                    case 3:
+                        decimal fact = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 4))
+                        {
+                            fact += procAct.HoursFact;
+                        }
+                        return fact.ToString("0.#");
+                    case 4:
+                        decimal deviation = 0;
+                        foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 4))
+                        {
+                            deviation += procAct.HoursPlan - procAct.HoursFact;
+                        }
+                        return Math.Abs(deviation).ToString("0.#");
                     default: return string.Empty;
                 }
             }
@@ -504,14 +616,14 @@ namespace workload_DataAccess.Repository
                 {
                     TableCell cell = new TableCell();
                     string cellText = string.Empty;
-                    if (i == 0) cellText = activityNumber.ToString();
+                    if (i == 0) cellText = activityNumber.ToString("0.#");
                     if (i == 1) cellText = procAct.Name;
                     if (i == 2) cellText = procAct.DatePlan;
-                    if (i == 3) cellText = procAct.HoursPlan.ToString();
-                    if (i == 4) cellText = procAct.UnitPlan.ToString();
+                    if (i == 3) cellText = procAct.HoursPlan.ToString("0.#");
+                    if (i == 4) cellText = procAct.UnitPlan.ToString("0.#");
                     if (i == 5) cellText = procAct.DateFact;
-                    if (i == 6) cellText = procAct.HoursFact.ToString();
-                    if (i == 7) cellText = procAct.UnitFact.ToString();
+                    if (i == 6) cellText = procAct.HoursFact.ToString("0.#");
+                    if (i == 7) cellText = procAct.UnitFact.ToString("0.#");
                     Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
                     paragraph.ParagraphProperties = new ParagraphProperties(
                     new SpacingBetweenLines() { Before = "0", After = "0" });

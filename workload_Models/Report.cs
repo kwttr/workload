@@ -38,7 +38,7 @@ namespace workload_Models
         public decimal? totalWorkPlan { get; set; }
         public decimal? totalWorkFact { get; set; }
         //Первый семестр
-        public decimal? firstSemesterPlan { get; set; }
+        public decimal? firstSemesterFact { get; set; }
         public decimal? septemberFact { get; set; }
         public decimal? octoberFact { get; set; }
         public decimal? novemberFact { get; set; }
@@ -46,7 +46,7 @@ namespace workload_Models
         public decimal? januaryFact { get; set; }
         public decimal? surveyFirstSemester{ get; set; }
         //Второй семестр
-        public decimal? secondSemesterPlan { get; set; }
+        public decimal? secondSemesterFact { get; set; }
         public decimal? februaryFact { get; set; }
         public decimal? marchFact { get; set; }
         public decimal? aprilFact { get; set; }

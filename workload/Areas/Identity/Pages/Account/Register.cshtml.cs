@@ -118,7 +118,9 @@ namespace workload.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             public string SelectedRole { get; set; }
-            public string FullName { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Patronymic { get; set; }
             public int DegreeId { get; set; }
             public int PositionId { get; set; }
         }
@@ -189,7 +191,7 @@ namespace workload.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new Teacher { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName, PositionId = Input.PositionId, DegreeId = Input.DegreeId };
+                var user = new Teacher { UserName = Input.Email, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, Patronymic = Input.Patronymic, PositionId = Input.PositionId, DegreeId = Input.DegreeId };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

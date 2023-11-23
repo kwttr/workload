@@ -117,7 +117,9 @@ namespace workload.Controllers
             {
                 //КОСТЫЛЬ!!!!!!!
                 Teacher teacher = _teachRepo.Find(vm.Teacher.Id);
-                teacher.FullName = vm.Teacher.FullName;
+                teacher.FirstName = vm.Teacher.FirstName;
+                teacher.LastName = vm.Teacher.LastName;
+                teacher.Patronymic = vm.Teacher.Patronymic;
                 teacher.DegreeId = vm.Teacher.DegreeId;
                 teacher.PositionId = vm.Teacher.PositionId;
 

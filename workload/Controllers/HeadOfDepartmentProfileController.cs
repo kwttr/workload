@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
 using workload_Utility;
+using workload_Utility.ClaimTypes;
 
 namespace workload.Controllers
 {
@@ -19,6 +21,7 @@ namespace workload.Controllers
         private readonly ITeacherRepository _teacherRepo;
         private readonly IActivityTypeRepository _activityTypeRepo;
         private readonly ITeacherDepartmentRepository _teacherDepartmentRepo;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public HeadOfDepartmentProfileController(
             ITeacherRepository teachRepo,
@@ -28,7 +31,8 @@ namespace workload.Controllers
             IProcessActivityTypeRepository processActivityTypeRepo,
             ITeacherRepository teacherRepo,
             IActivityTypeRepository activityTypeRepo,
-            ITeacherDepartmentRepository teacherDepartmentRepo)
+            ITeacherDepartmentRepository teacherDepartmentRepo,
+            IHttpContextAccessor contextAccessor)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
@@ -38,6 +42,7 @@ namespace workload.Controllers
             _teacherRepo = teacherRepo;
             _activityTypeRepo = activityTypeRepo;
             _teacherDepartmentRepo = teacherDepartmentRepo;
+            _contextAccessor = contextAccessor;
         }
 
         public IActionResult Index(int id)
@@ -164,6 +169,22 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateNewReport(ReportVM obj)
         {
+            var user = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result;
+            List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+            var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
+            foreach (var claim in claims)
+            {
+                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
+            }
+            var teacher = _teacherRepo.Find(user.Id);
+            var deserializedClaim = deserializedClaims.FirstOrDefault(x => x.RoleAccess == "HeadOfDepartment");
+            obj.report.hodName = teacher.FirstName;
+            obj.report.hodSecondName = teacher.LastName;
+            obj.report.hodPatronymic = teacher.Patronymic;
+            obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
+            ModelState.Remove("report.hodSecondName");
+            ModelState.Remove("report.hodName");
+            ModelState.Remove("report.hodPatronymic");
             if (ModelState.IsValid)
             {
                 obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId, includeProperties: "Degree");

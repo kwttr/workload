@@ -27,7 +27,7 @@ namespace workload_DataAccess.Repository
             {
                 return _db.Teachers.Select(i => new SelectListItem
                 {
-                    Text = i.FullName,
+                    Text = i.LastName + " " + i.FirstName + " " + i.Patronymic,
                     Value = i.Id.ToString()
                 });
             }

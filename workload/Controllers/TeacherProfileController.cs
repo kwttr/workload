@@ -86,7 +86,10 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult UpdateActivities(ReportDetailsVM reportDetailsVM)
         {
-            if(ModelState.IsValid)
+            ModelState.Remove("report.hodSecondName");
+            ModelState.Remove("report.hodName");
+            ModelState.Remove("report.hodPatronymic");
+            if (ModelState.IsValid)
             {
                 for(int i = 0; i < reportDetailsVM.ProcessActivityTypes.Count(); i++)
                 {
@@ -149,7 +152,7 @@ namespace workload.Controllers
             }
             else
             {
-                Report obj = _repRepo.FirstOrDefault(r=>r.Id==id, includeProperties: "ProcessActivities,Teacher");
+                Report obj = _repRepo.FirstOrDefault(r=>r.Id==id, includeProperties: "ProcessActivities,Teacher,Department");
                 MemoryStream stream = _repRepo.Export(obj);
                 return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Document.docx");
             }

@@ -28,7 +28,7 @@
                 @foreach(var obj in Model)
                 {
                     <tr>
-                        <td width="50%">@obj.FullName</td>
+                        <td width="50%">@obj.LastName @obj.FirstName @obj.Patronymic</td>
                         <td class="text-center">
                             <div class="w-75 btn-group" role="group">
                                 <a asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary mx-2">Edit</a>
