@@ -64,7 +64,7 @@
                 <table class="table table-bordered table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th rowspan="2" style="width:15px; text-align:center">№ п/п</th>
+                            <th rowspan="2" style="width:50px; text-align:center">№ п/п</th>
                             <th rowspan="2" style="text-align:center">Вид Работы</th>
                             <th colspan="2" style="text-align:center">Объем работы, ч</th>
                             <th rowspan="2" style="text-align:center">Отклонение (+,-)</th>
@@ -76,124 +76,124 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th rowspan="18" style="text-align:center">1</th>
-                            <th>Учебная работа, всего за учебный год</th>
-                            <th>@totalPlan</th>
-                            <th>@totalFact</th>
-                            <th>@totalDeviation</th>
+                            <td rowspan="18" style="text-align:center">1</td>
+                            <td>Учебная работа, всего за учебный год</td>
+                            <td>@totalPlan</td>
+                            <td>@totalFact</td>
+                            <td>@totalDeviation</td>
                         </tr>
                         <tr>
-                            <th colspan="4">в том числе:</th>
+                            <td colspan="4">в том числе:</td>
                         </tr>
                         <tr>
-                            <th></th>
-                            <th colspan="2" style="text-align:center">1 семестр</th>
-                            <th></th>
+                            <td></td>
+                            <td colspan="2" style="text-align:center">1 семестр</td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- сентябрь</th>
-                            <th rowspan="7"></th>
-                            <th><input asp-for="Report.septemberFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- сентябрь</td>
+                            <th rowspan="7"></td>
+                            <td><input asp-for="Report.septemberFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- октябрь</th>
-                            <th><input asp-for="Report.octoberFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- октябрь</td>
+                            <td><input asp-for="Report.octoberFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- ноябрь</th>
-                            <th><input asp-for="Report.novemberFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- ноябрь</td>
+                            <td><input asp-for="Report.novemberFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- декабрь</th>
-                            <th><input asp-for="Report.decemberFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- декабрь</td>
+                            <td><input asp-for="Report.decemberFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- январь</th>
-                            <th><input asp-for="Report.januaryFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- январь</td>
+                            <td><input asp-for="Report.januaryFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- анкетирование студентов о качестве обучения</th>
-                            <th><input asp-for="Report.surveyFirstSemester" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- анкетирование студентов о качестве обучения</td>
+                            <td><input asp-for="Report.surveyFirstSemester" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th style="text-align:right">Итого 1 семестр</th>
-                            <th><input asp-for="Report.firstSemesterFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td style="text-align:right">Итого 1 семестр</td>
+                            <td><input asp-for="Report.firstSemesterFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th></th>
-                            <th colspan="2" style="text-align:center">2 семестр</th>
-                            <th></th>
+                            <td></td>
+                            <td colspan="2" style="text-align:center">2 семестр</td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- февраль</th>
-                            <th rowspan="7"></th>
-                            <th><input asp-for="Report.februaryFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- февраль</td>
+                            <td rowspan="7"></td>
+                            <td><input asp-for="Report.februaryFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- март</th>
-                            <th><input asp-for="Report.marchFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- март</td>
+                            <td><input asp-for="Report.marchFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- апрель</th>
-                            <th><input asp-for="Report.aprilFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- апрель</td>
+                            <td><input asp-for="Report.aprilFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- май</th>
-                            <th><input asp-for="Report.mayFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- май</td>
+                            <td><input asp-for="Report.mayFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- июнь</th>
-                            <th><input asp-for="Report.juneFact" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- июнь</td>
+                            <td><input asp-for="Report.juneFact" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th>- анкетирование студентов о качестве обучения</th>
-                            <th><input asp-for="Report.surveySecondSemester" class="form-control form-control-sm" /></th>
-                            <th></th>
+                            <td>- анкетирование студентов о качестве обучения</td>
+                            <td><input asp-for="Report.surveySecondSemester" class="form-control form-control-sm" /></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th style="text-align:right">Итого 2 семестр</th>
-                            <th></th>
-                            <th></th>
+                            <td style="text-align:right">Итого 2 семестр</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <th style="text-align:center">2</th>
-                            <th>Учебно-методическая работа</th>
-                            <th>@firstCatPlan</th>
-                            <th>@firstCatFact</th>
-                            <th>@firstCatDeviation</th>
+                            <td style="text-align:center">2</td>
+                            <td>Учебно-методическая работа</td>
+                            <td>@firstCatPlan</td>
+                            <td>@firstCatFact</td>
+                            <td>@firstCatDeviation</td>
                         </tr>
                         <tr>
-                            <th style="text-align:center">3</th>
-                            <th>Организационно-методическая работа</th>
-                            <th>@secondCatPlan</th>
-                            <th>@secondCatFact</th>
-                            <th>@secondCatDeviation</th>
+                            <td style="text-align:center">3</td>
+                            <td>Организационно-методическая работа</td>
+                            <td>@secondCatPlan</td>
+                            <td>@secondCatFact</td>
+                            <td>@secondCatDeviation</td>
                         </tr>                       
                         <tr>
-                            <th style="text-align:center">4</th>
-                            <th>Научно-исследовательская и инновационная работа</th>
-                            <th>@thirdCatPlan</th>
-                            <th>@thirdCatFact</th>
-                            <th>@thirdCatDeviation</th>
+                            <td style="text-align:center">4</td>
+                            <td>Научно-исследовательская и инновационная работа</td>
+                            <td>@thirdCatPlan</td>
+                            <td>@thirdCatFact</td>
+                            <td>@thirdCatDeviation</td>
                         </tr>
                         <tr>
-                            <th style="text-align:center">5</th>
-                            <th>Профориентационная и воспитательная работа</th>
-                            <th>@fourthCatPlan</th>
-                            <th>@fourthCatFact</th>
-                            <th>@fourthCatDeviation</th>
+                            <td style="text-align:center">5</td>
+                            <td>Профориентационная и воспитательная работа</td>
+                            <td>@fourthCatPlan</td>
+                            <td>@fourthCatFact</td>
+                            <td>@fourthCatDeviation</td>
                         </tr>
                     </tbody>
                 </table>
