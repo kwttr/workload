@@ -176,9 +176,12 @@ namespace workload_DataAccess.Repository
                     Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
                     paragraph.ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines() { Before = "0", After = "0" });
                     if (j == 0) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
-                    if (i != 1)
+                    if (j != 1)
                     {
+                        var props = new TableCellProperties();
+                        props.Append(new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center });
                         paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                        cell.Append(props);
                     }
 
                     if ((i == 9 || i == 17) && j == 1) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Right });
