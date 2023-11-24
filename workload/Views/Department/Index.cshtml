@@ -3,10 +3,10 @@
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">Department List</h2>
+            <h2 class="text-primary">Список кафедр</h2>
         </div>
         <div class="col-6 text-right">
-        <a asp-action="Upsert" class="btn btn-primary">Create New Department</a>
+        <a asp-action="Upsert" class="btn btn-primary">Создать новую кафедру</a>
         </div>
     </div>
 
@@ -18,7 +18,7 @@
             <thead>
                 <tr>
                     <th>
-                        Department name
+                        Название кафедры
                     </th>
                     <th></th>
                 </tr>
@@ -30,7 +30,7 @@
                         <td width="70%">@obj.Name</td>
                         <td width="30%"class="text-center">
                             <div class="w-75 btn-group" role="group">
-                                <a asp-route-Id="@obj.Id" asp-action="ViewWorkers" class="btn btn-primary mx-2">View Workers</a>
+                                <a asp-route-Id="@obj.Id" asp-action="ViewWorkers" class="btn btn-primary mx-2">Просмотр работников</a>
                             </div>
                         </td>
                     </tr>
@@ -40,6 +40,6 @@
     }
     else
     {
-        <p>No departments exists.</p>
+        <p>Кафедр не существует</p>
     }
 </div>

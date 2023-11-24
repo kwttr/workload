@@ -32,12 +32,12 @@ namespace workload_Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal UnitFact { get; set; }
 
-        [Display(Name = "Report Id")]
+        [Display(Name = "Отчет")]
         public int ReportId { get; set; }
         [ForeignKey("ReportId")]
         public Report? Report { get; set; }
 
-        [Display(Name = "Category Type")]
+        [Display(Name = "Тип категории")]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }

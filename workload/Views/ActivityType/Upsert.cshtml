@@ -1,12 +1,12 @@
 ﻿@model workload_Models.ViewModels.ActivityTypeVM
 
 @{
-    var title = "Create ActivityType";
+    var title = "Создать вид работы";
 }
 <form method="post">
     @if (Model.ActivityType.Id != 0)
     {
-        title = "Edit ActivityType";
+        title = "Редактировать вид работы";
         <input asp-for="ActivityType.Id" hidden />
     }
     <div class="border p3">
@@ -59,16 +59,16 @@
                             @if (Model.ActivityType.Id != 0)
                             {
                                 //update
-                                <input type="submit" class="btn btn-info w-100" value="Update" />
+                                <input type="submit" class="btn btn-info w-100" value="Обновить" />
                             }
                             else
                             {
                                 //create
-                                <input type="submit" class="btn btn-info w-100" value="Create" />
+                                <input type="submit" class="btn btn-info w-100" value="Создать" />
                             }
                         </div>
                         <div class="col">
-                            <a asp-action="Index" class="btn btn-success w-100">Back</a>
+                            <a asp-action="Index" class="btn btn-success w-100">Назад</a>
                         </div>
                     </div>
                 </div>

@@ -3,10 +3,10 @@
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">Teacher List</h2>
+            <h2 class="text-primary">Список работников</h2>
         </div>
         <div class="col-6 text-right">
-        <a asp-action="Index" class="btn btn-primary">Back</a>
+        <a asp-action="Index" class="btn btn-primary">Назад</a>
         </div>
     </div>
 
@@ -18,10 +18,10 @@
             <thead>
                 <tr>
                     <th>
-                        Teacher Name
+                        Имя работника
                     </th>
                     <th>
-                        Some Info
+                        Информация
                     </th>
                     <th></th>
                 </tr>
@@ -31,7 +31,7 @@
                 {
                     <tr>
                         <td width="50%">@obj.FirstName @obj.LastName @obj.Patronymic</td>
-                        <td class="text-center">Some additional info here</td>
+                        <td class="text-center">Информация</td>
                     </tr>
                 }
             </tbody>
@@ -39,6 +39,6 @@
     }
     else
     {
-        <p>No teacher exists.</p>
+        <p>Работников не существует.</p>
     }
 </div>

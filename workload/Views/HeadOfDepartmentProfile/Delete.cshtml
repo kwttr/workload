@@ -5,7 +5,7 @@
     <div class="border p3">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group row">
-            <h2 class="text-info p1-3">Add Report</h2>
+            <h2 class="text-info p1-3">Добавить отчет</h2>
         </div>
         <div class="row">
             <div class="col-8">
@@ -32,16 +32,13 @@
                     <div class="col-8 offset-4 row">
 
                         <div class="col">
-                            <input type="submit" class="btn btn-danger w-100" value="Delete" />
+                            <input type="submit" class="btn btn-danger w-100" value="Удалить" />
                         </div>
                         <div class="col">
-                            <a asp-route-Id="@Model.TeacherId" asp-action="ViewAllReports" class="btn btn-success w-100">Back</a>
+                            <a asp-route-Id="@Model.TeacherId" asp-action="ViewAllReports" class="btn btn-success w-100">Назад</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                @*KEEP THIS EMPTY*@
             </div>
         </div>
     </div>

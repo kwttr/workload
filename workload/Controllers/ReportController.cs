@@ -22,7 +22,7 @@ namespace workload.Controllers
         private readonly IActivityTypeRepository _activityTypeRepo;
         private readonly IProcessActivityTypeRepository _processActivityTypeRepo;
         private readonly IHttpContextAccessor _contextAccessor;
-        private readonly UserManager<Teacher> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public ReportController(IReportRepository repRepo,
                                 ICategoryRepository categoryRepo,
@@ -30,7 +30,7 @@ namespace workload.Controllers
                                 IActivityTypeRepository activityTypeRepo,
                                 IProcessActivityTypeRepository processActivityTypeRepository,
                                 IHttpContextAccessor contextAccessor,
-                                UserManager<Teacher> userManager)
+                                UserManager<IdentityUser> userManager)
         {
             _repRepo = repRepo;
             _categoryRepo = categoryRepo;
@@ -106,9 +106,10 @@ namespace workload.Controllers
                 obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId, includeProperties: "Degree");
                 obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
                 obj.report.StatusId = 1;
-                obj.report.hodName = user.FirstName;
-                obj.report.hodSecondName = user.LastName;
-                obj.report.hodPatronymic = user.Patronymic;
+                var User = _teacherRepo.FirstOrDefault(x => x.Id == user.Id);
+                obj.report.hodName = User.FirstName;
+                obj.report.hodSecondName = User.LastName;
+                obj.report.hodPatronymic = User.Patronymic;
                 obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
                 List<ProcessActivityType> list = new List<ProcessActivityType>();
                 foreach (var activity in _activityTypeRepo.GetAll())

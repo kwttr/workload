@@ -33,7 +33,7 @@ namespace workload.Controllers
         public IActionResult ViewWorkers(int? id)
         {
             IEnumerable<TeacherDepartment> teachdeps = _teacherDepartmentRepository.GetAll(x=>x.DepartmentId==id);
-            List<Teacher> objList = new List<Teacher>();
+            List<Teacher> objList = new();
             foreach(var teach in teachdeps)
             {
                 objList.Add(_teacherRepo.Find(teach.TeacherId));
@@ -44,7 +44,7 @@ namespace workload.Controllers
         //GET - UPSERT
         public IActionResult Upsert(int? id)
         {
-            Department obj = new Department();
+            Department obj = new();
             if (id == null)
             {
                 return View(obj);

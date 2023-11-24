@@ -3,7 +3,7 @@
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">@Model.teacher.LastName @Model.teacher.FirstName @Model.teacher.Patronymic Profile</h2>
+            <h2 class="text-primary">Профиль @Model.teacher.LastName @Model.teacher.FirstName @Model.teacher.Patronymic</h2>
         </div>
     </div>
 
@@ -31,18 +31,18 @@
                             <div class="w-30 btn-group" role="group">
                             @if (obj.StatusId == 1)
                             {
-                                <a asp-route-Id="@obj.Id" asp-action="UpdateActivities" class="btn btn-primary mx-2">Update Activities</a>
-                                <a asp-route-Id="@obj.Id" asp-action="SendReport" class="btn btn-warning mx-2">Send Report</a>
+                                <a asp-route-Id="@obj.Id" asp-action="UpdateActivities" class="btn btn-primary mx-2">Редактирование</a>
+                                <a asp-route-Id="@obj.Id" asp-action="SendReport" class="btn btn-warning mx-2">Отправить</a>
                             }
                             else if(obj.StatusId == 2)
                             {
-                                <a asp-route-Id="@obj.Id" asp-action="ViewReport" class="btn btn-primary mx-2">View Activities</a>
-                                <button type="button" class="btn btn-dark" disabled>On review</button>
+                                <a asp-route-Id="@obj.Id" asp-action="ViewReport" class="btn btn-primary mx-2">Просмотр</a>
+                                <button type="button" class="btn btn-dark" disabled>На проверке</button>
                             }
                             else if(obj.StatusId == 3)
                             {
-                                <a asp-route-Id="@obj.Id" asp-action="ViewReport" class="btn btn-primary mx-2">View Activities</a>
-                                <button type="button" class="btn btn-success" disabled>Approved</button>
+                                <a asp-route-Id="@obj.Id" asp-action="ViewReport" class="btn btn-primary mx-2">Просмотр</a>
+                                <button type="button" class="btn btn-success" disabled>Утвержден</button>
                             }
                         </div>
                         </td>
@@ -53,6 +53,6 @@
         }
         else
         {
-            <p>No reports assigned to you</p>
+            <p>Вам не назначено ни одного отчета.</p>
         }
 </div>

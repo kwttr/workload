@@ -10,18 +10,20 @@ namespace workload_Models
         [Key]
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Название")]
         public string Name { get; set; }
 
         [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        [Display(Name = "Норма часов")]
         public decimal NormHours { get; set; }
 
-        [Display(Name="Category Type")]
+        [Display(Name="Вид категории")]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }
-        [Display(Name="Additional Info")]
 
+        [Display(Name="Дополнительная информация")]
         public string? AdditionalInfo { get; set; }
 
         public ActivityType(string name, decimal normHours, int categoryId)

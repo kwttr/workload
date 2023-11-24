@@ -24,21 +24,21 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная страница</a>
                         </li>
                         @if (User.IsInRole(WC.AdminRole))
                         {
                         <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Content Management
+                                    Управление содержанием
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ActivityType" asp-action="Index">ActivityType</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Index">Report</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="Index">Department</a>
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Create user</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Пользователи</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ActivityType" asp-action="Index">Виды работ</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Категории</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Index">Отчеты</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Department" asp-action="Index">Кафедры</a>
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Создать нового пользователя</a>
                                 </ul>
                             </li>
                         }

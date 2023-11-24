@@ -11,10 +11,11 @@ namespace workload_Models
         public int Id { get; set; }
 
         //Display in list
+        [Display(Name = "Название")]
         public string Title { get; set; }
 
         //Display in TitlePage
-        [Display(Name = "Teacher")]
+        [Display(Name = "Пользователь")]
         public string TeacherId { get; set; }
         [ForeignKey(nameof(TeacherId))]
         public virtual Teacher? Teacher { get; set; }

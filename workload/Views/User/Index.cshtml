@@ -4,7 +4,7 @@
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">Teacher List</h2>
+            <h2 class="text-primary">Список пользователей</h2>
         </div>
     </div>
 
@@ -16,10 +16,10 @@
             <thead>
                 <tr>
                     <th>
-                        Teacher Name
+                        ФИО пользователя
                     </th>
                     <th>
-                        Some Info
+                        Дополнительная информация
                     </th>
                     <th></th>
                 </tr>
@@ -31,8 +31,8 @@
                         <td width="50%">@obj.LastName @obj.FirstName @obj.Patronymic</td>
                         <td class="text-center">
                             <div class="w-75 btn-group" role="group">
-                                <a asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary mx-2">Edit</a>
-                                <a asp-route-Id="@obj.Id" asp-action="Delete" class="btn btn-danger mx-2">Delete</a>
+                                <a asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary mx-2">Редактировать</a>
+                                <a asp-route-Id="@obj.Id" asp-action="Delete" class="btn btn-danger mx-2">Удалить</a>
                             </div>
                         </td>
                     </tr>
@@ -42,6 +42,6 @@
     }
     else
     {
-        <p>No teacher exists.</p>
+        <p>Пользователей не существует</p>
     }
 </div>

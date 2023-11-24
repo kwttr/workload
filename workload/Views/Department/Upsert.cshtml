@@ -1,12 +1,12 @@
 ﻿@model workload_Models.Department
 
 @{
-    var title = "Create Department";
+    var title = "Создать кафедру";
 }
 <form method="post">
     @if (Model.Id != 0)
     {
-        title = "Edit Department";
+        title = "Редактировать кафедру";
         <input asp-for="Id" hidden />
     }
     <div class="border p3">
@@ -31,22 +31,19 @@
                             @if (Model.Id != 0)
                             {
                             //update
-                                <input type="submit" class="btn btn-info w-100" value="Update" />
+                                <input type="submit" class="btn btn-info w-100" value="Обновить" />
                             }
                             else
                             {
                                 //create
-                                <input type="submit" class="btn btn-info w-100" value="Create" />
+                                <input type="submit" class="btn btn-info w-100" value="Создать" />
                             }
                         </div>
                         <div class="col">
-                            <a asp-action="Index" class="btn btn-success w-100">Back</a>
+                            <a asp-action="Index" class="btn btn-success w-100">Назад</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-4">
-                @*KEEP THIS EMPTY*@
             </div>
         </div>
     </div>
