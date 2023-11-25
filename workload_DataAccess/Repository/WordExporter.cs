@@ -264,21 +264,21 @@ namespace workload_DataAccess.Repository
                         {
                             sumPlan += procAct.HoursPlan;
                         }
-                        return sumPlan.ToString("0.#");
+                        return sumPlan.ToString("0.###");
                     case 3:
                         decimal sumFact = 0;
                         foreach (var procAct in obj.ProcessActivities)
                         {
                             sumFact += procAct.HoursFact;
                         }
-                        return sumFact.ToString("0.#");
+                        return sumFact.ToString("0.###");
                     case 4:
                         decimal sumDeviation = 0;
                         foreach(var procAct in obj.ProcessActivities)
                         {
                             sumDeviation += procAct.HoursPlan - procAct.HoursFact;
                         }
-                        return Math.Abs(sumDeviation).ToString("0.#");
+                        return Math.Abs(sumDeviation).ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -445,21 +445,21 @@ namespace workload_DataAccess.Repository
                         {
                             plan += procAct.HoursPlan;
                         }
-                        return plan.ToString("0.#");
+                        return plan.ToString("0.####");
                     case 3:
                         decimal fact = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 1))
                         {
                             fact += procAct.HoursFact;
                         }
-                        return fact.ToString("0.#");
+                        return fact.ToString("0.###");
                     case 4:
                         decimal deviation = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 1))
                         {
                            deviation += procAct.HoursPlan - procAct.HoursFact;
                         }
-                        return Math.Abs(deviation).ToString("0.#");
+                        return Math.Abs(deviation).ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -475,21 +475,21 @@ namespace workload_DataAccess.Repository
                         {
                             plan += procAct.HoursPlan;
                         }
-                        return plan.ToString("0.#");
+                        return plan.ToString("0.###");
                     case 3:
                         decimal fact = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 2))
                         {
                             fact += procAct.HoursFact;
                         }
-                        return fact.ToString("0.#");
+                        return fact.ToString("0.###");
                     case 4:
                         decimal deviation = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 2))
                         {
                             deviation += procAct.HoursPlan - procAct.HoursFact;
                         }
-                        return Math.Abs(deviation).ToString("0.#");
+                        return Math.Abs(deviation).ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -505,21 +505,21 @@ namespace workload_DataAccess.Repository
                         {
                             plan += procAct.HoursPlan;
                         }
-                        return plan.ToString("0.#");
+                        return plan.ToString("0.###");
                     case 3:
                         decimal fact = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 3))
                         {
                             fact += procAct.HoursFact;
                         }
-                        return fact.ToString("0.#");
+                        return fact.ToString("0.###");
                     case 4:
                         decimal deviation = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 3))
                         {
                             deviation += procAct.HoursPlan - procAct.HoursFact;
                         }
-                        return Math.Abs(deviation).ToString("0.#");
+                        return Math.Abs(deviation).ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -535,21 +535,21 @@ namespace workload_DataAccess.Repository
                         {
                             plan += procAct.HoursPlan;
                         }
-                        return plan.ToString("0.#");
+                        return plan.ToString("0.###");
                     case 3:
                         decimal fact = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 4))
                         {
                             fact += procAct.HoursFact;
                         }
-                        return fact.ToString("0.#");
+                        return fact.ToString("0.###");
                     case 4:
                         decimal deviation = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 4))
                         {
                             deviation += procAct.HoursPlan - procAct.HoursFact;
                         }
-                        return Math.Abs(deviation).ToString("0.#");
+                        return Math.Abs(deviation).ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -619,14 +619,14 @@ namespace workload_DataAccess.Repository
                 {
                     TableCell cell = new TableCell();
                     string cellText = string.Empty;
-                    if (i == 0) cellText = activityNumber.ToString("0.#");
+                    if (i == 0) cellText = activityNumber.ToString("0.###");
                     if (i == 1) cellText = procAct.Name;
                     if (i == 2) cellText = procAct.DatePlan;
-                    if (i == 3) cellText = procAct.HoursPlan.ToString("0.#");
-                    if (i == 4) cellText = procAct.UnitPlan.ToString("0.#");
+                    if (i == 3) cellText = procAct.HoursPlan.ToString("0.###");
+                    if (i == 4) cellText = procAct.UnitPlan.ToString("0.###");
                     if (i == 5) cellText = procAct.DateFact;
-                    if (i == 6) cellText = procAct.HoursFact.ToString("0.#");
-                    if (i == 7) cellText = procAct.UnitFact.ToString("0.#");
+                    if (i == 6) cellText = procAct.HoursFact.ToString("0.###");
+                    if (i == 7) cellText = procAct.UnitFact.ToString("0.###");
                     Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
                     paragraph.ParagraphProperties = new ParagraphProperties(
                     new SpacingBetweenLines() { Before = "0", After = "0" });
