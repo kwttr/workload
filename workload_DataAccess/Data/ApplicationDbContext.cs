@@ -28,7 +28,7 @@ namespace workload_Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=Database.db");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=usersdb;Username=postgres;Password=50515051");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
