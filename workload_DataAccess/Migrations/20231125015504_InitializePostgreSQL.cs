@@ -1,25 +1,22 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace workload_DataAccess.Migrations
 {
-    /// <inheritdoc />
-    public partial class Initialize : Migration
+    public partial class InitializePostgreSQL : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,9 +27,9 @@ namespace workload_DataAccess.Migrations
                 name: "Degree",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,9 +40,9 @@ namespace workload_DataAccess.Migrations
                 name: "Department",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,9 +53,9 @@ namespace workload_DataAccess.Migrations
                 name: "Position",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,9 +66,9 @@ namespace workload_DataAccess.Migrations
                 name: "Status",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,12 +79,12 @@ namespace workload_DataAccess.Migrations
                 name: "Activities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    NormHours = table.Column<decimal>(type: "TEXT", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    AdditionalInfo = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    NormHours = table.Column<decimal>(type: "numeric", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    AdditionalInfo = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -104,11 +101,11 @@ namespace workload_DataAccess.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -125,25 +122,27 @@ namespace workload_DataAccess.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    FullName = table.Column<string>(type: "TEXT", nullable: true),
-                    DegreeId = table.Column<int>(type: "INTEGER", nullable: true),
-                    PositionId = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Discriminator = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    Patronymic = table.Column<string>(type: "text", nullable: true),
+                    DegreeId = table.Column<int>(type: "integer", nullable: true),
+                    PositionId = table.Column<int>(type: "integer", nullable: true),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -166,11 +165,11 @@ namespace workload_DataAccess.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
-                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
-                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -187,11 +186,11 @@ namespace workload_DataAccess.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    ClaimType = table.Column<string>(type: "TEXT", nullable: true),
-                    ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -208,10 +207,10 @@ namespace workload_DataAccess.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false)
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -228,8 +227,8 @@ namespace workload_DataAccess.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,10 +251,10 @@ namespace workload_DataAccess.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -272,13 +271,33 @@ namespace workload_DataAccess.Migrations
                 name: "Reports",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    TeacherId = table.Column<string>(type: "TEXT", nullable: false),
-                    CurrentDegree = table.Column<string>(type: "TEXT", nullable: true),
-                    Rate = table.Column<double>(type: "REAL", nullable: true),
-                    StatusId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    TeacherId = table.Column<string>(type: "text", nullable: false),
+                    CurrentDegree = table.Column<string>(type: "text", nullable: true),
+                    Rate = table.Column<double>(type: "double precision", nullable: true),
+                    hodName = table.Column<string>(type: "text", nullable: false),
+                    hodSecondName = table.Column<string>(type: "text", nullable: false),
+                    hodPatronymic = table.Column<string>(type: "text", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: false),
+                    totalWorkPlan = table.Column<decimal>(type: "numeric", nullable: true),
+                    totalWorkFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    firstSemesterFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    septemberFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    octoberFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    novemberFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    decemberFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    januaryFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    surveyFirstSemester = table.Column<decimal>(type: "numeric", nullable: true),
+                    secondSemesterFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    februaryFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    marchFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    aprilFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    mayFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    juneFact = table.Column<decimal>(type: "numeric", nullable: true),
+                    surveySecondSemester = table.Column<decimal>(type: "numeric", nullable: true),
+                    StatusId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -287,6 +306,12 @@ namespace workload_DataAccess.Migrations
                         name: "FK_Reports_AspNetUsers_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reports_Department_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Department",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -301,8 +326,8 @@ namespace workload_DataAccess.Migrations
                 name: "TeacherDepartment",
                 columns: table => new
                 {
-                    TeacherId = table.Column<string>(type: "TEXT", nullable: false),
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false)
+                    TeacherId = table.Column<string>(type: "text", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -325,18 +350,18 @@ namespace workload_DataAccess.Migrations
                 name: "ProcessActivityType",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    NormHours = table.Column<decimal>(type: "TEXT", nullable: false),
-                    DatePlan = table.Column<string>(type: "TEXT", nullable: true),
-                    DateFact = table.Column<string>(type: "TEXT", nullable: true),
-                    HoursPlan = table.Column<decimal>(type: "TEXT", nullable: false),
-                    HoursFact = table.Column<decimal>(type: "TEXT", nullable: false),
-                    UnitPlan = table.Column<decimal>(type: "TEXT", nullable: false),
-                    UnitFact = table.Column<decimal>(type: "TEXT", nullable: false),
-                    ReportId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    NormHours = table.Column<decimal>(type: "numeric", nullable: false),
+                    DatePlan = table.Column<string>(type: "text", nullable: true),
+                    DateFact = table.Column<string>(type: "text", nullable: true),
+                    HoursPlan = table.Column<decimal>(type: "numeric", nullable: false),
+                    HoursFact = table.Column<decimal>(type: "numeric", nullable: false),
+                    UnitPlan = table.Column<decimal>(type: "numeric", nullable: false),
+                    UnitFact = table.Column<decimal>(type: "numeric", nullable: false),
+                    ReportId = table.Column<int>(type: "integer", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -383,7 +408,8 @@ namespace workload_DataAccess.Migrations
                 values: new object[,]
                 {
                     { 1, "Кафедра информатики" },
-                    { 2, "Кафедра математики" }
+                    { 2, "Кафедра математики" },
+                    { 3, "Кафедра экономики" }
                 });
 
             migrationBuilder.InsertData(
@@ -424,7 +450,42 @@ namespace workload_DataAccess.Migrations
                     { 9, null, 1, "Подготовка к семинарским, практическим и лабораторным занятиям для впервые изучаемых дисциплин", 0m },
                     { 10, null, 1, "Подготовка конспектов лекций к семинарским, практическим и лабораторным занятиям", 0m },
                     { 11, null, 1, "Полная актуализация комплекта учебно-методических материалов электронного курса для технологии дистанционного обучения", 0m },
-                    { 12, null, 1, "Прочие", 0m }
+                    { 12, null, 1, "Прочие", 0m },
+                    { 13, null, 2, "Работа в качестве секретаря совета факультета, заседаний кафедры", 0m },
+                    { 14, null, 2, "Участие в заседаниях кафедры и совета факультета", 0m },
+                    { 15, null, 2, "Работа в методическом совете университета / филиала", 0m },
+                    { 16, null, 2, "Ответственный за методическую работу по кафедре, факультету", 0m },
+                    { 17, null, 2, "Ответственный за работу в системе дистанционного обучения по кафедре", 0m },
+                    { 18, null, 2, "Выполнение обязанностей ответственного за контент сайта структурного подразделения университета", 0m },
+                    { 19, null, 2, "Взаимопосещение занятий преподавателями", 0m },
+                    { 20, null, 2, "Выполнение поручений по формированию банка тестовых заданий", 0m },
+                    { 21, null, 2, "Выполнение поручений по формированию банка тестовых заданий", 0m },
+                    { 22, null, 2, "Выполнение поручений по организации производственной практики", 0m },
+                    { 23, null, 2, "Выполнение поручений по организации распределения и выполнения ВКР", 0m },
+                    { 24, null, 2, "Прочие", 0m },
+                    { 25, null, 3, "Участие в заседаниях совета по науке", 0m },
+                    { 26, null, 3, "Выполнение исследований по НИР в соответствии с программой исследований (договором) с представлением отчёта, оформленного по ГОСТ 7.32.-2001", 0m },
+                    { 27, null, 3, "Подготовка диссертации согласно плану подготовки диссертации сотрудниками университета (указать выполнение глав)", 0m },
+                    { 28, null, 3, "Написание и подготовка к изданию монографии", 0m },
+                    { 29, null, 3, "Написание и подготовка к изданию научной статьи в журнале, входящем в базу Web of Science, Scopus", 0m },
+                    { 30, null, 3, "Написание и подготовка к изданию научной статьи в журнале из перечня ВАК, журнале \"Вестник СибУПК\"", 0m },
+                    { 31, null, 3, "Написание и подготовка к изданию научной статьи в сборнике конференций", 0m },
+                    { 32, null, 3, "Участие в научно-практических, научно-методических и других научных мероприятиях с подготовкой доклада (международных, национальных, межвузовских, университетских)", 0m },
+                    { 33, null, 3, "Руководство студенческим научным кружком с предоставлением протоколов заседаний кружков; руководство студенческим научно-инновационным проектом с предоставлением отчета о работе", 0m },
+                    { 34, null, 3, "Руководство НИРС (научные доклады, конкурсы, олимпиады, в т.ч. профориентационные)", 0m },
+                    { 35, null, 3, "Организация и проведение мастер-классов, деловых игр и др. в рамках научных инновационных форумов", 0m },
+                    { 36, null, 3, "Подготовка заявок на изобретение, конкурсы российских и международных грантов", 0m },
+                    { 37, null, 3, "Подготовка и проведение международных, российских и региональных научно-практических конференций (форумов, семинаров) на базе университета", 0m },
+                    { 38, null, 3, "Организация и проведение конкурсов (инновационных проектов, стендовых докладов)", 0m },
+                    { 39, null, 3, "Организация и проведение мероприятий, подготовка материалов (концепций, рекомендаций и т.п.) по плану взаимодействия с предприятиями потребительской кооперации, Межрегиональной ассоциацией \"Сибирское соглашение\" вузами, научными учреждениями", 0m },
+                    { 40, null, 3, "Подготовка отзыва на автореферат докторских и кандидатских диссертаций", 0m },
+                    { 41, null, 3, "Прочие", 0m },
+                    { 42, null, 4, "Кураторство обучающихся 1 и 2 курсов с проведением еженедельных консультаций", 0m },
+                    { 43, null, 4, "Классное руководство СПО, в том числе проведение классных часов", 0m },
+                    { 44, null, 4, "Работа с потенциальными абитуриентами в школах, колледжах (с поступлением в университет), не менее 10 человек", 0m },
+                    { 45, null, 4, "Организация и проведение мероприятий по воспитательной работе (на факультете, кафедре)", 0m },
+                    { 46, null, 4, "Участие в мероприятиях для абитуриентов, проводимых на базе университета", 0m },
+                    { 47, null, 4, "Прочее", 0m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -505,6 +566,11 @@ namespace workload_DataAccess.Migrations
                 column: "ReportId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reports_DepartmentId",
+                table: "Reports",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reports_StatusId",
                 table: "Reports",
                 column: "StatusId");
@@ -520,7 +586,6 @@ namespace workload_DataAccess.Migrations
                 column: "DepartmentId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -557,10 +622,10 @@ namespace workload_DataAccess.Migrations
                 name: "Reports");
 
             migrationBuilder.DropTable(
-                name: "Department");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Department");
 
             migrationBuilder.DropTable(
                 name: "Status");

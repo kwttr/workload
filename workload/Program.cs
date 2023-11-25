@@ -13,7 +13,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlite("Filename = Database.db"));
+options.UseNpgsql("Filename = Database.db"));
 
 builder.Services.AddIdentity<IdentityUser, CustomRole>()
     .AddRoleManager<CustomRoleManager>()
