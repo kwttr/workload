@@ -9,6 +9,12 @@
 workload/Database.db-wal
 workload/Database.db-shm
 
+# Docker
+.dockerignore
+compose-dev.yaml
+docker-compose.*
+*/Dockerfile
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

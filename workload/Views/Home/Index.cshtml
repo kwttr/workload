@@ -1,5 +1,8 @@
 ﻿@using Newtonsoft.Json;
+@using workload_Models.ViewModels;
 @using workload_Utility.ClaimTypes;
+
+@model HomeViewModel
 @{
     var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
     List<CustomClaim> deserializedClaims = new List<CustomClaim>();
@@ -10,20 +13,34 @@
 }
 
 <div class="container p-3">
-    @if (deserializedClaims.Any(c => c.RoleAccess == "HeadOfDepartment"))
+
+        @if (Model.DepartmentsHod != null)
     {
         <h2>Вы являетесь заведующим кафедр в следующих кафедрах:</h2>
-        @foreach (var claim in deserializedClaims.Where(c => c.RoleAccess == "HeadOfDepartment"))
+        @for (int i = 0; i < Model.DepartmentsHod.Count(); i++)
         {
-            <a asp-route-id="@claim.DepartmentId" asp-controller="HeadOfDepartmentProfile" asp-action="Index" class="btn btn-primary">Кафедра @claim.DepartmentId</a>
+            <div class="border-2">
+                <h3>@Model.DepartmentsHod[i].Department.Name</h3>
+                <h4>Работников: @Model.DepartmentsHod[i].WorkersCount</h4>
+                <h4>Отчетов на проверку: @Model.DepartmentsHod[i].ReportsToApproveCount</h4>
+                <a asp-route-id="@Model.DepartmentsHod[i].Department.Id" asp-controller="HeadOfDepartmentProfile" asp-action="Index" class="btn btn-primary">Перейти на кафедру</a>
+            </div>
         }
-
     }
     <br /><br />
 
-    @if (deserializedClaims.Any(c => c.RoleAccess == "Teacher"))
-    {
+
+        @if (Model.DepartmentsTeacher != null)
+        {
         <h2>Вы являетесь преподавателем. Перейти в профиль:</h2>
-        <a asp-controller="TeacherProfile" asp-action="Index" class="btn btn-primary">Профиль преподавателя</a>
-    }
+            @for(int i = 0; i < Model.DepartmentsTeacher.Count(); i++)
+            {
+                <div>
+                    <h3>@Model.DepartmentsTeacher[i].Department.Name</h3>
+                    <h3>Отчетов назначено: @Model.DepartmentsTeacher[i].ReportsAssignedCount</h3>
+                    <a asp-controller="TeacherProfile" asp-action="Index" class="btn btn-primary">Профиль преподавателя</a>
+                </div>
+            }
+        }
+
 </div>
