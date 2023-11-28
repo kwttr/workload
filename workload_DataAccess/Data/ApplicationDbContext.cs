@@ -184,76 +184,86 @@ namespace workload_Data
                     Id=1,
                     Name="Подготовка к изданию учебных пособий",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=250,
+                    AdditionalInfo="до 250 часов"
                 },
                 new ActivityType
                 {
                     Id=2,
                     Name="Подготовка новой рабочей программы учебной дисциплины / программы дополнительного (профессионального) образования",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=30,
+                    AdditionalInfo="30 часов на программу"
                 },
                 new ActivityType {
                     Id=3,
                     Name="Обновление рабочих программ учебной дисциплины / программы дополнительного (профессионального) образования",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=5,
+                    AdditionalInfo="5 часов на программу"
                 },
                 new ActivityType
                 {
                     Id=4,
                     Name="Подготовка новых методических разработок",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=205
                 },
                 new ActivityType
                 {
                     Id=5,
                     Name="Составление программы практики",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=30,
+                    AdditionalInfo="30 часов на программу"
                 },
                 new ActivityType
                 {
                     Id=6,
                     Name="Обновление методических разработок",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=5,
+                    AdditionalInfo="5 часов на разработку"
                 },
                 new ActivityType
                 {
                     Id=7,
                     Name="Подготовка к лекциям, семинарским, практическим и лабораторным занятиям с применением интерактивных форм обучения",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=4,
+                    AdditionalInfo="4 часа на каждый вид интерактивной формы"
                 },
                 new ActivityType
                 {
                     Id=8,
                     Name="Подготовка конспектов лекций для впервые изучаемых дисциплин",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=4,
+                    AdditionalInfo="4 часа на лекцию"
                 },
                 new ActivityType
                 {
                     Id=9,
                     Name="Подготовка к семинарским, практическим и лабораторным занятиям для впервые изучаемых дисциплин",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=2,
+                    AdditionalInfo="2 часа на занятие"
                 },
                 new ActivityType
                 {
                     Id=10,
                     Name="Подготовка конспектов лекций к семинарским, практическим и лабораторным занятиям",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=1,
+                    AdditionalInfo="1 час на занятие"
                 },
                 new ActivityType
                 {
                     Id=11,
                     Name="Полная актуализация комплекта учебно-методических материалов электронного курса для технологии дистанционного обучения",
                     CategoryId=1,
-                    NormHours=0
+                    NormHours=60,
+                    AdditionalInfo="60 часов на дисциплину"
                 },
                 new ActivityType
                 {
@@ -267,63 +277,70 @@ namespace workload_Data
                     Id=13,
                     Name="Работа в качестве секретаря совета факультета, заседаний кафедры",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=60,
+                    AdditionalInfo="60 часов в год"
                 },
                 new ActivityType
                 {
                     Id=14,
                     Name="Участие в заседаниях кафедры и совета факультета",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=20,
+                    AdditionalInfo="20 часов в год"
                 },
                 new ActivityType
                 {
                     Id=15,
                     Name="Работа в методическом совете университета / филиала",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=60,
+                    AdditionalInfo="до 60 часов"
                 },
                 new ActivityType
                 {
                     Id=16,
                     Name="Ответственный за методическую работу по кафедре, факультету",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=60,
+                    AdditionalInfo="60 часов"
                 },
                 new ActivityType
                 {
                     Id=17,
                     Name="Ответственный за работу в системе дистанционного обучения по кафедре",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=100,
+                    AdditionalInfo="100 часов"
                 },
                 new ActivityType
                 {
                     Id=18,
                     Name="Выполнение обязанностей ответственного за контент сайта структурного подразделения университета",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=30,
+                    AdditionalInfo="30 часов в год"
                 },
                 new ActivityType
                 {
                     Id=19,
                     Name="Взаимопосещение занятий преподавателями",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=10,
+                    AdditionalInfo="10 часов в год"
                 },
                 new ActivityType
                 {
                     Id=20,
                     Name="Выполнение поручений по формированию банка тестовых заданий",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=30,
                 },
                 new ActivityType
                 {
                     Id=21,
                     Name="Выполнение поручений по формированию банка тестовых заданий",
                     CategoryId=2,
-                    NormHours=0
+                    NormHours=30
                 },
                 new ActivityType
                 {
