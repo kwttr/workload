@@ -13,27 +13,30 @@
 }
 
 <div class="container p-3">
+    @if (Model != null)
+    {
 
         @if (Model.DepartmentsHod != null)
-    {
-        <h2>Вы являетесь заведующим кафедр в следующих кафедрах:</h2>
-        @for (int i = 0; i < Model.DepartmentsHod.Count(); i++)
         {
-            <div class="border-2">
-                <h3>@Model.DepartmentsHod[i].Department.Name</h3>
-                <h4>Работников: @Model.DepartmentsHod[i].WorkersCount</h4>
-                <h4>Отчетов на проверку: @Model.DepartmentsHod[i].ReportsToApproveCount</h4>
-                <a asp-route-id="@Model.DepartmentsHod[i].Department.Id" asp-controller="HeadOfDepartmentProfile" asp-action="Index" class="btn btn-primary">Перейти на кафедру</a>
-            </div>
+            <h2>Вы являетесь заведующим кафедр в следующих кафедрах:</h2>
+            @for (int i = 0; i < Model.DepartmentsHod.Count(); i++)
+            {
+                <div class="border-2">
+                    <h3>@Model.DepartmentsHod[i].Department.Name</h3>
+                    <h4>Работников: @Model.DepartmentsHod[i].WorkersCount</h4>
+                    <h4>Отчетов на проверку: @Model.DepartmentsHod[i].ReportsToApproveCount</h4>
+                    <a asp-route-id="@Model.DepartmentsHod[i].Department.Id" asp-controller="HeadOfDepartmentProfile" asp-action="Index" class="btn btn-primary">Перейти на кафедру</a>
+                </div>
+            }
+
         }
-    }
-    <br /><br />
+        <br /><br />
 
 
         @if (Model.DepartmentsTeacher != null)
         {
-        <h2>Вы являетесь преподавателем. Перейти в профиль:</h2>
-            @for(int i = 0; i < Model.DepartmentsTeacher.Count(); i++)
+            <h2>Вы являетесь преподавателем. Перейти в профиль:</h2>
+            @for (int i = 0; i < Model.DepartmentsTeacher.Count(); i++)
             {
                 <div>
                     <h3>@Model.DepartmentsTeacher[i].Department.Name</h3>
@@ -42,5 +45,6 @@
                 </div>
             }
         }
+    }
 
 </div>

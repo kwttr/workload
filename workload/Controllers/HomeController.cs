@@ -34,10 +34,10 @@ namespace workload.Controllers
                 {
                     deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
                 }
-
+                HomeViewModel homeVM = new HomeViewModel();
                 if (deserializedClaims.Any(x=>x.RoleAccess=="HeadOfDepartment"))
                 {
-                    HomeViewModel homeVM = new HomeViewModel();
+
                     List<DepartmentHodWindow> depWindows = new List<DepartmentHodWindow>();
                     foreach (var claim in deserializedClaims.Where(x => x.RoleAccess == "HeadOfDepartment"))
                     {
@@ -49,12 +49,10 @@ namespace workload.Controllers
                         depWindows.Add(depWindow);
                     }
                     homeVM.DepartmentsHod = depWindows;
-                    return View(homeVM);
                 }
 
                 if (deserializedClaims.Any(x => x.RoleAccess == "Teacher"))
                 {
-                    HomeViewModel homeVM = new HomeViewModel();
                     List<DepartmentTeacherWindow> depWindows = new();
                     foreach(var claim in deserializedClaims.Where(x=>x.RoleAccess == "Teacher"))
                     {
@@ -64,9 +62,8 @@ namespace workload.Controllers
                         depWindows.Add(depWindow);
                     }
                     homeVM.DepartmentsTeacher = depWindows;
-                    return View(homeVM);
                 }
-                return View();
+                return View(homeVM);
             }
             else return Redirect("Identity/Account/Login");
         }

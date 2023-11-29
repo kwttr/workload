@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NuGet.Versioning;
 using SQLitePCL;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -28,6 +29,7 @@ namespace workload.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<CustomRole> _roleManager;
         private readonly ITeacherDepartmentRepository _teachDepRepo;
+        private readonly object _lock = new object();
 
         public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager, RoleManager<CustomRole> roleManager, ITeacherDepartmentRepository teachDepRepo)
         {
@@ -77,9 +79,12 @@ namespace workload.Controllers
             }
         }
 
-        public async void AddRoleToUser(string id,Teacher user)
+        public void AddRoleToUser(string id,Teacher user)
         {
-            await _userManager.AddToRoleAsync(user, id);
+            lock (_lock)
+            {
+                _userManager.AddToRoleAsync(user, id);
+            }
         }
 
         public void RemoveClaim(string id, string role)
@@ -95,23 +100,23 @@ namespace workload.Controllers
             }
         }
 
-        public void AddClaim(string id,string role)
+        public async Task AddClaim(string id,string role)
         {
-            var user = _userManager.FindByIdAsync(id).Result;
-            CustomRole tempRole = _roleManager.FindByNameAsync(role).Result;
+            var user = await _userManager.FindByIdAsync(id);
+            CustomRole tempRole = await _roleManager.FindByNameAsync(role);
             string roleaccess = Regex.Replace(role, @"\d", "");
             CustomClaim claim = new CustomClaim() { DepartmentId = tempRole.DepartmentId.ToString(), RoleAccess = roleaccess };
             var userClaim = _userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == "UserRoleDep" && c.Value == JsonConvert.SerializeObject(claim));
             if (userClaim == null)
             {
-                _userManager.AddClaimAsync(user, new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(claim)));
+                await _userManager.AddClaimAsync(user, new Claim(CustomClaimType.UserRoleDep, JsonConvert.SerializeObject(claim)));
             }
         }
 
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(TeacherVM vm)
+        public async Task<IActionResult> EditAsync(TeacherVM vm)
         {
             if(ModelState.IsValid)
             {
@@ -124,7 +129,7 @@ namespace workload.Controllers
                 teacher.PositionId = vm.Teacher.PositionId;
 
                 //РОЛИ И КАФЕДРА
-                var roles = _userManager.GetRolesAsync(teacher).Result;
+                var roles = await _userManager.GetRolesAsync(teacher);
                 if (vm.SelectedRoles != null)
                 {
                     //РОЛИ
@@ -132,7 +137,7 @@ namespace workload.Controllers
                     {
                         if (!vm.SelectedRoles.Contains(role))
                         {
-                            _userManager.RemoveFromRoleAsync(teacher, role);
+                            await _userManager.RemoveFromRoleAsync(teacher, role);
                             RemoveClaim(teacher.Id,role);
                         }
                     }
@@ -143,11 +148,10 @@ namespace workload.Controllers
                     }
 
                     //КАФЕДРА
-                    roles=_userManager.GetRolesAsync(teacher).Result;
                     List<TeacherDepartment> newTeachDep = new List<TeacherDepartment>();
-                    foreach(var role in roles)
+                    foreach(var role in vm.SelectedRoles)
                     {
-                        var depRole = _roleManager.FindByNameAsync(role).Result;
+                        var depRole = await _roleManager.FindByNameAsync(role);
                         newTeachDep.Add(new TeacherDepartment() { DepartmentId = depRole.DepartmentId, TeacherId = teacher.Id });
                     }
                     var oldTeachDep = _teachDepRepo.GetAll(c => c.TeacherId == teacher.Id).ToList();
@@ -180,7 +184,7 @@ namespace workload.Controllers
         }
 
         //GET - DELETE
-        public ActionResult Delete(string? id)
+        public IActionResult Delete(string? id)
         {
             if (id == null)
             {
