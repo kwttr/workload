@@ -16,7 +16,6 @@ namespace workload_DataAccess.Repository
             _catRepo = categoryRepository;
         }
 
-        //Надо будет вынести в отдельный файл, ибо к репозиторию это отношение не имеет.
         #region Export
         public MemoryStream Export(Report obj)
         {
@@ -72,7 +71,7 @@ namespace workload_DataAccess.Repository
             }
         }
 
-        //Создание титульника
+        //Создание шапки титульника
         public static Body CreateTitlePage(Body body, Report obj)
         {
             Paragraph paragraph1 = new Paragraph();
@@ -130,6 +129,7 @@ namespace workload_DataAccess.Repository
             return body;
         }
 
+        //Таблица титульника
         public Table CreateTitleTable(Report obj)
         {
             //Заголовок
@@ -250,6 +250,7 @@ namespace workload_DataAccess.Repository
             return string.Empty;
         }
 
+        #region TitleTableBodyText
         public string GetMainBodyText(int row, int col, Report obj)
         {
             if (row == 0)
@@ -555,7 +556,9 @@ namespace workload_DataAccess.Repository
             }
             return string.Empty;
         }
+        #endregion
 
+        //Создание таблиц категорий
         public static Table CreateTable(List<ProcessActivityType> procActs)
         {
             // Создаем таблицу
@@ -582,8 +585,12 @@ namespace workload_DataAccess.Repository
                     props.Append(new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center });
                     cell.Append(props);
 
-                    if ((i == 0 && j == 1) || (i == 0 && j == 8) || (i == 0 && j == 0)) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
-                    else if (j == 0 || j == 1 || j == 8) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+                    if (i == 0 && j == 0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 0 && j == 1)
+                    {
+                        cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart },new TableCellWidth() { Width = "4000",Type=TableWidthUnitValues.Dxa}));
+                    }
+                    if ((j == 0 || j == 1)&&(i != 0)) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
 
                     if (i == 0 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 6 }));
                     if (i == 1 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
@@ -598,7 +605,7 @@ namespace workload_DataAccess.Repository
                     if (i == 2 && j == 3) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
                     if (i == 2 && j == 6) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
 
-                    if ((i == 0 && j > 2 && j < 8) || (i == 1 && j > 2 && j < 5) || (i == 1 && j > 5 && j < 8) || (i == 2 && j == 4) || (i == 2 && j == 7)) continue;
+                    if ((i == 0 && j > 2) || (i == 1 && j > 2 && j < 5) || (i == 1 && j > 5) || (i == 2 && j == 4) || (i == 2 && j == 7)) continue;
                     row.Append(cell);
                 }
 
