@@ -1,16 +1,200 @@
 ﻿@model workload_Models.ViewModels.ReportDetailsVM
+@{
+    decimal totalPlan = 0;
+    decimal totalFact = 0;
+    foreach (var activityType in Model.ProcessActivityTypes)
+    {
+        totalPlan += activityType.HoursPlan;
+        totalFact += activityType.HoursFact;
+    }
+    decimal totalDeviation = Math.Abs(totalPlan - totalFact);
 
+    decimal firstCatPlan = 0;
+    decimal firstCatFact = 0;
+    foreach (var activityType in Model.ProcessActivityTypes.Where(pat => pat.CategoryId == 1))
+    {
+        firstCatPlan += activityType.HoursPlan;
+        firstCatFact += activityType.HoursFact;
+    }
+    decimal firstCatDeviation = Math.Abs(firstCatPlan - firstCatFact);
+
+    decimal secondCatPlan = 0;
+    decimal secondCatFact = 0;
+    foreach (var activityType in Model.ProcessActivityTypes.Where(pat => pat.CategoryId == 2))
+    {
+        secondCatPlan += activityType.HoursPlan;
+        secondCatFact += activityType.HoursFact;
+    }
+    decimal secondCatDeviation = Math.Abs(secondCatPlan - secondCatFact);
+
+    decimal thirdCatPlan = 0;
+    decimal thirdCatFact = 0;
+    foreach (var activityType in Model.ProcessActivityTypes.Where(pat => pat.CategoryId == 3))
+    {
+        thirdCatPlan += activityType.HoursPlan;
+        thirdCatFact += activityType.HoursFact;
+    }
+    decimal thirdCatDeviation = Math.Abs(thirdCatPlan - thirdCatFact);
+
+    decimal fourthCatPlan = 0;
+    decimal fourthCatFact = 0;
+    foreach (var activityType in Model.ProcessActivityTypes.Where(pat => pat.CategoryId == 4))
+    {
+        fourthCatPlan += activityType.HoursPlan;
+        fourthCatFact += activityType.HoursFact;
+    }
+    decimal fourthCatDeviation = Math.Abs(fourthCatPlan - fourthCatFact);
+
+}
 <form method="post" asp-action="Details">
     <input asp-for="Report.Id" hidden />
     <div class="border p3">
         <div class="form-group row">
             <h2 class="text-info p1-3">@Model.Report.Title</h2>
             <div class="col-8 offset-4">
-                <a asp-route-id="@Model.Report.TeacherId" asp-action="ViewAllReports" class="btn btn-primary w-50">Назад</a>
+                <a asp-action="Index" class="btn btn-primary w-50">Назад</a>
+                <a asp-route-Id="@Model.Report.Id" asp-action="ExportReport" class="btn btn-warning mx-2">Экспорт</a>
             </div>
         </div>
         <div class="row">
-            <div class="col-8">
+            <div class="col-16">
+                <h1>Титульник</h1>
+                <table class="table table-bordered table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width:50px; text-align:center">№ п/п</th>
+                            <th rowspan="2" style="width:500px;text-align:center">Вид Работы</th>
+                            <th colspan="2" style="text-align:center">Объем работы, ч</th>
+                            <th rowspan="2" style="text-align:center">Отклонение (+,-)</th>
+                        <tr>
+                            <th style="text-align:center">планируемый</th>
+                            <th style="text-align:center">фактический</th>
+                        </tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="18" style="text-align:center">1</td>
+                            <td>Учебная работа, всего за учебный год</td>
+                            <td>@totalPlan</td>
+                            <td>@totalFact</td>
+                            <td>@totalDeviation</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">в том числе:</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="2" style="text-align:center">1 семестр</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- сентябрь</td>
+                            <td rowspan="7"></td>
+                            <td>@Html.DisplayFor(model => model.Report.septemberFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- октябрь</td>
+                            <td>@Html.DisplayFor(model => model.Report.octoberFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- ноябрь</td>
+                            <td>@Html.DisplayFor(model => model.Report.novemberFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- декабрь</td>
+                            <td>@Html.DisplayFor(model => model.Report.decemberFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- январь</td>
+                            <td>@Html.DisplayFor(model => model.Report.januaryFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- анкетирование студентов о качестве обучения</td>
+                            <td>@Html.DisplayFor(model => model.Report.surveyFirstSemester)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Итого 1 семестр</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="2" style="text-align:center">2 семестр</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- февраль</td>
+                            <td rowspan="7"></td>
+                            <td>@Html.DisplayFor(model => model.Report.februaryFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- март</td>
+                            <td>@Html.DisplayFor(model => model.Report.marchFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- апрель</td>
+                            <td>@Html.DisplayFor(model => model.Report.aprilFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- май</td>
+                            <td>@Html.DisplayFor(model => model.Report.mayFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- июнь</td>
+                            <td>@Html.DisplayFor(model => model.Report.juneFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>- анкетирование студентов о качестве обучения</td>
+                            <td>@Html.DisplayFor(model => model.Report.secondSemesterFact)</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:right">Итого 2 семестр</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center">2</td>
+                            <td>Учебно-методическая работа</td>
+                            <td>@firstCatPlan</td>
+                            <td>@firstCatFact</td>
+                            <td>@firstCatDeviation</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center">3</td>
+                            <td>Организационно-методическая работа</td>
+                            <td>@secondCatPlan</td>
+                            <td>@secondCatFact</td>
+                            <td>@secondCatDeviation</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center">4</td>
+                            <td>Научно-исследовательская и инновационная работа</td>
+                            <td>@thirdCatPlan</td>
+                            <td>@thirdCatFact</td>
+                            <td>@thirdCatDeviation</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center">5</td>
+                            <td>Профориентационная и воспитательная работа</td>
+                            <td>@fourthCatPlan</td>
+                            <td>@fourthCatFact</td>
+                            <td>@fourthCatDeviation</td>
+                        </tr>
+                    </tbody>
+                </table>
                 @foreach (var category in Model.CategoryList)
                 {
                     <h1>@category.Name</h1>
@@ -57,16 +241,16 @@
                 }
                 @if (Model.Report.StatusId == 2)
                 {
-                <div class="form-group row">
-                    <div class="col-8 offset-4 row">
-                        <div class="col">
-                            <a asp-route-id="@Model.Report.Id" asp-action="ApproveReport" class="btn btn-success w-50">Одобрить</a>
-                        </div>
+                    <div class="form-group row">
+                        <div class="col-8 offset-4 row">
+                            <div class="col">
+                                <a asp-route-id="@Model.Report.Id" asp-action="ApproveReport" class="btn btn-success w-50">Одобрить</a>
+                            </div>
                             <div class="col">
                                 <a asp-route-id="@Model.Report.Id" asp-action="DeclineReport" class="btn btn-danger w-50">Отклонить</a>
                             </div>
+                        </div>
                     </div>
-                  </div>
                 }
             </div>
         </div>

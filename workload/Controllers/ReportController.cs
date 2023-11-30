@@ -188,5 +188,20 @@ namespace workload.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        //EXPORTREPORT
+        public IActionResult ExportReport(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                Report obj = _repRepo.FirstOrDefault(r => r.Id == id, includeProperties: "ProcessActivities,Teacher,Department");
+                MemoryStream stream = _repRepo.Export(obj);
+                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Document.docx");
+            }
+        }
     }
 }

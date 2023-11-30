@@ -54,6 +54,9 @@
     <div class="border p3">
         <div class="form-group row">
             <h2 class="text-info p1-3">Просмотр отчета</h2>
+            <div class="col-12 offset-9">
+                <a asp-route-Id="@Model.Report.Id" asp-action="ExportReport" class="btn btn-warning mx-2">Экспорт</a>
+            </div>
         </div>
         <div class="row">
             <div class="col-16">
@@ -92,7 +95,7 @@
                         </tr>
                         <tr>
                             <td>- сентябрь</td>
-                            <th rowspan="7"></td>
+                            <td rowspan="7"></td>
                             <td><input asp-for="Report.septemberFact" class="form-control form-control-sm" /></td>
                             <td></td>
                         </tr>
