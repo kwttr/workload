@@ -16,3 +16,31 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.gradient-blue {
+    width:auto;
+    border: 10px solid transparent;
+    border-radius: 10px;
+    background: linear-gradient(#cfd8dc, #78adc4) padding-box, linear-gradient(to right, rgb(66, 145, 214), #04508f) border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+    padding: 10px;
+    display:inline;
+}
+
+.gradient-red {
+    width: auto;
+    border: 10px solid transparent;
+    border-radius: 10px;
+    background: linear-gradient(#f8d7da, #f49797) padding-box, linear-gradient(to right, rgb(214, 66, 66), #8f0404) border-box;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+    padding: 10px;
+    display: inline;
+}
+
+.gridcontainer {
+    display: grid;
+    grid-template-columns: repeat(3,auto);
+    grid-gap:10px;
+}

@@ -16,7 +16,6 @@ namespace workload_DataAccess.Repository
             _catRepo = categoryRepository;
         }
 
-        #region Export
         public MemoryStream Export(Report obj)
         {
             using (var stream = new MemoryStream())
@@ -250,6 +249,113 @@ namespace workload_DataAccess.Repository
             return string.Empty;
         }
 
+        //Создание таблиц категорий
+        public static Table CreateTable(List<ProcessActivityType> procActs)
+        {
+            // Создаем таблицу
+            Table table = new Table();
+
+            // Добавляем заголовок таблицы
+            for (int i = 0; i < 4; i++)
+            {
+                TableRow row = new TableRow();
+
+                for (int j = 0; j < 8; j++)
+                {
+                    TableCell cell = new TableCell();
+
+                    // Добавляем текст в ячейку
+                    string cellText = GetHeaderTextMainBody(i, j);
+                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
+                    paragraph.ParagraphProperties = new ParagraphProperties(
+                    new SpacingBetweenLines() { Before = "0", After = "0" });
+                    paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                    cell.Append(paragraph);
+
+                    var props = new TableCellProperties();
+                    props.Append(new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center });
+                    cell.Append(props);
+
+                    if (i == 0 && j == 0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 0 && j == 1)
+                    {
+                        cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart },new TableCellWidth() { Width = "4000",Type=TableWidthUnitValues.Dxa}));
+                    }
+                    if ((j == 0 || j == 1)&&(i != 0)) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if (i == 0 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 6 }));
+                    if (i == 1 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
+                    if (i == 1 && j == 5) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
+
+                    if (i == 2 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 3 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if (i == 2 && j == 5) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i == 3 && j == 5) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+
+                    if (i == 2 && j == 3) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    if (i == 2 && j == 6) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+
+                    if ((i == 0 && j > 2) || (i == 1 && j > 2 && j < 5) || (i == 1 && j > 5) || (i == 2 && j == 4) || (i == 2 && j == 7)) continue;
+                    row.Append(cell);
+                }
+
+                table.Append(row);
+            }
+
+
+
+            // Добавление тела таблицы
+            int activityNumber = 0;
+            foreach (var procAct in procActs)
+            {
+                if (procAct.DatePlan == null) procAct.DatePlan = "";
+                if (procAct.DateFact == null) procAct.DateFact = "";
+                TableRow procRow = new TableRow();
+                activityNumber++;
+                for (int i = 0; i < 8; i++)
+                {
+                    TableCell cell = new TableCell();
+                    string cellText = string.Empty;
+                    if (i == 0) cellText = activityNumber.ToString("0.###");
+                    if (i == 1) cellText = procAct.Name;
+                    if (i == 2) cellText = procAct.DatePlan;
+                    if (i == 3) cellText = procAct.HoursPlan.ToString("0.###");
+                    if (i == 4) cellText = procAct.UnitPlan.ToString("0.###");
+                    if (i == 5) cellText = procAct.DateFact;
+                    if (i == 6) cellText = procAct.HoursFact.ToString("0.###");
+                    if (i == 7) cellText = procAct.UnitFact.ToString("0.###");
+                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
+                    paragraph.ParagraphProperties = new ParagraphProperties(
+                    new SpacingBetweenLines() { Before = "0", After = "0" });
+                    if (i != 1) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                    cell.Append(paragraph);
+
+                    var props = new TableCellProperties();
+                    props.Append(new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center });
+                    cell.Append(props);
+
+                    procRow.Append(cell);
+                }
+                table.Append(procRow);
+            }
+
+            // Добавляем границы таблицы
+            TableProperties tableProperties = new TableProperties(
+                new TableBorders(
+                    new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
+                    new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 }
+                )
+            );
+
+            table.Append(tableProperties);
+            return table;
+        }
+
         #region TitleTableBodyText
         public string GetMainBodyText(int row, int col, Report obj)
         {
@@ -259,9 +365,9 @@ namespace workload_DataAccess.Repository
                 {
                     case 0: return "1";
                     case 1: return "Учебная работа, всего за учебный год";
-                    case 2: 
+                    case 2:
                         decimal sumPlan = 0;
-                        foreach(var procAct in obj.ProcessActivities)
+                        foreach (var procAct in obj.ProcessActivities)
                         {
                             sumPlan += procAct.HoursPlan;
                         }
@@ -275,7 +381,7 @@ namespace workload_DataAccess.Repository
                         return sumFact.ToString("0.###");
                     case 4:
                         decimal sumDeviation = 0;
-                        foreach(var procAct in obj.ProcessActivities)
+                        foreach (var procAct in obj.ProcessActivities)
                         {
                             sumDeviation += procAct.HoursPlan - procAct.HoursFact;
                         }
@@ -458,7 +564,7 @@ namespace workload_DataAccess.Repository
                         decimal deviation = 0;
                         foreach (var procAct in obj.ProcessActivities.Where(pa => pa.CategoryId == 1))
                         {
-                           deviation += procAct.HoursPlan - procAct.HoursFact;
+                            deviation += procAct.HoursPlan - procAct.HoursFact;
                         }
                         return Math.Abs(deviation).ToString("0.###");
                     default: return string.Empty;
@@ -558,115 +664,7 @@ namespace workload_DataAccess.Repository
         }
         #endregion
 
-        //Создание таблиц категорий
-        public static Table CreateTable(List<ProcessActivityType> procActs)
-        {
-            // Создаем таблицу
-            Table table = new Table();
-
-            // Добавляем заголовок таблицы
-            for (int i = 0; i < 4; i++)
-            {
-                TableRow row = new TableRow();
-
-                for (int j = 0; j < 8; j++)
-                {
-                    TableCell cell = new TableCell();
-
-                    // Добавляем текст в ячейку
-                    string cellText = GetHeaderTextMainBody(i, j);
-                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
-                    paragraph.ParagraphProperties = new ParagraphProperties(
-                    new SpacingBetweenLines() { Before = "0", After = "0" });
-                    paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
-                    cell.Append(paragraph);
-
-                    var props = new TableCellProperties();
-                    props.Append(new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center });
-                    cell.Append(props);
-
-                    if (i == 0 && j == 0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
-                    if (i == 0 && j == 1)
-                    {
-                        cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart },new TableCellWidth() { Width = "4000",Type=TableWidthUnitValues.Dxa}));
-                    }
-                    if ((j == 0 || j == 1)&&(i != 0)) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
-
-                    if (i == 0 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 6 }));
-                    if (i == 1 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
-                    if (i == 1 && j == 5) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
-
-                    if (i == 2 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
-                    if (i == 3 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
-
-                    if (i == 2 && j == 5) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
-                    if (i == 3 && j == 5) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
-
-                    if (i == 2 && j == 3) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
-                    if (i == 2 && j == 6) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
-
-                    if ((i == 0 && j > 2) || (i == 1 && j > 2 && j < 5) || (i == 1 && j > 5) || (i == 2 && j == 4) || (i == 2 && j == 7)) continue;
-                    row.Append(cell);
-                }
-
-                table.Append(row);
-            }
-
-
-
-            // Добавление тела таблицы
-            int activityNumber = 0;
-            foreach (var procAct in procActs)
-            {
-                if (procAct.DatePlan == null) procAct.DatePlan = "";
-                if (procAct.DateFact == null) procAct.DateFact = "";
-                TableRow procRow = new TableRow();
-                activityNumber++;
-                for (int i = 0; i < 8; i++)
-                {
-                    TableCell cell = new TableCell();
-                    string cellText = string.Empty;
-                    if (i == 0) cellText = activityNumber.ToString("0.###");
-                    if (i == 1) cellText = procAct.Name;
-                    if (i == 2) cellText = procAct.DatePlan;
-                    if (i == 3) cellText = procAct.HoursPlan.ToString("0.###");
-                    if (i == 4) cellText = procAct.UnitPlan.ToString("0.###");
-                    if (i == 5) cellText = procAct.DateFact;
-                    if (i == 6) cellText = procAct.HoursFact.ToString("0.###");
-                    if (i == 7) cellText = procAct.UnitFact.ToString("0.###");
-                    Paragraph paragraph = new Paragraph(new Run(new Text(cellText)));
-                    paragraph.ParagraphProperties = new ParagraphProperties(
-                    new SpacingBetweenLines() { Before = "0", After = "0" });
-                    if (i != 1) paragraph.ParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
-                    cell.Append(paragraph);
-
-                    var props = new TableCellProperties();
-                    props.Append(new TableCellVerticalAlignment() { Val = TableVerticalAlignmentValues.Center });
-                    cell.Append(props);
-
-                    procRow.Append(cell);
-                }
-                table.Append(procRow);
-            }
-
-            // Добавляем границы таблицы
-            TableProperties tableProperties = new TableProperties(
-                new TableBorders(
-                    new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
-                    new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
-                    new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
-                    new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
-                    new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 },
-                    new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 12 }
-                )
-            );
-
-            table.Append(tableProperties);
-            return table;
-        }
-
-
-
+        #region MainBodyText
         static string GetHeaderTextMainBody(int row, int col)
         {
             // Возвращает текст для ячейки таблицы в зависимости от её положения
