@@ -95,7 +95,7 @@ namespace workload_Data
                     Id=2,
                     Name = "Профессор"
                 },
-                new Degree("Кандидат")
+                new Degree
                 {
                     Id=3,
                     Name = "Кандидат"

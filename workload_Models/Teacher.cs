@@ -54,8 +54,6 @@ namespace workload_Models
         {
             Name = name;
         }
-
-        public Degree() { }
     }
 
     public class Position
@@ -70,8 +68,6 @@ namespace workload_Models
         {
             Name = name;
         }
-
-        public Position() { }
     }
 
     public class Department
@@ -88,8 +84,6 @@ namespace workload_Models
         {
             Name = name;
         }
-
-        public Department() { }
     }
 
     public class TeacherDepartment
