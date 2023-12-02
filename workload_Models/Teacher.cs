@@ -24,22 +24,6 @@ namespace workload_Models
         public List<TeacherDepartment>? TeacherDepartments { get; set; }
 
         public List<Report>? Reports { get; set; }
-
-        public Teacher(string firstName, string lastName, string patronymic)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Patronymic = patronymic;
-        }
-        public Teacher(string firstName, string lastName, string patronymic, int degreeId, Degree? degree, int positionId, Position? position, List<TeacherDepartment>? teacherDepartments, List<Report>? reports) : this(firstName, lastName, patronymic)
-        {
-            DegreeId = degreeId;
-            Degree = degree;
-            PositionId = positionId;
-            Position = position;
-            TeacherDepartments = teacherDepartments;
-            Reports = reports;
-        }
     }
 
     public class Degree
@@ -49,11 +33,6 @@ namespace workload_Models
         [Required]
         [Display(Name = "Название")]
         public string Name { get; set; }
-
-        public Degree(string name)
-        {
-            Name = name;
-        }
     }
 
     public class Position
@@ -63,11 +42,6 @@ namespace workload_Models
         [Required]
         [Display(Name = "Название")]
         public string Name { get; set; }
-
-        public Position(string name)
-        {
-            Name = name;
-        }
     }
 
     public class Department
@@ -79,11 +53,6 @@ namespace workload_Models
         public string Name { get; set; }
 
         public List<TeacherDepartment>? TeacherDepartments { get; set; }
-
-        public Department(string name)
-        {
-            Name = name;
-        }
     }
 
     public class TeacherDepartment

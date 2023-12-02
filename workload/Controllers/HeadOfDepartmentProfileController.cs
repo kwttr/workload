@@ -157,24 +157,10 @@ namespace workload.Controllers
         {
             if (id != null)
             {
-                var user = _userManager.GetUserAsync(User).Result;
-                List<CustomClaim> deserializedClaims = new List<CustomClaim>();
-                var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
-                foreach (var claim in claims)
-                {
-                    deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
-                }
-                var teacher = _teacherRepo.Find(user.Id);
-                var deserializedClaim = deserializedClaims.FirstOrDefault(x => x.RoleAccess == "HeadOfDepartment");
-                var name = teacher.FirstName;
-                var secondname = teacher.LastName;
-                var patronymic = teacher.Patronymic;
-                int depId = 0;
-                if (deserializedClaim != null) depId = Convert.ToInt32(deserializedClaim.DepartmentId);
-                else return BadRequest();
+
                 ReportVM reportVM = new ReportVM()
                 {
-                    report = new Report(teacher.Id,name,secondname,patronymic,depId),
+                    report = new Report(),
                     teacher = _teachRepo.Find(id)
                 };
                 reportVM.report.TeacherId = id;
@@ -190,6 +176,20 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateNewReport(ReportVM obj)
         {
+            var user = _userManager.GetUserAsync(User).Result;
+            List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+            var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
+            foreach (var claim in claims)
+            {
+                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
+            }
+            var teacher = _teacherRepo.Find(user.Id);
+            var deserializedClaim = deserializedClaims.FirstOrDefault(x => x.RoleAccess == "HeadOfDepartment");
+            obj.report.hodName = teacher.FirstName;
+            obj.report.hodSecondName = teacher.LastName;
+            obj.report.hodPatronymic = teacher.Patronymic;
+            if (deserializedClaim != null) obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
+            else return BadRequest();
             ModelState.Remove("report.hodSecondName");
             ModelState.Remove("report.hodName");
             ModelState.Remove("report.hodPatronymic");

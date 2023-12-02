@@ -52,7 +52,7 @@ namespace workload_Models
 
     public class MyRoleValidator : RoleValidator<CustomRole>
     {
-        public override Task<IdentityResult> ValidateAsync(RoleManager<CustomRole> manager, CustomRole role)
+        public override async Task<IdentityResult> ValidateAsync(RoleManager<CustomRole> manager, CustomRole role)
         {
             if (manager == null)
             {
@@ -65,9 +65,9 @@ namespace workload_Models
             var errors = new List<IdentityError>();
             if (errors.Count > 0)
             {
-                return Task.FromResult(IdentityResult.Failed(errors.ToArray()));
+                return IdentityResult.Failed(errors.ToArray());
             }
-            return Task.FromResult(IdentityResult.Success);
+            return IdentityResult.Success;
         }
     }
 }
