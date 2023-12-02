@@ -63,7 +63,7 @@ namespace workload.Controllers
                 var roles = _roleManager.Roles.ToListAsync().Result;
                 TeacherVM teacherVM = new TeacherVM()
                 {
-                    Teacher = new Teacher(),
+                    Teacher = new Teacher(string.Empty, string.Empty, string.Empty),
                     DegreeSelectList = _teachRepo.GetAllDropdownList(WC.DegreeName),
                     PositionSelectList = _teachRepo.GetAllDropdownList(WC.PositionName),
                     DepartmentSelectList = _teachRepo.GetAllDropdownList(WC.DepartmentName),
@@ -144,7 +144,7 @@ namespace workload.Controllers
                     foreach (var obj in vm.SelectedRoles)
                     {
                         AddRoleToUser(obj, teacher);
-                        AddClaim(teacher.Id, obj);
+                        await AddClaim(teacher.Id, obj);
                     }
 
                     //КАФЕДРА
@@ -203,13 +203,16 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirm(string? id)
         {
-            var obj = _teachRepo.Find(id);
-            if (obj == null)
+            if (id != null)
             {
-                return NotFound();
+                var obj = _teachRepo.Find(id);
+                if (obj == null)
+                {
+                    return NotFound();
+                }
+                _teachRepo.Remove(obj);
+                _teachRepo.Save();
             }
-            _teachRepo.Remove(obj);
-            _teachRepo.Save();
             return RedirectToAction("Index");
         }
     }

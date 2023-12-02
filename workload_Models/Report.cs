@@ -92,8 +92,13 @@ namespace workload_Models
         public int StatusId { get; set; }
         public Status? Status { get; set; }
 
-        public Report()
+        public Report(string teacherId, string name, string secondname, string patronymic, int departmentId)
         {
+            TeacherId = teacherId;
+            hodName = name;
+            hodSecondName = secondname;
+            hodPatronymic = patronymic;
+            DepartmentId = departmentId;
             Title = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             totalWorkPlan = 0;
             totalWorkFact = 0;
@@ -119,5 +124,10 @@ namespace workload_Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public Status(string name)
+        {
+            Name = name;
+        }
     }
 }
