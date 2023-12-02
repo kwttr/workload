@@ -21,6 +21,7 @@ namespace workload_Models
         public virtual Teacher? Teacher { get; set; }
 
         public string? CurrentDegree { get; set; }
+        public string? CurrentPosition { get; set; }
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true)]
         [Display(Name = "Ставка преподавателя")]

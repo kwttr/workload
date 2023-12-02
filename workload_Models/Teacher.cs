@@ -15,7 +15,7 @@ namespace workload_Models
 
         [Display(Name = "Научная степень")]
         public int DegreeId { get; set; }
-        public Degree? Degree{ get; set; }
+        public Degree? Degree { get; set; }
 
         [Display(Name = "Должность")]
         public int PositionId { get; set; }

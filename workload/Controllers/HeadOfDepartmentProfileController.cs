@@ -189,8 +189,13 @@ namespace workload.Controllers
             ModelState.Remove("report.hodPatronymic");
             if (ModelState.IsValid)
             {
-                obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId, includeProperties: "Degree");
-                obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
+                obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId, includeProperties: "Degree,Position");
+                if ((obj.report.Teacher.Degree != null) && (obj.report.Teacher.Position != null))
+                {
+                    obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
+                    obj.report.CurrentPosition = obj.report.Teacher.Position.Name;
+                }
+                else return BadRequest();
                 obj.report.StatusId = 1;
                 List<ProcessActivityType> list = new List<ProcessActivityType>();
                 foreach (var activity in _activityTypeRepo.GetAll())

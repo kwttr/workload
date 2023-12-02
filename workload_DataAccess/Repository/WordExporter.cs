@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 
 namespace workload_DataAccess.Repository
 {
@@ -111,12 +112,12 @@ namespace workload_DataAccess.Repository
             body.Append(paragraph5);
 
             Paragraph paragraphTeacherInfo = new Paragraph();
-            if (obj.Teacher != null)
+            if (obj.Teacher != null && obj.Department != null)
                 paragraphTeacherInfo.Append(new Run(new Text("Фамилия " + obj.Teacher.LastName +
                 "\nИмя " + obj.Teacher.FirstName + " Отчество " + obj.Teacher.Patronymic +
-                "\nУченая степень, учёное звание " + obj.Teacher.Degree + " " +
+                "\nУченая степень, учёное звание " + obj.CurrentDegree + " " +
                 "\nКафедра" + obj.Department.Name +
-                "\nДолжность" + obj.Teacher.Position +
+                "\nДолжность " + obj.CurrentPosition +
                 "\nДата избрания на должность______________________________")));
             body.Append(paragraphTeacherInfo);
 
