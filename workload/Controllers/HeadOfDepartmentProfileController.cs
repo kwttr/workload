@@ -155,15 +155,20 @@ namespace workload.Controllers
         //GET - CREATENEWREPORT
         public IActionResult CreateNewReport(string? id)
         {
-            ReportVM reportVM = new ReportVM()
+            if (id != null)
             {
-                report = new Report(),
-                teacher = _teachRepo.Find(id)
-            };
-            reportVM.report.TeacherId = id;
-            reportVM.report.Title = DateTime.Now.Year.ToString()+"-"+(DateTime.Now.Year+1).ToString();
-            reportVM.report.Rate = 1.0;
-            return View(reportVM);
+
+                ReportVM reportVM = new ReportVM()
+                {
+                    report = new Report(),
+                    teacher = _teachRepo.Find(id)
+                };
+                reportVM.report.TeacherId = id;
+
+                reportVM.report.Rate = 1.0;
+                return View(reportVM);
+            }
+            else return BadRequest();
         }
 
         //POST - CREATENEWREPOPRT
@@ -171,7 +176,7 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult CreateNewReport(ReportVM obj)
         {
-            var user = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result;
+            var user = _userManager.GetUserAsync(User).Result;
             List<CustomClaim> deserializedClaims = new List<CustomClaim>();
             var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
             foreach (var claim in claims)
@@ -183,7 +188,8 @@ namespace workload.Controllers
             obj.report.hodName = teacher.FirstName;
             obj.report.hodSecondName = teacher.LastName;
             obj.report.hodPatronymic = teacher.Patronymic;
-            obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
+            if (deserializedClaim != null) obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
+            else return BadRequest();
             ModelState.Remove("report.hodSecondName");
             ModelState.Remove("report.hodName");
             ModelState.Remove("report.hodPatronymic");

@@ -70,5 +70,10 @@ namespace workload_Models
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

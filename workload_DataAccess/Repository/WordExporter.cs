@@ -51,6 +51,7 @@ namespace workload_DataAccess.Repository
 
                     //Создаются таблицы на каждую категорию
                     var categories = _catRepo.GetAll().ToList();
+                    if(obj.ProcessActivities!=null)
                     for (int i = 1; i < 5; i++)
                     {
                         Paragraph paragraph = new Paragraph();

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using workload_Models.ModelBinders;
+using workload_Models.ViewModels;
 
 namespace workload_Models
 {
@@ -93,6 +94,7 @@ namespace workload_Models
 
         public Report()
         {
+            Title = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             totalWorkPlan = 0;
             totalWorkFact = 0;
             //Первый семестр
