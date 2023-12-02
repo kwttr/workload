@@ -36,13 +36,14 @@ namespace workload_DataAccess.Repository
 
         public void Update(Report obj)
         {
-            var objFromDb = base.FirstOrDefault(u => u.Id == obj.Id);
-            if (objFromDb != null)
-            {
-                objFromDb.Title = obj.Title;
-                objFromDb.Rate = obj.Rate;
-                objFromDb.ProcessActivities = obj.ProcessActivities;
-            }
+            //var objFromDb = base.FirstOrDefault(u => u.Id == obj.Id);
+            //if (objFromDb != null)
+            //{
+            //    objFromDb.Title = obj.Title;
+            //    objFromDb.Rate = obj.Rate;
+            //    objFromDb.ProcessActivities = obj.ProcessActivities;
+            //}
+            _db.Reports.Update(obj);
         }
 
         public MemoryStream Export(Report obj)

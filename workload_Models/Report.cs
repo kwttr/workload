@@ -36,29 +36,87 @@ namespace workload_Models
         //Display in Table for an year
         [BindProperty(BinderType = typeof(CustomDoubleModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true)]
-        public decimal? totalWorkPlan { get; set; }
-        public decimal? totalWorkFact { get; set; }
+        public decimal totalWorkPlan { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal totalWorkFact { get; set; }
         //Первый семестр
-        public decimal? firstSemesterFact { get; set; }
-        public decimal? septemberFact { get; set; }
-        public decimal? octoberFact { get; set; }
-        public decimal? novemberFact { get; set; }
-        public decimal? decemberFact { get; set; }
-        public decimal? januaryFact { get; set; }
-        public decimal? surveyFirstSemester{ get; set; }
+        public decimal firstSemesterFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal septemberFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal octoberFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal novemberFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal decemberFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal januaryFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal surveyFirstSemester{ get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal firstSemesterPlan { get; set; }
         //Второй семестр
-        public decimal? secondSemesterFact { get; set; }
-        public decimal? februaryFact { get; set; }
-        public decimal? marchFact { get; set; }
-        public decimal? aprilFact { get; set; }
-        public decimal? mayFact { get; set; }
-        public decimal? juneFact { get; set; }
-        public decimal? surveySecondSemester{ get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal secondSemesterFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal februaryFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal marchFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal aprilFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal mayFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal juneFact { get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal surveySecondSemester{ get; set; }
+        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
+        public decimal secondSemesterPlan { get; set; }
         //Display in form
         public List<ProcessActivityType>? ProcessActivities { get; set; }
         
         public int StatusId { get; set; }
         public Status? Status { get; set; }
+
+        public Report()
+        {
+            totalWorkPlan = 0;
+            totalWorkFact = 0;
+            //Первый семестр
+            firstSemesterFact = 0;
+            septemberFact = 0;
+            octoberFact = 0;
+            novemberFact = 0;
+            decemberFact = 0;
+            januaryFact = 0;
+            surveyFirstSemester = 0;
+            firstSemesterPlan = 0;
+            //Второй семестр
+            secondSemesterFact = 0;
+            februaryFact = 0;
+            marchFact = 0;
+            aprilFact = 0;
+            mayFact = 0;
+            juneFact = 0;
+            surveySecondSemester = 0;
+            secondSemesterPlan = 0;
+        }
     }
     public class Status
     {

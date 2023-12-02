@@ -192,7 +192,11 @@ namespace workload_DataAccess.Repository
 
                     if (i == 1 && j == 1) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 4 }));
                     if (i == 2 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    if (i == 3 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i > 3 && i < 10 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
                     if (i == 10 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 2 }));
+                    if (i == 11 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
+                    if (i > 11 && i < 18 && j == 2) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
 
                     if ((i == 1 && j > 1) || (i == 2 && j == 3) || (i == 10 && j == 3)) continue;
 
@@ -275,9 +279,9 @@ namespace workload_DataAccess.Repository
                     if (i == 0 && j == 0) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }));
                     if (i == 0 && j == 1)
                     {
-                        cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart },new TableCellWidth() { Width = "4000",Type=TableWidthUnitValues.Dxa}));
+                        cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }, new TableCellWidth() { Width = "4000", Type = TableWidthUnitValues.Dxa }));
                     }
-                    if ((j == 0 || j == 1)&&(i != 0)) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
+                    if ((j == 0 || j == 1) && (i != 0)) cell.AppendChild(new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }));
 
                     if (i == 0 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 6 }));
                     if (i == 1 && j == 2) cell.AppendChild(new TableCellProperties(new GridSpan() { Val = 3 }));
@@ -452,8 +456,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- анкетирование студентов о качестве обучения";
-                    case 2: return obj.surveyFirstSemesterPlan.ToString();
-                    case 3: return obj.surveyFirstSemesterFact.ToString();
+                    case 3: return obj.surveyFirstSemester.ToString();
                     default: return string.Empty;
                 }
             }
@@ -462,8 +465,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "Итого 1 семестр";
-                    case 2: return (obj.septemberPlan+obj.octoberPlan+obj.novemberPlan+obj.decemberPlan+obj.januaryPlan+obj.surveyFirstSemesterPlan).ToString();
-                    case 3: return (obj.septemberFact+obj.octoberFact+obj.novemberFact+obj.decemberFact+obj.januaryFact+obj.surveyFirstSemesterFact).ToString();
+                    case 3: return obj.firstSemesterFact.ToString();
                     default: return string.Empty;
                 }
             }
@@ -525,8 +527,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- анкетирование студентов о качестве обучения";
-                    case 2: return obj.surveySecondSemesterPlan.ToString();
-                    case 3: return obj.surveySecondSemesterFact.ToString();
+                    case 3: return obj.surveySecondSemester.ToString();
                     default: return string.Empty;
                 }
             }
@@ -535,8 +536,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "Итого 2 семестр";
-                    case 2: return (obj.februaryPlan+obj.marchPlan+obj.aprilPlan+obj.mayPlan+obj.junePlan+obj.surveySecondSemesterPlan).ToString();
-                    case 3: return (obj.februaryFact+obj.marchFact+obj.aprilFact+obj.mayFact+obj.juneFact+obj.surveySecondSemesterFact).ToString();
+                    case 3: return obj.secondSemesterFact.ToString();
                     default: return string.Empty;
                 }
             }

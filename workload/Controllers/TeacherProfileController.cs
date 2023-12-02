@@ -91,11 +91,15 @@ namespace workload.Controllers
             ModelState.Remove("report.hodPatronymic");
             if (ModelState.IsValid)
             {
+                
                 for(int i = 0; i < reportDetailsVM.ProcessActivityTypes.Count(); i++)
                 {
                     _processActivityTypeRepo.Update(reportDetailsVM.ProcessActivityTypes[i]);
                 }
+                reportDetailsVM.Report.ProcessActivities = reportDetailsVM.ProcessActivityTypes;
                 _processActivityTypeRepo.Save();
+                _repRepo.Update(reportDetailsVM.Report);
+                _repRepo.Save();
             }
             return RedirectToAction("Index");
         }

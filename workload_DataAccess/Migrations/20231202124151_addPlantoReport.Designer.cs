@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using workload_Data;
 
@@ -10,9 +11,10 @@ using workload_Data;
 namespace workload_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231202124151_addPlantoReport")]
+    partial class addPlantoReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.23");
@@ -818,19 +820,19 @@ namespace workload_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("aprilFact")
+                    b.Property<decimal?>("aprilFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("decemberFact")
+                    b.Property<decimal?>("decemberFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("februaryFact")
+                    b.Property<decimal?>("februaryFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("firstSemesterFact")
+                    b.Property<decimal?>("firstSemesterFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("firstSemesterPlan")
+                    b.Property<decimal?>("firstSemesterPlan")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("hodName")
@@ -845,43 +847,43 @@ namespace workload_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("januaryFact")
+                    b.Property<decimal?>("januaryFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("juneFact")
+                    b.Property<decimal?>("juneFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("marchFact")
+                    b.Property<decimal?>("marchFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("mayFact")
+                    b.Property<decimal?>("mayFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("novemberFact")
+                    b.Property<decimal?>("novemberFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("octoberFact")
+                    b.Property<decimal?>("octoberFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("secondSemesterFact")
+                    b.Property<decimal?>("secondSemesterFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("secondSemesterPlan")
+                    b.Property<decimal?>("secondSemesterPlan")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("septemberFact")
+                    b.Property<decimal?>("septemberFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("surveyFirstSemester")
+                    b.Property<decimal?>("surveyFirstSemester")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("surveySecondSemester")
+                    b.Property<decimal?>("surveySecondSemester")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("totalWorkFact")
+                    b.Property<decimal?>("totalWorkFact")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("totalWorkPlan")
+                    b.Property<decimal?>("totalWorkPlan")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

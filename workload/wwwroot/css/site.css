@@ -44,3 +44,10 @@ body {
     grid-template-columns: repeat(3,auto);
     grid-gap:10px;
 }
+
+.cell-table{
+    height:75%;
+}
+.text-filter{
+    height:100%;
+}
