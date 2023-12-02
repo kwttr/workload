@@ -161,6 +161,8 @@ namespace workload.Controllers
                 teacher = _teachRepo.Find(id)
             };
             reportVM.report.TeacherId = id;
+            reportVM.report.Title = DateTime.Now.Year.ToString()+"-"+(DateTime.Now.Year+1).ToString();
+            reportVM.report.Rate = 1.0;
             return View(reportVM);
         }
 
@@ -279,7 +281,9 @@ namespace workload.Controllers
             {
                 Report obj = _repRepo.FirstOrDefault(r => r.Id == id, includeProperties: "ProcessActivities,Teacher,Department");
                 MemoryStream stream = _repRepo.Export(obj);
-                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Document.docx");
+                if (obj != null && obj.Department != null && obj.Teacher != null)
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"{obj.Title + "_" + obj.Department.Name + "_" + obj.Teacher.LastName + obj.Teacher.FirstName + obj.Teacher.Patronymic}.docx");
+                else return BadRequest();
             }
         }
     }

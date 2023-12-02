@@ -285,6 +285,26 @@ namespace workload.Areas.Identity.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
+            Degrees = _teachRepo.GetAllDropdownList(WC.DegreeName);
+            Positions = _teachRepo.GetAllDropdownList(WC.PositionName);
+
+            if (User.IsInRole(WC.HeadOfDepartmentRole))
+            {
+                Roles = _roleManager.Roles.Where(x => x.NormalizedName == "TEACHER").Select(i => new SelectListItem
+                {
+
+                    Text = Regex.Replace(i.Name, @"\d", "") + " " + i.Department.Name,
+                    Value = i.Id.ToString()
+                });
+            }
+            else
+            {
+                Roles = _roleManager.Roles.Select(i => new SelectListItem
+                {
+                    Text = Regex.Replace(i.Name, @"\d", "") + " " + i.Department.Name,
+                    Value = i.Id.ToString()
+                });
+            }
             return Page();
         }
 
