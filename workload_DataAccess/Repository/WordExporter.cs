@@ -410,7 +410,8 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- сентябрь";
-                    case 3: return obj.septemberFact.ToString();
+                    case 2: return obj.firstSemesterPlan.ToString("0.###");
+                    case 3: return obj.septemberFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -419,7 +420,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- октябрь";
-                    case 3: return obj.octoberFact.ToString();
+                    case 3: return obj.octoberFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -428,7 +429,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- ноябрь";
-                    case 3: return obj.novemberFact.ToString();
+                    case 3: return obj.novemberFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -437,7 +438,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- декабрь";
-                    case 3: return obj.decemberFact.ToString();
+                    case 3: return obj.decemberFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -446,7 +447,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- январь";
-                    case 3: return obj.januaryFact.ToString();
+                    case 3: return obj.januaryFact.ToString("0.###");
                     default: return string.Empty;
 
                 }
@@ -456,7 +457,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- анкетирование студентов о качестве обучения";
-                    case 3: return obj.surveyFirstSemester.ToString();
+                    case 3: return obj.surveyFirstSemester.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -465,7 +466,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "Итого 1 семестр";
-                    case 3: return obj.firstSemesterFact.ToString();
+                    case 3: return (obj.septemberFact + obj.octoberFact + obj.novemberFact + obj.decemberFact + obj.januaryFact + obj.surveyFirstSemester).ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -482,7 +483,8 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- февраль";
-                    case 3: return obj.februaryFact.ToString();
+                    case 2: return obj.secondSemesterPlan.ToString("0.###");
+                    case 3: return obj.februaryFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -491,7 +493,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- март";
-                    case 3: return obj.marchFact.ToString();
+                    case 3: return obj.marchFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -500,7 +502,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- апрель";
-                    case 3: return obj.aprilFact.ToString();
+                    case 3: return obj.aprilFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -509,7 +511,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- май";
-                    case 3: return obj.mayFact.ToString();
+                    case 3: return obj.mayFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -518,7 +520,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- июнь";
-                    case 3: return obj.juneFact.ToString();
+                    case 3: return obj.juneFact.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -527,7 +529,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "- анкетирование студентов о качестве обучения";
-                    case 3: return obj.surveySecondSemester.ToString();
+                    case 3: return obj.surveySecondSemester.ToString("0.###");
                     default: return string.Empty;
                 }
             }
@@ -536,7 +538,7 @@ namespace workload_DataAccess.Repository
                 switch (col)
                 {
                     case 1: return "Итого 2 семестр";
-                    case 3: return obj.secondSemesterFact.ToString();
+                    case 3: return (obj.februaryFact + obj.marchFact + obj.aprilFact + obj.mayFact + obj.juneFact + obj.surveySecondSemester).ToString("0.###");
                     default: return string.Empty;
                 }
             }

@@ -41,7 +41,6 @@ namespace workload_Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal totalWorkFact { get; set; }
         //Первый семестр
-        public decimal firstSemesterFact { get; set; }
         [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal septemberFact { get; set; }
@@ -64,9 +63,6 @@ namespace workload_Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal firstSemesterPlan { get; set; }
         //Второй семестр
-        [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
-        public decimal secondSemesterFact { get; set; }
         [BindProperty(BinderType = typeof(CustomDecimalModelBinder))]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#,##0.##########}")]
         public decimal februaryFact { get; set; }
@@ -99,7 +95,6 @@ namespace workload_Models
             totalWorkPlan = 0;
             totalWorkFact = 0;
             //Первый семестр
-            firstSemesterFact = 0;
             septemberFact = 0;
             octoberFact = 0;
             novemberFact = 0;
@@ -108,7 +103,6 @@ namespace workload_Models
             surveyFirstSemester = 0;
             firstSemesterPlan = 0;
             //Второй семестр
-            secondSemesterFact = 0;
             februaryFact = 0;
             marchFact = 0;
             aprilFact = 0;
