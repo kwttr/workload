@@ -129,5 +129,7 @@ namespace workload_Models
         {
             Name = name;
         }
+
+        public Status() { }
     }
 }
