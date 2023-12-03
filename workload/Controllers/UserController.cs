@@ -1,19 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using NuGet.Versioning;
-using SQLitePCL;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using workload_Data;
-using workload_DataAccess.Repository;
+using workload.Services;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
@@ -29,14 +21,15 @@ namespace workload.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<CustomRole> _roleManager;
         private readonly ITeacherDepartmentRepository _teachDepRepo;
-        private readonly object _lock = new object();
+        private readonly IUsers _iUser;
 
-        public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager, RoleManager<CustomRole> roleManager, ITeacherDepartmentRepository teachDepRepo)
+        public UserController(ITeacherRepository teachRepo, UserManager<IdentityUser> userManager, RoleManager<CustomRole> roleManager, ITeacherDepartmentRepository teachDepRepo, IUsers users)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
             _roleManager = roleManager;
             _teachDepRepo = teachDepRepo;
+            _iUser = users;
         }
 
         public IActionResult Index()
@@ -81,10 +74,7 @@ namespace workload.Controllers
 
         public void AddRoleToUser(string id,Teacher user)
         {
-            lock (_lock)
-            {
-                _userManager.AddToRoleAsync(user, id);
-            }
+          _userManager.AddToRoleAsync(user, id);
         }
 
         public void RemoveClaim(string id, string role)
@@ -210,6 +200,31 @@ namespace workload.Controllers
             }
             _teachRepo.Remove(obj);
             _teachRepo.Save();
+            return RedirectToAction("Index");
+        }
+
+        //GET - BLOCK
+        public IActionResult Block(string? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var obj = _teachRepo.Find(id);
+            return View(obj);
+        }
+
+        //POST - BLOCK
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Block(Teacher obj)
+        {
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            obj = _teachRepo.Find(obj.Id);
+            _iUser.LockUser(obj.Email, new DateTime(2222, 06, 06));
             return RedirectToAction("Index");
         }
     }

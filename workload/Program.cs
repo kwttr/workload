@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using workload.Services;
 using workload_Data;
 using workload_DataAccess.Repository;
 using workload_DataAccess.Repository.IRepository;
@@ -21,6 +23,16 @@ builder.Services.AddIdentity<IdentityUser, CustomRole>()
     .AddDefaultTokenProviders().AddDefaultUI()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+    options.Tokens.ProviderMap.Add("CustomEmailConfirmation",
+        new TokenProviderDescriptor(
+            typeof(CustomEmailConfirmationTokenProvider<IdentityUser>)));
+    options.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+});
+
+builder.Services.AddTransient<CustomEmailConfirmationTokenProvider<IdentityUser>>();
 builder.Services.AddScoped<RoleManager<CustomRole>, CustomRoleManager>();
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
@@ -29,7 +41,19 @@ builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IProcessActivityTypeRepository, ProcessActivityTypeRepository>();
 builder.Services.AddScoped<ITeacherDepartmentRepository, TeacherDepartmentRepository>();
+builder.Services.AddScoped<IUsers, Users>();
 builder.Services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 268435456; });
+
+builder.Services.AddTransient<IEmailSender,EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+
+builder.Services.ConfigureApplicationCookie(o => {
+    o.ExpireTimeSpan = TimeSpan.FromDays(5);
+    o.SlidingExpiration = true;
+});
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
+       o.TokenLifespan = TimeSpan.FromHours(3));
 
 var app = builder.Build();
 

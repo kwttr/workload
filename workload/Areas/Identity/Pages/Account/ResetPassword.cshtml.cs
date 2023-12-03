@@ -11,16 +11,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using workload.Services;
 
 namespace workload.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUsers _IUser;
 
-        public ResetPasswordModel(UserManager<IdentityUser> userManager)
+        public ResetPasswordModel(UserManager<IdentityUser> userManager, IUsers _iusers)
         {
             _userManager = userManager;
+            _IUser = _iusers;
         }
 
         /// <summary>
@@ -104,6 +107,7 @@ namespace workload.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
+                _IUser.UnlockUser(user.Email);
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 
