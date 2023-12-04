@@ -272,7 +272,7 @@ namespace workload.Controllers
                 }
                 return View(vm);
             }
-
+            _iUser.UnlockUser(user.Email);
             return RedirectToAction("Index");
         }
     }
