@@ -270,7 +270,7 @@ namespace workload.Controllers
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return View(vm.TeacherId);
+                return View(vm);
             }
 
             return RedirectToAction("Index");
