@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace workload_Models
 {
@@ -47,6 +45,33 @@ namespace workload_Models
             : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
             _roleManager = roleManager;
+        }
+
+        public virtual async Task<IdentityResult> ChangePasswordAsync(TUser user, string newPassword)
+        {
+            ThrowIfDisposed();
+            var passwordStore = GetPasswordStore();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var result = await UpdatePasswordHash(user, newPassword, true);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+            return await UpdateUserAsync(user);
+        }
+
+        private IUserPasswordStore<TUser> GetPasswordStore()
+        {
+            var cast = Store as IUserPasswordStore<TUser>;
+            if (cast == null)
+            {
+                throw new NotSupportedException();
+            }
+            return cast;
         }
     }
 
