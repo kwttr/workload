@@ -53,7 +53,7 @@
         <div class="form-group row">
             <h2 class="text-info p1-3">@Model.Report.Title</h2>
             <div class="col-8 offset-4">
-                <a asp-action="Index" class="btn btn-primary w-50">Назад</a>
+                <a asp-route-Id="@Model.Report.TeacherId" asp-action="ViewAllReports" class="btn btn-primary w-50">Назад</a>
                 <a asp-route-Id="@Model.Report.Id" asp-action="ExportReport" class="btn btn-warning mx-2">Экспорт</a>
             </div>
         </div>
