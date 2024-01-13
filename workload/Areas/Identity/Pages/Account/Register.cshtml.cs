@@ -244,7 +244,7 @@ namespace workload.Areas.Identity.Pages.Account
 
                     //Выдача Claim
                     var resultRole = Regex.Replace(role.Name, @"\d", "");
-                    var customClaim = new CustomClaim() { DepartmentId = role.DepartmentId.ToString(), RoleAccess = resultRole };
+                    var customClaim = new CustomClaimValue() { DepartmentId = role.DepartmentId.ToString(), RoleAccess = resultRole };
                     await _userManager.AddClaimAsync(user, new Claim(CustomClaimType.UserRoleDep,JsonConvert.SerializeObject(customClaim)));
 
                     _logger.LogInformation("User created a new account with password.");

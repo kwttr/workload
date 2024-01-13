@@ -6,7 +6,7 @@
     int depId = 0;
     if (Claim != null)
     {
-        CustomClaim deserializedClaim = JsonConvert.DeserializeObject<CustomClaim>(Claim.Value);
+        CustomClaimValue deserializedClaim = JsonConvert.DeserializeObject<CustomClaimValue>(Claim.Value);
         depId = Convert.ToInt32(deserializedClaim.DepartmentId);
     }
 }

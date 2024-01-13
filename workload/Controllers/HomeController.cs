@@ -29,10 +29,10 @@ namespace workload.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
-                List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+                List<CustomClaimValue> deserializedClaims = new List<CustomClaimValue>();
                 foreach (var claim in claims)
                 {
-                    deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
+                    deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value));
                 }
                 HomeViewModel homeVM = new HomeViewModel();
                 if (deserializedClaims.Any(x=>x.RoleAccess=="HeadOfDepartment"))

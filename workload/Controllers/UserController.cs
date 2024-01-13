@@ -89,7 +89,7 @@ namespace workload.Controllers
             var user = _userManager.FindByIdAsync(id).Result;
             CustomRole tempRole = _roleManager.FindByNameAsync(role).Result;
             string roleaccess = Regex.Replace(role, @"\d", "");
-            CustomClaim claim = new CustomClaim() { DepartmentId = tempRole.DepartmentId.ToString(), RoleAccess = roleaccess };
+            CustomClaimValue claim = new CustomClaimValue() { DepartmentId = tempRole.DepartmentId.ToString(), RoleAccess = roleaccess };
             var userClaim = _userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == "UserRoleDep" && c.Value == JsonConvert.SerializeObject(claim));
             if (userClaim != null)
             {
@@ -102,7 +102,7 @@ namespace workload.Controllers
             var user = await _userManager.FindByIdAsync(id);
             CustomRole tempRole = await _roleManager.FindByNameAsync(role);
             string roleaccess = Regex.Replace(role, @"\d", "");
-            CustomClaim claim = new CustomClaim() { DepartmentId = tempRole.DepartmentId.ToString(), RoleAccess = roleaccess };
+            CustomClaimValue claim = new CustomClaimValue() { DepartmentId = tempRole.DepartmentId.ToString(), RoleAccess = roleaccess };
             var userClaim = _userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == "UserRoleDep" && c.Value == JsonConvert.SerializeObject(claim));
             if (userClaim == null)
             {

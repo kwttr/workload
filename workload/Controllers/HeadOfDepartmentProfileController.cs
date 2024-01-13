@@ -177,11 +177,11 @@ namespace workload.Controllers
         public IActionResult CreateNewReport(ReportVM obj)
         {
             var user = _userManager.GetUserAsync(User).Result;
-            List<CustomClaim> deserializedClaims = new List<CustomClaim>();
+            List<CustomClaimValue> deserializedClaims = new List<CustomClaimValue>();
             var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
             foreach (var claim in claims)
             {
-                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaim>(claim.Value));
+                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value));
             }
             var teacher = _teacherRepo.Find(user.Id);
             var deserializedClaim = deserializedClaims.FirstOrDefault(x => x.RoleAccess == "HeadOfDepartment");
