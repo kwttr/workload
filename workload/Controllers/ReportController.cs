@@ -27,7 +27,7 @@ namespace workload.Controllers
                                 IActivityTypeRepository activityTypeRepo,
                                 IProcessActivityTypeRepository processActivityTypeRepository,
                                 IHttpContextAccessor contextAccessor,
-                                UserManager<IdentityUser> userManager, List<ProcessActivityType> processActivityTypes)
+                                UserManager<IdentityUser> userManager)
         {
             _repRepo = repRepo;
             _categoryRepo = categoryRepo;
@@ -36,10 +36,9 @@ namespace workload.Controllers
             _processActivityTypeRepo = processActivityTypeRepository;
             _contextAccessor = contextAccessor;
             _userManager = userManager;
-            ProcessActivityTypes = processActivityTypes;
         }
         [BindProperty]
-        public List<ProcessActivityType> ProcessActivityTypes { get; set; }
+        public List<ProcessActivityType>? ProcessActivityTypes { get; set; }
 
         public IActionResult Index()
         {
@@ -106,7 +105,8 @@ namespace workload.Controllers
                 obj.report.hodName = firstOrDefault.FirstName;
                 obj.report.hodSecondName = firstOrDefault.LastName;
                 obj.report.hodPatronymic = firstOrDefault.Patronymic;
-                obj.report.DepartmentId = Convert.ToInt32(deserializedClaim?.DepartmentId);
+                if (deserializedClaim != null)
+                    obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
                 List<ProcessActivityType> list = new List<ProcessActivityType>();
                 foreach (var activity in _activityTypeRepo.GetAll())
                 {
@@ -185,7 +185,7 @@ namespace workload.Controllers
             return RedirectToAction("Index");
         }
 
-        //EXPORT REPORT
+        //EXPORTREPORT
         public IActionResult ExportReport(int? id)
         {
             if (id == null)
