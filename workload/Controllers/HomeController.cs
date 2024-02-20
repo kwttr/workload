@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using workload_DataAccess.Repository.IRepository;
@@ -11,14 +10,12 @@ namespace workload.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ITeacherDepartmentRepository _teacherDepartmentRepository;
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IReportRepository _reportRepository;
 
-        public HomeController(ILogger<HomeController> logger, ITeacherDepartmentRepository teacherDepartmentRepository, IDepartmentRepository departmentRepository, IReportRepository reportRepository)
+        public HomeController(ITeacherDepartmentRepository teacherDepartmentRepository, IDepartmentRepository departmentRepository, IReportRepository reportRepository)
         {
-            _logger = logger;
             _teacherDepartmentRepository = teacherDepartmentRepository;
             _departmentRepository = departmentRepository;
             _reportRepository = reportRepository;
@@ -26,15 +23,15 @@ namespace workload.Controllers
 
         public IActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
                 List<CustomClaimValue> deserializedClaims = new List<CustomClaimValue>();
                 foreach (var claim in claims)
                 {
-                    deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value));
+                    deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value) ?? throw new InvalidOperationException());
                 }
-                HomeViewModel homeVM = new HomeViewModel();
+                HomeViewModel homeVm = new HomeViewModel();
                 if (deserializedClaims.Any(x=>x.RoleAccess=="HeadOfDepartment"))
                 {
 
@@ -48,7 +45,7 @@ namespace workload.Controllers
                         depWindow.ReportsToApproveCount = _reportRepository.GetAll(x => x.DepartmentId == Convert.ToInt32(claim.DepartmentId) && (x.StatusId == 2)).Count();
                         depWindows.Add(depWindow);
                     }
-                    homeVM.DepartmentsHod = depWindows;
+                    homeVm.DepartmentsHod = depWindows;
                 }
 
                 if (deserializedClaims.Any(x => x.RoleAccess == "Teacher"))
@@ -61,9 +58,9 @@ namespace workload.Controllers
                         depWindow.ReportsAssignedCount = _reportRepository.GetAll(x => x.DepartmentId == Convert.ToInt32(claim.DepartmentId) && (x.StatusId == 1)).Count();
                         depWindows.Add(depWindow);
                     }
-                    homeVM.DepartmentsTeacher = depWindows;
+                    homeVm.DepartmentsTeacher = depWindows;
                 }
-                return View(homeVM);
+                return View(homeVm);
             }
             else return Redirect("Identity/Account/Login");
         }

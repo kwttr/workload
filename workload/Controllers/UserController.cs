@@ -22,21 +22,18 @@ namespace workload.Controllers
         private readonly RoleManager<CustomRole> _roleManager;
         private readonly ITeacherDepartmentRepository _teachDepRepo;
         private readonly IUsers _iUser;
-        private readonly SignInManager<IdentityUser> _signInManager;
 
         public UserController(ITeacherRepository teachRepo,
                               CustomUserManager<IdentityUser> userManager,
                               RoleManager<CustomRole> roleManager,
                               ITeacherDepartmentRepository teachDepRepo,
-                              IUsers users,
-                              SignInManager<IdentityUser> signInManager)
+                              IUsers users)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
             _roleManager = roleManager;
             _teachDepRepo = teachDepRepo;
             _iUser = users;
-            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -61,7 +58,7 @@ namespace workload.Controllers
             else
             {
                 var roles = _roleManager.Roles.ToListAsync().Result;
-                TeacherVM teacherVM = new TeacherVM()
+                TeacherVM teacherVm = new TeacherVM()
                 {
                     Teacher = new Teacher(),
                     DegreeSelectList = _teachRepo.GetAllDropdownList(WC.DegreeName),
@@ -69,13 +66,9 @@ namespace workload.Controllers
                     DepartmentSelectList = _teachRepo.GetAllDropdownList(WC.DepartmentName),
                     RolesSelectList = roles
                 };
-                teacherVM.Teacher = _teachRepo.Find(id);
-                teacherVM.SelectedRoles = _userManager.GetRolesAsync(teacherVM.Teacher).Result.ToList();
-                if (teacherVM.Teacher == null)
-                {
-                    return NotFound();
-                }
-                return View(teacherVM);
+                teacherVm.Teacher = _teachRepo.Find(id);
+                teacherVm.SelectedRoles = _userManager.GetRolesAsync(teacherVm.Teacher).Result.ToList();
+                return View(teacherVm);
             }
         }
 
@@ -141,7 +134,7 @@ namespace workload.Controllers
                     foreach (var obj in vm.SelectedRoles)
                     {
                         AddRoleToUser(obj, teacher);
-                        AddClaim(teacher.Id, obj);
+                        await AddClaim(teacher.Id, obj);
                     }
 
                     //КАФЕДРА
@@ -188,10 +181,6 @@ namespace workload.Controllers
                 return NotFound();
             }
             var obj = _teachRepo.Find(id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
             return View(obj);
         }
 
@@ -200,12 +189,12 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirm(string? id)
         {
-            var obj = _teachRepo.Find(id);
-            if (obj == null)
+            if (id != null)
             {
-                return NotFound();
+                var obj = _teachRepo.Find(id);
+                _teachRepo.Remove(obj);
             }
-            _teachRepo.Remove(obj);
+
             _teachRepo.Save();
             return RedirectToAction("Index");
         }
@@ -226,16 +215,12 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Block(Teacher obj)
         {
-            if (obj == null)
-            {
-                return NotFound();
-            }
             obj = _teachRepo.Find(obj.Id);
             _iUser.LockUser(obj.Email, new DateTime(2222, 06, 06));
             return RedirectToAction("Index");
         }
 
-        //GET - CHANGEPASSWORD
+        //GET - CHANGE PASSWORD
         public IActionResult ChangePassword(string? id)
         {
             if (id == null)
@@ -246,7 +231,7 @@ namespace workload.Controllers
             return View(vm);
         }
 
-        //POST - CHANGEPASSWORD
+        //POST - CHANGE PASSWORD
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePasswordAsync(ChangePasswordVM vm)
@@ -259,7 +244,7 @@ namespace workload.Controllers
             var user = await _userManager.FindByIdAsync(vm.TeacherId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with this ID.");
+                return NotFound("Unable to load user with this ID.");
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, vm.NewPassword);

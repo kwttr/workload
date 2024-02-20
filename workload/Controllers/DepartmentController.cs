@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
-using workload_Models.ViewModels;
 using workload_Utility;
 
 namespace workload.Controllers
@@ -52,10 +51,6 @@ namespace workload.Controllers
             else
             {
                 obj = _depRepo.Find(id.GetValueOrDefault());
-                if (obj == null)
-                {
-                    return NotFound();
-                }
                 return View(obj);
             }
         }
@@ -83,7 +78,7 @@ namespace workload.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (obj == null || obj.Id == 0)
+                if (obj.Id == 0)
                 {
                     _depRepo.Add(obj);
                 }

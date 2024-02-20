@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
-using workload_Utility;
 using workload_Utility.ClaimTypes;
 
 namespace workload.Controllers
@@ -21,7 +20,6 @@ namespace workload.Controllers
         private readonly ITeacherRepository _teacherRepo;
         private readonly IActivityTypeRepository _activityTypeRepo;
         private readonly ITeacherDepartmentRepository _teacherDepartmentRepo;
-        private readonly IHttpContextAccessor _contextAccessor;
 
         public HeadOfDepartmentProfileController(
             ITeacherRepository teachRepo,
@@ -31,8 +29,7 @@ namespace workload.Controllers
             IProcessActivityTypeRepository processActivityTypeRepo,
             ITeacherRepository teacherRepo,
             IActivityTypeRepository activityTypeRepo,
-            ITeacherDepartmentRepository teacherDepartmentRepo,
-            IHttpContextAccessor contextAccessor)
+            ITeacherDepartmentRepository teacherDepartmentRepo)
         {
             _teachRepo = teachRepo;
             _userManager = userManager;
@@ -42,7 +39,6 @@ namespace workload.Controllers
             _teacherRepo = teacherRepo;
             _activityTypeRepo = activityTypeRepo;
             _teacherDepartmentRepo = teacherDepartmentRepo;
-            _contextAccessor = contextAccessor;
         }
 
         public IActionResult Index(int id)
@@ -72,24 +68,20 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-            ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
+            ReportDetailsVM reportDetailsVm = new ReportDetailsVM()
             {
                 Report = _repRepo.Find(id.GetValueOrDefault()),
                 CategoryList = _categoryRepo.GetAll().ToList(),
             };
             List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
-            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVM.Report.Id).ToList();
+            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVm.Report.Id).ToList();
             foreach (var processActivity in matchingProcessActivities)
             {
                 processActivityList.Add(processActivity);
             }
-            reportDetailsVM.ProcessActivityTypes = processActivityList;
+            reportDetailsVm.ProcessActivityTypes = processActivityList;
 
-            if (reportDetailsVM == null)
-            {
-                return NotFound();
-            }
-            return View(reportDetailsVM);
+            return View(reportDetailsVm);
         }
 
         //GET - VIEWALLREPORTS
@@ -158,15 +150,15 @@ namespace workload.Controllers
             if (id != null)
             {
 
-                ReportVM reportVM = new ReportVM()
+                ReportVM reportVm = new ReportVM()
                 {
                     report = new Report(),
                     teacher = _teachRepo.Find(id)
                 };
-                reportVM.report.TeacherId = id;
+                reportVm.report.TeacherId = id;
 
-                reportVM.report.Rate = 1.0;
-                return View(reportVM);
+                reportVm.report.Rate = 1.0;
+                return View(reportVm);
             }
             else return BadRequest();
         }
@@ -181,7 +173,7 @@ namespace workload.Controllers
             var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
             foreach (var claim in claims)
             {
-                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value));
+                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value) ?? throw new InvalidOperationException());
             }
             var teacher = _teacherRepo.Find(user.Id);
             var deserializedClaim = deserializedClaims.FirstOrDefault(x => x.RoleAccess == "HeadOfDepartment");
@@ -292,7 +284,7 @@ namespace workload.Controllers
             {
                 Report obj = _repRepo.FirstOrDefault(r => r.Id == id, includeProperties: "ProcessActivities,Teacher,Department");
                 MemoryStream stream = _repRepo.Export(obj);
-                if (obj != null && obj.Department != null && obj.Teacher != null)
+                if (obj.Department != null && obj.Teacher != null)
                     return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"{obj.Title + "_" + obj.Department.Name + "_" + obj.Teacher.LastName + obj.Teacher.FirstName + obj.Teacher.Patronymic}.docx");
                 else return BadRequest();
             }

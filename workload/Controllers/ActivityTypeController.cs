@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using workload_Data;
 using workload_DataAccess.Repository.IRepository;
 using workload_Models;
 using workload_Models.ViewModels;
@@ -30,45 +25,41 @@ namespace workload.Controllers
         //GET - UPSERT
         public IActionResult Upsert(int? id)
         {
-            ActivityTypeVM activityTypeVM = new ActivityTypeVM()
+            ActivityTypeVM activityTypeVm = new ActivityTypeVM()
             {
                 ActivityType = new ActivityType(),
                 CategorySelectList = _actRepo.GetAllDropdownList(WC.CategoryName)
             };
             if (id == null)
             {
-                return View(activityTypeVM);
+                return View(activityTypeVm);
             }
             else
             {
-                activityTypeVM.ActivityType = _actRepo.Find(id.GetValueOrDefault());
-                if(activityTypeVM.ActivityType == null)
-                {
-                    return NotFound();
-                }
-                return View(activityTypeVM);
+                activityTypeVm.ActivityType = _actRepo.Find(id.GetValueOrDefault());
+                return View(activityTypeVm);
             }
         }
 
         //POST - UPSERT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(ActivityTypeVM activityTypeVM)
+        public IActionResult Upsert(ActivityTypeVM activityTypeVm)
         {
             if (ModelState.IsValid)
             {
-                if(activityTypeVM.ActivityType == null || activityTypeVM.ActivityType.Id == 0) {
-                    _actRepo.Add(activityTypeVM.ActivityType);
+                if(activityTypeVm.ActivityType.Id == 0) {
+                    _actRepo.Add(activityTypeVm.ActivityType);
                 }
                 else
                 {
-                    _actRepo.Update(activityTypeVM.ActivityType);
+                    _actRepo.Update(activityTypeVm.ActivityType);
                 }
                 _actRepo.Save();
                 return RedirectToAction("Index");
             }
-            activityTypeVM.CategorySelectList = _actRepo.GetAllDropdownList(WC.CategoryName);
-            return View(activityTypeVM);
+            activityTypeVm.CategorySelectList = _actRepo.GetAllDropdownList(WC.CategoryName);
+            return View(activityTypeVm);
         }
 
         //GET - DELETE
@@ -79,10 +70,6 @@ namespace workload.Controllers
                 return NotFound();
             }
             var obj = _actRepo.Find(id.GetValueOrDefault());
-            if (obj == null)
-            {
-                return NotFound();
-            }
 
             return View(obj);
         }
@@ -93,10 +80,6 @@ namespace workload.Controllers
         public IActionResult DeleteConfirm(int? id)
         {
             var obj = _actRepo.Find(id.GetValueOrDefault());
-            if (obj == null)
-            {
-                return NotFound();
-            }
             _actRepo.Remove(obj);
             _actRepo.Save();
             return RedirectToAction("Index");

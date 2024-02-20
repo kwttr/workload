@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using workload_Utility;
-using System.Data;
-using workload_Data;
 using workload_Models;
 using workload_Models.ViewModels;
 using workload_DataAccess.Repository.IRepository;
@@ -30,7 +27,7 @@ namespace workload.Controllers
                                 IActivityTypeRepository activityTypeRepo,
                                 IProcessActivityTypeRepository processActivityTypeRepository,
                                 IHttpContextAccessor contextAccessor,
-                                UserManager<IdentityUser> userManager)
+                                UserManager<IdentityUser> userManager, List<ProcessActivityType> processActivityTypes)
         {
             _repRepo = repRepo;
             _categoryRepo = categoryRepo;
@@ -39,9 +36,10 @@ namespace workload.Controllers
             _processActivityTypeRepo = processActivityTypeRepository;
             _contextAccessor = contextAccessor;
             _userManager = userManager;
+            ProcessActivityTypes = processActivityTypes;
         }
         [BindProperty]
-        public List<ProcessActivityType> processActivityTypes { get; set; }
+        public List<ProcessActivityType> ProcessActivityTypes { get; set; }
 
         public IActionResult Index()
         {
@@ -56,38 +54,34 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-            ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
+            ReportDetailsVM reportDetailsVm = new ReportDetailsVM()
             {
                 Report = _repRepo.Find(id.GetValueOrDefault()),
                 CategoryList = _categoryRepo.GetAll().ToList(),
             };
 
             List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
-            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u=>u.ReportId == reportDetailsVM.Report.Id).ToList();
+            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u=>u.ReportId == reportDetailsVm.Report.Id).ToList();
             foreach(var processActivity in matchingProcessActivities)
             {
                 processActivityList.Add(processActivity);
             }
-            reportDetailsVM.ProcessActivityTypes = processActivityList;
+            reportDetailsVm.ProcessActivityTypes = processActivityList;
 
-            if (reportDetailsVM == null)
-            {
-                return NotFound();
-            }
-            return View(reportDetailsVM);
+            return View(reportDetailsVm);
         }
 
         //GET - CREATE
         public IActionResult Create()
         {
-            ReportVM reportVM = new ReportVM()
+            ReportVM reportVm = new ReportVM()
             {
                 report = new Report(),
                 TeacherSelectList = _repRepo.GetAllDropdownList(WC.TeacherName)
             };
-            reportVM.report.Title = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
-            reportVM.report.Rate = 1.0;
-            return View(reportVM);
+            reportVm.report.Title = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
+            reportVm.report.Rate = 1.0;
+            return View(reportVm);
         }
 
         //POST - CREATE
@@ -95,24 +89,24 @@ namespace workload.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ReportVM obj)
         {
-            var user = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result;
+            var user = _userManager.GetUserAsync(_contextAccessor.HttpContext?.User).Result;
             List<CustomClaimValue> deserializedClaims = new List<CustomClaimValue>();
             var claims = User.Claims.Where(c => c.Type == "UserRoleDep");
             foreach (var claim in claims)
             {
-                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value));
+                deserializedClaims.Add(JsonConvert.DeserializeObject<CustomClaimValue>(claim.Value) ?? throw new InvalidOperationException());
             }
             var deserializedClaim = deserializedClaims.FirstOrDefault(x => x.RoleAccess == "HeadOfDepartment");
             if (ModelState.IsValid)
             {
                 obj.report.Teacher = _teacherRepo.FirstOrDefault(u => u.Id == obj.report.TeacherId, includeProperties: "Degree");
-                obj.report.CurrentDegree = obj.report.Teacher.Degree.Name;
+                obj.report.CurrentDegree = obj.report.Teacher.Degree?.Name;
                 obj.report.StatusId = 1;
-                var User = _teacherRepo.FirstOrDefault(x => x.Id == user.Id);
-                obj.report.hodName = User.FirstName;
-                obj.report.hodSecondName = User.LastName;
-                obj.report.hodPatronymic = User.Patronymic;
-                obj.report.DepartmentId = Convert.ToInt32(deserializedClaim.DepartmentId);
+                var firstOrDefault = _teacherRepo.FirstOrDefault(x => x.Id == user.Id);
+                obj.report.hodName = firstOrDefault.FirstName;
+                obj.report.hodSecondName = firstOrDefault.LastName;
+                obj.report.hodPatronymic = firstOrDefault.Patronymic;
+                obj.report.DepartmentId = Convert.ToInt32(deserializedClaim?.DepartmentId);
                 List<ProcessActivityType> list = new List<ProcessActivityType>();
                 foreach (var activity in _activityTypeRepo.GetAll())
                 {
@@ -191,7 +185,7 @@ namespace workload.Controllers
             return RedirectToAction("Index");
         }
 
-        //EXPORTREPORT
+        //EXPORT REPORT
         public IActionResult ExportReport(int? id)
         {
             if (id == null)
@@ -202,7 +196,7 @@ namespace workload.Controllers
             {
                 Report obj = _repRepo.FirstOrDefault(r => r.Id == id, includeProperties: "ProcessActivities,Teacher,Department");
                 MemoryStream stream = _repRepo.Export(obj);
-                if (obj != null && obj.Department != null && obj.Teacher != null)
+                if (obj.Department != null && obj.Teacher != null)
                     return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"{obj.Title + "_" + obj.Department.Name + "_" + obj.Teacher.LastName + obj.Teacher.FirstName + obj.Teacher.Patronymic}.docx");
                 else return BadRequest();
             }

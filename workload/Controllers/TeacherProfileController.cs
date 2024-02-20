@@ -1,7 +1,4 @@
-﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using workload_DataAccess.Repository.IRepository;
@@ -60,31 +57,27 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-            ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
+            ReportDetailsVM reportDetailsVm = new ReportDetailsVM()
             {
                 Report = _repRepo.Find(id.GetValueOrDefault()),
                 CategoryList = _categoryRepo.GetAll().ToList(),
             };
 
             List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
-            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVM.Report.Id).ToList();
+            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVm.Report.Id).ToList();
             foreach (var processActivity in matchingProcessActivities)
             {
                 processActivityList.Add(processActivity);
             }
-            reportDetailsVM.ProcessActivityTypes = processActivityList;
+            reportDetailsVm.ProcessActivityTypes = processActivityList;
 
-            if (reportDetailsVM == null)
-            {
-                return NotFound();
-            }
-            return View(reportDetailsVM);
+            return View(reportDetailsVm);
         }
 
         //POST - UPDATEACTIVITIES
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult UpdateActivities(ReportDetailsVM reportDetailsVM)
+        public IActionResult UpdateActivities(ReportDetailsVM reportDetailsVm)
         {
             ModelState.Remove("report.hodSecondName");
             ModelState.Remove("report.hodName");
@@ -92,13 +85,13 @@ namespace workload.Controllers
             if (ModelState.IsValid)
             {
                 
-                for(int i = 0; i < reportDetailsVM.ProcessActivityTypes.Count(); i++)
+                for(int i = 0; i < reportDetailsVm.ProcessActivityTypes.Count(); i++)
                 {
-                    _processActivityTypeRepo.Update(reportDetailsVM.ProcessActivityTypes[i]);
+                    _processActivityTypeRepo.Update(reportDetailsVm.ProcessActivityTypes[i]);
                 }
-                reportDetailsVM.Report.ProcessActivities = reportDetailsVM.ProcessActivityTypes;
+                reportDetailsVm.Report.ProcessActivities = reportDetailsVm.ProcessActivityTypes;
                 _processActivityTypeRepo.Save();
-                _repRepo.Update(reportDetailsVM.Report);
+                _repRepo.Update(reportDetailsVm.Report);
                 _repRepo.Save();
             }
             return RedirectToAction("Index");
@@ -123,28 +116,20 @@ namespace workload.Controllers
             {
                 return NotFound();
             }
-            ReportDetailsVM reportDetailsVM = new ReportDetailsVM()
+            ReportDetailsVM reportDetailsVm = new ReportDetailsVM()
             {
                 Report = _repRepo.Find(id.GetValueOrDefault()),
                 CategoryList = _categoryRepo.GetAll().ToList(),
             };
-            if (reportDetailsVM.Report == null)
-            {
-                return NotFound();
-            }
             List<ProcessActivityType> processActivityList = new List<ProcessActivityType>();
-            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVM.Report.Id).ToList();
+            var matchingProcessActivities = _processActivityTypeRepo.GetAll().Where(u => u.ReportId == reportDetailsVm.Report.Id).ToList();
             foreach (var processActivity in matchingProcessActivities)
             {
                 processActivityList.Add(processActivity);
             }
-            reportDetailsVM.ProcessActivityTypes = processActivityList;
+            reportDetailsVm.ProcessActivityTypes = processActivityList;
 
-            if (reportDetailsVM == null)
-            {
-                return NotFound();
-            }
-            return View(reportDetailsVM);
+            return View(reportDetailsVm);
         }
 
         //EXPORTREPORT
@@ -158,7 +143,7 @@ namespace workload.Controllers
             {
                 Report obj = _repRepo.FirstOrDefault(r=>r.Id==id, includeProperties: "ProcessActivities,Teacher,Department");
                 MemoryStream stream = _repRepo.Export(obj);
-                if (obj != null && obj.Department != null && obj.Teacher != null)
+                if (obj.Department != null && obj.Teacher != null)
                     return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"{obj.Title + "_" + obj.Department.Name + "_" + obj.Teacher.LastName + obj.Teacher.FirstName + obj.Teacher.Patronymic}.docx");
                 else return BadRequest();
             }
