@@ -72,12 +72,12 @@ namespace workload.Controllers
             }
         }
 
-        public void AddRoleToUser(string id, Teacher user)
+        public async Task AddRoleToUser(string id, Teacher user)
         {
-            _userManager.AddToRoleAsync(user, id);
+            await _userManager.AddToRoleAsync(user, id);
         }
 
-        public void RemoveClaim(string id, string role)
+        public async Task RemoveClaim(string id, string role)
         {
             var user = _userManager.FindByIdAsync(id).Result;
             CustomRole tempRole = _roleManager.FindByNameAsync(role).Result;
@@ -86,7 +86,7 @@ namespace workload.Controllers
             var userClaim = _userManager.GetClaimsAsync(user).Result.FirstOrDefault(c => c.Type == "UserRoleDep" && c.Value == JsonConvert.SerializeObject(claim));
             if (userClaim != null)
             {
-                _userManager.RemoveClaimAsync(user, userClaim);
+                await _userManager.RemoveClaimAsync(user, userClaim);
             }
         }
 
@@ -128,12 +128,12 @@ namespace workload.Controllers
                         if (!vm.SelectedRoles.Contains(role))
                         {
                             await _userManager.RemoveFromRoleAsync(teacher, role);
-                            RemoveClaim(teacher.Id, role);
+                            await RemoveClaim(teacher.Id, role);
                         }
                     }
                     foreach (var obj in vm.SelectedRoles)
                     {
-                        AddRoleToUser(obj, teacher);
+                        await AddRoleToUser(obj, teacher);
                         await AddClaim(teacher.Id, obj);
                     }
 

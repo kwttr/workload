@@ -15,7 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlite("Filename = Database.db"));
+options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
 
 builder.Services.AddIdentity<IdentityUser, CustomRole>()
     .AddRoleManager<CustomRoleManager>()
@@ -33,7 +33,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 builder.Services.AddTransient<CustomEmailConfirmationTokenProvider<IdentityUser>>();
-builder.Services.AddScoped<RoleManager<CustomRole>, CustomRoleManager>();
+builder.Services.AddTransient<RoleManager<CustomRole>, CustomRoleManager>();
 builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
@@ -41,7 +41,7 @@ builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IProcessActivityTypeRepository, ProcessActivityTypeRepository>();
 builder.Services.AddScoped<ITeacherDepartmentRepository, TeacherDepartmentRepository>();
-builder.Services.AddScoped<IUsers, Users>();
+builder.Services.AddTransient<IUsers, Users>();
 builder.Services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = 268435456; });
 
 builder.Services.AddTransient<IEmailSender,EmailSender>();
